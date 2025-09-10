@@ -19,7 +19,7 @@ const Splash = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			router.replace({ pathname: "/onBoarding" });
-		}, 800);
+		}, 2000);
 	}, []);
 	const spinValue = useRef(new Animated.Value(0)).current;
 
@@ -48,7 +48,7 @@ const Splash = () => {
 			position: "relative",
 		},
 		logoStyle: {
-			width: "70%",
+			width: "85%",
 			height: Dimensions.get("screen").height / 2,
 			resizeMode: "contain",
 		},
