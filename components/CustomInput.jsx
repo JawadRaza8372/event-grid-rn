@@ -15,6 +15,7 @@ const CustomInput = ({
 	value,
 	onChangeValue,
 	isPasswordType,
+	secondVarient,
 }) => {
 	const colors = useThemeColors();
 	const [hidePassword, sethidePassword] = useState(false);
@@ -36,13 +37,16 @@ const CustomInput = ({
 			height: 48,
 			width: "100%",
 			borderRadius: 14,
-			backgroundColor: colors.inputBgColor,
+			backgroundColor: secondVarient ? "transparent" : colors.inputBgColor,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "flex-start",
 			flexDirection: "row",
 			gap: 10,
 			overflow: "hidden",
+			...(secondVarient
+				? { borderWidth: 1, borderColor: colors.blackColor }
+				: {}),
 		},
 		inputMainStyle: {
 			fontSize: 12,

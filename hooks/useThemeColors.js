@@ -3,6 +3,7 @@ const defaultColors = {
 	blackColor: "#222831",
 	onBoardSubColor: "#414141",
 	inActiveColor: "#D9D9D9",
+	notificationBg: "#dddddd",
 	authTitleColor: "#2B2B2B",
 	inputBgColor: "#F7F7F9",
 	inputPlaceHolderColor: "#6A6A6A",
@@ -22,6 +23,10 @@ const defaultColors = {
 	profileItemsTxtColor: "#50555C",
 	organizerTabBg: "#EBEBEB",
 	createEventInputBg: "#E3E3E3",
+	botmTab: "#fdfdfd",
+	modalBg: "rgba(0,0,0,0.8)",
+	botmTabShadow: "#83AAD11F",
+	dateTxt: "#595959",
 };
 export const useThemeColors = () => {
 	const colors = defaultColors;

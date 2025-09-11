@@ -1,7 +1,7 @@
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import backgroudImage from "../assets/images/Signin-bg.png";
 import { useThemeColors } from "../hooks/useThemeColors";
-const AuthLayout = ({ children }) => {
+const AuthLayout = ({ children, hideBgImg }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -30,17 +30,18 @@ const AuthLayout = ({ children }) => {
 			display: "flex",
 			flexDirection: "column",
 			gap: 15,
-			backgroundColor: colors.profileItemsTxtColor,
 		},
 	});
 	return (
 		<View style={styles.mainContainer}>
-			<Image
-				style={styles.backgroundImageStyle}
-				source={backgroudImage}
-			/>
+			{hideBgImg ? null : (
+				<Image
+					style={styles.backgroundImageStyle}
+					source={backgroudImage}
+				/>
+			)}
 			<View style={styles.childContainer}>
-				<ScrollView>
+				<ScrollView showsVerticalScrollIndicator={false}>
 					<View style={styles.formContainer}>{children}</View>
 				</ScrollView>
 			</View>

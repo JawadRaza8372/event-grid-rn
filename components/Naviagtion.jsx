@@ -16,6 +16,13 @@ const Naviagtion = () => {
 			<Stack.Screen name="onBoarding" />
 			<Stack.Screen name="login" />
 			<Stack.Screen name="register" />
+			<Stack.Screen name="forgot-password" />
+			<Stack.Screen name="change-password" />
+			<Stack.Screen name="book-event" />
+			<Stack.Screen name="edit-profile" />
+			<Stack.Screen name="edit-profile-organizer" />
+
+			<Stack.Screen name="(tabs)" />
 			<Stack.Screen name="+not-found" />
 		</Stack>
 	);

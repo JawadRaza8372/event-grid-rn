@@ -1,28 +1,32 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import {
-	Dimensions,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "../assets/icons";
 import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
-import SocialContainer from "../components/SocialContainer";
+import UserAvatar from "../components/UserAvatar";
 import { useThemeColors } from "../hooks/useThemeColors";
-const Login = () => {
+const EditProfile = () => {
 	const colors = useThemeColors();
-	const [formData, setformData] = useState({ email: "", password: "" });
+	const [formData, setformData] = useState({
+		name: "",
+		email: "",
+		password: "",
+	});
 	const styles = StyleSheet.create({
+		screenHeaderTitle: {
+			color: colors.blackColor,
+			fontSize: 18,
+			fontWeight: "600",
+			lineHeight: 20,
+		},
 		topBarContainer: {
 			width: "100%",
 			height: 45,
 			display: "flex",
 			alignItems: "center",
-			justifyContent: "flex-start",
+			justifyContent: "space-between",
 			flexDirection: "row",
 		},
 		backBtn: {
@@ -35,6 +39,7 @@ const Login = () => {
 			flexDirection: "row",
 			backgroundColor: colors.inputBgColor,
 		},
+		sideBtn: { height: 44, width: 44, borderRadius: 44 },
 		mainHeading: {
 			fontSize: 25,
 			fontWeight: "600",
@@ -59,57 +64,9 @@ const Login = () => {
 			marginTop: -5,
 			marginBottom: 19,
 		},
-		loginWithTxtCont: {
-			width: "100%",
-			height: "auto",
-			marginTop: 3,
-			marginBottom: 14,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			flexDirection: "column",
-		},
-		orText: {
-			fontSize: 14,
-			fontWeight: "600",
-			color: colors.inputPlaceHolderColor,
-			textAlign: "center",
-			lineHeight: 20,
-		},
-		loginWithText: {
-			fontSize: 14,
-			fontWeight: "500",
-			color: colors.inputPlaceHolderColor,
-			textAlign: "center",
-			lineHeight: 20,
-		},
-		btmOrText: {
-			fontSize: 14,
-			fontWeight: "600",
-			color: colors.blackColor,
-			textAlign: "center",
-			lineHeight: 20,
-		},
-		btmLoginWithText: {
-			fontSize: 14,
-			fontWeight: "500",
-			color: colors.inputPlaceHolderColor,
-			textAlign: "center",
-			lineHeight: 20,
-		},
-		botmBtn: {
-			width: "100%",
-			height: "auto",
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			flexDirection: "row",
-			gap: 3,
-			marginTop: Dimensions.get("screen").height / 4.7,
-		},
 	});
 	return (
-		<AuthLayout>
+		<AuthLayout hideBgImg={true}>
 			<>
 				<View style={styles.topBarContainer}>
 					<TouchableOpacity
@@ -120,8 +77,19 @@ const Login = () => {
 							height={25}
 						/>
 					</TouchableOpacity>
+					<Text style={styles.screenHeaderTitle}>Profile</Text>
+					<View style={styles.sideBtn} />
 				</View>
-				<Text style={styles.mainHeading}>Let’s Sign In</Text>
+				<UserAvatar
+					size={76}
+					isEditable={true}
+				/>
+				<CustomInput
+					title={"Name"}
+					placeHolderText={"jhon doe"}
+					value={formData.name}
+					onChangeValue={(text) => setformData({ ...formData, name: text })}
+				/>
 				<CustomInput
 					title={"Email Address"}
 					placeHolderText={"jhondoe@gmail.com"}
@@ -142,27 +110,11 @@ const Login = () => {
 				</TouchableOpacity>
 				<CustomButton
 					btnWidth={"100%"}
-					btnTitle={"Sign In"}
-					onPressFun={() => router.push({ pathname: "/(tabs)" })}
+					btnTitle={"Submit"}
 				/>
-				<View style={styles.loginWithTxtCont}>
-					<Text style={styles.orText}>OR</Text>
-					<Text style={styles.loginWithText}>Login With</Text>
-				</View>
-				<SocialContainer
-					onGooglePress={() => console.log("google")}
-					onFacebookPress={() => console.log("facebook")}
-					onInstaPress={() => console.log("insta")}
-				/>
-				<TouchableOpacity
-					onPress={() => router.push({ pathname: "/register" })}
-					style={styles.botmBtn}>
-					<Text style={styles.btmLoginWithText}>New User?</Text>
-					<Text style={styles.btmOrText}>Create Account</Text>
-				</TouchableOpacity>
 			</>
 		</AuthLayout>
 	);
 };
 
-export default Login;
+export default EditProfile;

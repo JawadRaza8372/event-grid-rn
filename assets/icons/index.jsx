@@ -3,10 +3,11 @@ import ArrowBack from "./Arrow-back.svg";
 import ArrowLeft from "./arrow-left.svg";
 import CalendarDigit from "./calendar-digit.svg";
 import Call from "./Call.svg";
+import Check from "./Check.svg";
 import CoinsDollar from "./coins-dollar.svg";
 import CreditCard from "./credit-card.svg";
 import Delete from "./delete.svg";
-import Edit from "./edit.svg";
+import Edit from "./Edit";
 import Email from "./Email.svg";
 import Eye from "./eyeIcon.svg";
 import EyeOff from "./eyeoffIcon.svg";
@@ -24,14 +25,18 @@ import PriceTag from "./price-tag.svg";
 import SendIcon from "./sendIcon.svg";
 import Star from "./star.svg";
 import TaleArrowLeft from "./tale_arrow-left.svg";
+import TaleArrowLeftWhite from "./tale_arrow-leftlight.svg";
 import Ticket from "./ticket.svg";
 import Time from "./time.svg";
 import TransactionHistory from "./transaction-history.svg";
+import Share from "./u_share-alt.svg";
 
 export const Icons = {
+	Share,
 	AddCircle,
 	ArrowBack,
 	ArrowLeft,
+	Check,
 	CalendarDigit,
 	Call,
 	CoinsDollar,
@@ -53,6 +58,7 @@ export const Icons = {
 	SendIcon,
 	Star,
 	TaleArrowLeft,
+	TaleArrowLeftWhite,
 	Ticket,
 	Time,
 	TransactionHistory,

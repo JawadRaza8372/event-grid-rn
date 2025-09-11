@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Icons } from "../assets/icons";
 import { useThemeColors } from "../hooks/useThemeColors";
 
 const CustomSelector = ({ title, value, onChangeValue, options }) => {
@@ -36,6 +37,7 @@ const CustomSelector = ({ title, value, onChangeValue, options }) => {
 			width: 16,
 			height: 16,
 			borderWidth: 1,
+			borderRadius: 4,
 			borderColor: colors.blackColor,
 			display: "flex",
 			alignItems: "center",
@@ -62,7 +64,14 @@ const CustomSelector = ({ title, value, onChangeValue, options }) => {
 						style={styles.optionContainer}
 						key={index}
 						onPress={() => onChangeValue(dat)}>
-						<View style={styles.borderedView}></View>
+						<View style={styles.borderedView}>
+							{dat === value ? (
+								<Icons.Check
+									width={10}
+									height={10}
+								/>
+							) : null}
+						</View>
 						<Text style={styles.optionText}>{dat}</Text>
 					</TouchableOpacity>
 				))}

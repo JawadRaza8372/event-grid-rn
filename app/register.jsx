@@ -1,11 +1,18 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+	Dimensions,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import { Icons } from "../assets/icons";
 import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import CustomSelector from "../components/CustomSelector";
+import OrganizerApprovedModal from "../components/OrganizerApprovedModal";
 import SocialContainer from "../components/SocialContainer";
 import { useThemeColors } from "../hooks/useThemeColors";
 const Register = () => {
@@ -16,6 +23,10 @@ const Register = () => {
 		email: "",
 		password: "",
 	});
+	const [openOrganizeModal, setopenOrganizeModal] = useState(false);
+	const switchOpenOrganizeModal = () => {
+		setopenOrganizeModal(!openOrganizeModal);
+	};
 	const styles = StyleSheet.create({
 		topBarContainer: {
 			width: "100%",
@@ -81,6 +92,20 @@ const Register = () => {
 			color: colors.inputPlaceHolderColor,
 			textAlign: "center",
 		},
+		btmOrText: {
+			fontSize: 14,
+			fontWeight: "600",
+			color: colors.blackColor,
+			textAlign: "center",
+			lineHeight: 20,
+		},
+		btmLoginWithText: {
+			fontSize: 14,
+			fontWeight: "500",
+			color: colors.inputPlaceHolderColor,
+			textAlign: "center",
+			lineHeight: 20,
+		},
 		botmBtn: {
 			width: "100%",
 			height: "auto",
@@ -88,8 +113,8 @@ const Register = () => {
 			alignItems: "center",
 			justifyContent: "center",
 			flexDirection: "row",
-			gap: 10,
-			marginBottom: 20,
+			gap: 3,
+			marginTop: Dimensions.get("screen").height / 13,
 		},
 		seprator: {
 			width: "100%",
@@ -139,6 +164,7 @@ const Register = () => {
 				<CustomButton
 					btnWidth={"100%"}
 					btnTitle={"Sign Up"}
+					onPressFun={switchOpenOrganizeModal}
 				/>
 				<View style={styles.loginWithTxtCont}>
 					<Text style={styles.orText}>OR</Text>
@@ -150,11 +176,15 @@ const Register = () => {
 					onInstaPress={() => console.log("insta")}
 				/>
 				<TouchableOpacity
-					onPress={() => router.push({ pathname: "/register" })}
+					onPress={() => router.push({ pathname: "/login" })}
 					style={styles.botmBtn}>
-					<Text style={styles.loginWithText}>Already have an account?</Text>
-					<Text style={styles.orText}>Login</Text>
+					<Text style={styles.btmLoginWithText}>Already have an account?</Text>
+					<Text style={styles.btmOrText}>Login</Text>
 				</TouchableOpacity>
+				<OrganizerApprovedModal
+					showModal={openOrganizeModal}
+					hideModal={switchOpenOrganizeModal}
+				/>
 			</>
 		</AuthLayout>
 	);
