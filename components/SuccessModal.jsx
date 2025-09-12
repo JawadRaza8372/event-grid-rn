@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import successImage from "../assets/images/success.png";
 import { useThemeColors } from "../hooks/useThemeColors";
-const OrganizerApprovedModal = ({ showModal, hideModal }) => {
+const SuccessModal = ({ showModal, hideModal, title, description }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -74,14 +74,12 @@ const OrganizerApprovedModal = ({ showModal, hideModal }) => {
 						source={successImage}
 						style={styles.modalImage}
 					/>
-					<Text style={styles.modalTitleTxt}>Organizer Approved!</Text>
-					<Text style={styles.modalSubTitleTxt}>
-						Admin has successfully approved you{"\n"}as an Organizer
-					</Text>
+					<Text style={styles.modalTitleTxt}>{title ?? ""}</Text>
+					<Text style={styles.modalSubTitleTxt}>{description ?? ""}</Text>
 				</View>
 			</TouchableOpacity>
 		</Modal>
 	);
 };
 
-export default OrganizerApprovedModal;
+export default SuccessModal;

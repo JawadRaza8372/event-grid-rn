@@ -12,8 +12,8 @@ import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import CustomSelector from "../components/CustomSelector";
-import OrganizerApprovedModal from "../components/OrganizerApprovedModal";
 import SocialContainer from "../components/SocialContainer";
+import SuccessModal from "../components/SuccessModal";
 import { useThemeColors } from "../hooks/useThemeColors";
 const Register = () => {
 	const colors = useThemeColors();
@@ -181,7 +181,9 @@ const Register = () => {
 					<Text style={styles.btmLoginWithText}>Already have an account?</Text>
 					<Text style={styles.btmOrText}>Login</Text>
 				</TouchableOpacity>
-				<OrganizerApprovedModal
+				<SuccessModal
+					title={"Organizer Approved!"}
+					description={"Admin has successfully approved you\nas an Organizer"}
 					showModal={openOrganizeModal}
 					hideModal={switchOpenOrganizeModal}
 				/>

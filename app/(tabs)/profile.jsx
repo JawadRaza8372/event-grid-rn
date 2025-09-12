@@ -1,12 +1,18 @@
 import { router } from "expo-router";
+import { useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../../assets/icons";
+import DeleteAccountModal from "../../components/DeleteAccountModal";
 import ProfileOption from "../../components/ProfileOption";
 import SideTopBar from "../../components/SideTopBar";
 import UserAvatar from "../../components/UserAvatar";
 import { useThemeColors } from "../../hooks/useThemeColors";
 const Profile = () => {
 	const colors = useThemeColors();
+	const [openDeleteModal, setopenDeleteModal] = useState(false);
+	const switchOpenDeleteModal = () => {
+		setopenDeleteModal(!openDeleteModal);
+	};
 	const styles = StyleSheet.create({
 		userContainer: {
 			width: "100%",
@@ -104,7 +110,7 @@ const Profile = () => {
 					height={25}
 				/>
 			),
-			onClickFun: () => null,
+			onClickFun: () => switchOpenDeleteModal(),
 		},
 	];
 	return (
@@ -137,6 +143,11 @@ const Profile = () => {
 					/>
 				)}
 				ListFooterComponent={<View style={styles.bottomPadding} />}
+			/>
+			<DeleteAccountModal
+				showModal={openDeleteModal}
+				hideModal={switchOpenDeleteModal}
+				onYesFun={switchOpenDeleteModal}
 			/>
 		</View>
 	);

@@ -14,7 +14,9 @@ const defaultColors = {
 	topEventBg: "#F9F9F9",
 	recoveryTabInactiveBorderColor: "#E5E7EB",
 	recoverySubTxtColor: "#A1A8B0",
+	dateBorder: "#d4d4d4",
 	bellBorder: "#EAEAEA",
+	deleteDesc: "#1E1E1E",
 	morningColor: "#898A8D",
 	searchInputBg: "#EFEFEF",
 	shadowColor: "#00000025",
@@ -25,8 +27,13 @@ const defaultColors = {
 	createEventInputBg: "#E3E3E3",
 	botmTab: "#fdfdfd",
 	modalBg: "rgba(0,0,0,0.8)",
+	scannerBg: "rgba(0,0,0,0.15)",
 	botmTabShadow: "#83AAD11F",
 	dateTxt: "#595959",
+	noBtnBg: "#E6E6E6",
+	dataTitleColor: "#030319",
+	backBtnBorder: "#B8C2CF",
+	createInputLabelColor: "#545961",
 };
 export const useThemeColors = () => {
 	const colors = defaultColors;

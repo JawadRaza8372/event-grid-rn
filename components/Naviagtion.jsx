@@ -21,7 +21,7 @@ const Naviagtion = () => {
 			<Stack.Screen name="book-event" />
 			<Stack.Screen name="edit-profile" />
 			<Stack.Screen name="edit-profile-organizer" />
-
+			<Stack.Screen name="e-ticket-wallet" />
 			<Stack.Screen name="(tabs)" />
 			<Stack.Screen name="+not-found" />
 		</Stack>
