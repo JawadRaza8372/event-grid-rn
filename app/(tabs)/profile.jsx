@@ -90,7 +90,12 @@ const Profile = () => {
 		},
 		{
 			title: "Switch Role",
-			icon: <Icons.Edit size={25} />,
+			icon: (
+				<Icons.Star
+					width={25}
+					height={25}
+				/>
+			),
 			onClickFun: () => switchRole(),
 		},
 		{

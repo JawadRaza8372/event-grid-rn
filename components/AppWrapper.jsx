@@ -1,6 +1,5 @@
 import { StatusBar } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { AuthContext } from "../constants/AuthContext";
 import { useThemeColors } from "../hooks/useThemeColors";
 import Navigation from "./Naviagtion";
 const AppWrapper = () => {
@@ -14,9 +13,7 @@ const AppWrapper = () => {
 					backgroundColor={colors.mainBgColor}
 					barStyle={"dark-content"}
 				/>
-				<AuthContext>
-					<Navigation />
-				</AuthContext>
+				<Navigation />
 			</SafeAreaView>
 		</SafeAreaProvider>
 	);

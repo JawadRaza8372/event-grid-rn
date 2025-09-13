@@ -1,4 +1,5 @@
 import AppWrapper from "@/components/AppWrapper";
+import { AuthProvider } from "@/constants/AuthContext";
 import { KeyboardAvoidingView, LogBox, Platform } from "react-native";
 import "react-native-reanimated";
 export default function RootLayout() {
@@ -8,12 +9,12 @@ export default function RootLayout() {
 	]);
 
 	return (
-		<>
+		<AuthProvider>
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
 				behavior={Platform.OS === "ios" ? "padding" : undefined}>
 				<AppWrapper />
 			</KeyboardAvoidingView>
-		</>
+		</AuthProvider>
 	);
 }

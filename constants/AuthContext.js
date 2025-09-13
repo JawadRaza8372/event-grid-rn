@@ -1,8 +1,9 @@
+// context/RoleContext.js
 import { createContext, useState } from "react";
 
-export const RoleContext = createContext();
+export const AuthContext = createContext();
 
-export const AuthContext = ({ children }) => {
+export const AuthProvider = ({ children }) => {
 	const [role, setRole] = useState("user");
 
 	const switchRole = () => {
@@ -10,8 +11,8 @@ export const AuthContext = ({ children }) => {
 	};
 
 	return (
-		<RoleContext.Provider value={{ role, switchRole }}>
+		<AuthContext.Provider value={{ role, switchRole }}>
 			{children}
-		</RoleContext.Provider>
+		</AuthContext.Provider>
 	);
 };
