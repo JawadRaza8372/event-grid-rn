@@ -1,23 +1,31 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useThemeColors } from "../hooks/useThemeColors";
 
-const TabContainer = ({ options, value, onchange }) => {
+const TabContainer = ({
+	options,
+	value,
+	onchange,
+	activeTxtColor,
+	inActiveTxtColor,
+	inActiveBg,
+	borderWidth,
+}) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",
 			height: 51,
 			borderRadius: 29,
-			backgroundColor: colors.recoveryTabInactiveColor,
-			borderWidth: 1,
-			borderColor: colors.recoveryTabInactiveBorderColor,
+			backgroundColor: inActiveBg ?? colors.recoveryTabInactiveColor,
+			borderWidth: borderWidth ?? 1,
+			borderColor: inActiveBg ?? colors.recoveryTabInactiveBorderColor,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
 			flexDirection: "row",
 		},
 		optionContainer: {
-			height: "100%",
+			height: "98%",
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
@@ -30,10 +38,10 @@ const TabContainer = ({ options, value, onchange }) => {
 		optionText: {
 			fontSize: 14,
 			fontWeight: "500",
-			color: colors.recoverySubTxtColor,
+			color: inActiveTxtColor ?? colors.recoverySubTxtColor,
 		},
 		activeOptionText: {
-			color: colors.blackColor,
+			color: activeTxtColor ?? colors.blackColor,
 		},
 	});
 

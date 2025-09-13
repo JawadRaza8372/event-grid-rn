@@ -86,7 +86,7 @@ const ForgotPassword = () => {
 						onchange={(text) => setSelectedTab(text)}
 					/>
 				</View>
-				{selectedTab === "email" ? (
+				{selectedTab === "Email" ? (
 					<InputWithIcons
 						placeHolderText={""}
 						value={formData.email}

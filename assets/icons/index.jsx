@@ -2,6 +2,7 @@ import AddCircle from "./add-circle.svg";
 import ArrowBack from "./Arrow-back.svg";
 import ArrowLeft from "./arrow-left.svg";
 import CalendarDigit from "./calendar-digit.svg";
+import Calendar from "./calendar.svg";
 import Call from "./Call.svg";
 import Check from "./Check.svg";
 import CoinsDollar from "./coins-dollar.svg";
@@ -11,6 +12,7 @@ import Edit from "./Edit";
 import Email from "./Email.svg";
 import Eye from "./eyeIcon.svg";
 import EyeOff from "./eyeoffIcon.svg";
+import Filter from "./filter.svg";
 import Gift from "./gift.svg";
 import HeartEmpty from "./heart-empty.svg";
 import HeartFill from "./heart-filled.svg";
@@ -22,6 +24,7 @@ import Notification from "./notification.svg";
 import Lock from "./Password.svg";
 import PlusIcon from "./plus-icon.svg";
 import PriceTag from "./price-tag.svg";
+import Search from "./search.svg";
 import SendIcon from "./sendIcon.svg";
 import Star from "./star.svg";
 import TaleArrowLeft from "./tale_arrow-left.svg";
@@ -32,6 +35,9 @@ import TransactionHistory from "./transaction-history.svg";
 import Share from "./u_share-alt.svg";
 
 export const Icons = {
+	Calendar,
+	Filter,
+	Search,
 	Share,
 	AddCircle,
 	ArrowBack,

@@ -25,7 +25,8 @@ const SuccessModal = ({ showModal, hideModal, title, description }) => {
 			width: Dimensions.get("screen").width - 60,
 			alignSelf: "center",
 			maxWidth: 450,
-			padding: 16,
+			paddingHorizontal: 16,
+			paddingVertical: 22,
 			borderRadius: 25,
 			shadowColor: colors.blackColor,
 			shadowOffset: {

@@ -65,7 +65,7 @@ const Profile = () => {
 		{
 			title: "Notifications",
 			icon: (
-				<Icons.NotificationWithDot
+				<Icons.Notification
 					width={25}
 					height={25}
 				/>

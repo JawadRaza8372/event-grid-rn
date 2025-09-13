@@ -1,0 +1,268 @@
+import { router } from "expo-router";
+import { useRef, useState } from "react";
+import {
+	Dimensions,
+	FlatList,
+	Image,
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
+import { Icons } from "../assets/icons";
+import placeHolderImage from "../assets/images/placeholderImage.jpg";
+import CustomButton from "../components/CustomButton";
+import EventDetailOverView from "../components/EventDetailOverView";
+import MapContainer from "../components/MapContainer";
+import { useThemeColors } from "../hooks/useThemeColors";
+const EventDetails = () => {
+	const eventData = {
+		imageLinks: [
+			"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+			"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+			"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+		],
+		title: "National Music Festival",
+		category: "Music",
+		date: "Monday, September 01, 2025",
+		time: "18.00 -23.00 PM (GMT +07.00)",
+		location: "Grand Park, New York City, US",
+		locationDesc: "Grand City St.100, New York, United States.",
+		locationCoordinates: {
+			lat: 0,
+			lng: 0,
+		},
+		price: "$20.00 - $100.00",
+		description:
+			"The National Music Festival is a grand celebration of music, culture, and creativity that brings together artists, performers, and music lovers from across the country. This annual event showcases a diverse mix of musical genres—ranging from classical, folk, and traditional sounds to contemporary, pop, rock, and fusion performances.",
+	};
+	const colors = useThemeColors();
+	const [currentIndex, setCurrentIndex] = useState(0);
+	const viewabilityConfig = useRef({
+		viewAreaCoveragePercentThreshold: 50,
+	}).current;
+
+	const onViewableItemsChanged = useRef(({ viewableItems }) => {
+		if (viewableItems.length > 0) {
+			setCurrentIndex(viewableItems[0].index);
+		}
+	}).current;
+	const styles = StyleSheet.create({
+		mainContainer: {
+			width: "100%",
+			height: "100%",
+			backgroundColor: colors.mainBgColor,
+		},
+		imageContainer: {
+			width: "100%",
+			height: "auto",
+			position: "relative",
+			backgroundColor: colors.scannerBg,
+		},
+		imageContainerView: {
+			width: Dimensions.get("screen").width,
+			height: Dimensions.get("screen").height / 2.8,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			backgroundColor: "red",
+		},
+		imageStyle: {
+			width: "100%",
+			height: "100%",
+			resizeMode: "cover",
+		},
+		backBtn: {
+			width: 50,
+			height: 60,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "flex-start",
+			flexDirection: "row",
+			position: "absolute",
+			top: 0,
+			left: 21,
+			zIndex: 2,
+		},
+		bottmIndicator: {
+			bottom: 0,
+			left: 0,
+			zIndex: 20,
+			position: "absolute",
+			width: "100%",
+			height: 60,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			flexDirection: "row",
+			gap: 3,
+		},
+		activeIndicatorView: {
+			width: 28,
+			height: 10,
+			borderRadius: 10,
+			backgroundColor: colors.blackColor,
+		},
+		indicatorView: {
+			width: 10,
+			height: 10,
+			borderRadius: 10,
+			backgroundColor: colors.inActiveColor,
+		},
+		childContainer: {
+			width: Dimensions.get("screen").width - 42,
+			alignSelf: "center",
+			flex: 1,
+		},
+		eventDescriptionTxt: {
+			marginTop: 14,
+			marginBottom: 19,
+			fontSize: 12,
+			lineHeight: 20,
+			fontWeight: "400",
+			color: colors.blackColor,
+			letterSpacing: 0.5,
+		},
+		locationText: {
+			fontSize: 12,
+			fontWeight: "400",
+			lineHeight: 20,
+			color: colors.blackColor,
+		},
+		locationView: {
+			height: "auto",
+			width: "100%",
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "flex-start",
+			flexDirection: "row",
+			gap: 9,
+			marginTop: 14,
+		},
+		headingTxt: {
+			width: "100%",
+			fontSize: 20,
+			fontWeight: "600",
+			color: colors.dataTitleColor,
+		},
+		eventNameTxt: {
+			marginTop: 29,
+			marginBottom: 18,
+			width: "100%",
+			fontSize: 24,
+			fontWeight: "600",
+			color: colors.dataTitleColor,
+		},
+		categoryTxt: {
+			fontSize: 7,
+			fontWeight: "400",
+			color: colors.blackColor,
+		},
+		categoryView: {
+			height: 22,
+			paddingHorizontal: 14,
+			alignSelf: "flex-start",
+			borderWidth: 1,
+			borderColor: colors.blackColor,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			borderRadius: 5,
+		},
+		borderedView: {
+			width: "100%",
+			marginVertical: 22,
+			height: 1,
+			backgroundColor: colors.noBtnBg,
+		},
+		botomPadding: {
+			width: "100%",
+			height: 100,
+		},
+	});
+	return (
+		<View style={styles.mainContainer}>
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<View style={styles.imageContainer}>
+					<TouchableOpacity
+						onPress={() => router.back()}
+						style={styles.backBtn}>
+						<Icons.TaleArrowLeftWhite />
+					</TouchableOpacity>
+					<View style={styles.bottmIndicator}>
+						{eventData.imageLinks?.map((_, index) => (
+							<View
+								key={index}
+								style={
+									currentIndex === index
+										? styles.activeIndicatorView
+										: styles.indicatorView
+								}
+							/>
+						))}
+					</View>
+					<FlatList
+						onViewableItemsChanged={onViewableItemsChanged}
+						viewabilityConfig={viewabilityConfig}
+						pagingEnabled={true}
+						horizontal={true}
+						data={eventData?.imageLinks}
+						keyExtractor={(item, index) => index.toString()}
+						renderItem={({ item }) => {
+							return (
+								<View style={styles.imageContainerView}>
+									<Image
+										style={styles.imageStyle}
+										source={
+											typeof item === "string"
+												? { uri: item }
+												: placeHolderImage
+										}
+									/>
+								</View>
+							);
+						}}
+					/>
+				</View>
+
+				<View style={styles.childContainer}>
+					<Text style={styles.eventNameTxt}>{eventData?.title ?? ""}</Text>
+					<View style={styles.categoryView}>
+						<Text style={styles.categoryTxt}>{eventData?.category ?? ""}</Text>
+					</View>
+					<View style={styles.borderedView} />
+					<EventDetailOverView
+						date={eventData?.date}
+						location={eventData?.location}
+						locationDesc={eventData?.locationDesc}
+						priceRange={eventData?.price}
+						time={eventData?.time}
+					/>
+					<View style={styles.borderedView} />
+					<Text style={styles.headingTxt}>About Event</Text>
+					<Text style={styles.eventDescriptionTxt}>
+						{eventData?.description ?? ""}
+					</Text>
+					<Text style={styles.headingTxt}>Location</Text>
+					<View style={styles.locationView}>
+						<Icons.PinFat />
+						<Text style={styles.locationText}>{eventData.location}</Text>
+					</View>
+					<MapContainer
+						location={eventData?.location}
+						coordinates={eventData?.locationCoordinates}
+					/>
+					<CustomButton
+						btnWidth={"100%"}
+						btnTitle={"Book Event"}
+						onPressFun={() => router.push({ pathname: "/book-event" })}
+					/>
+					<View style={styles.botomPadding} />
+				</View>
+			</ScrollView>
+		</View>
+	);
+};
+
+export default EventDetails;

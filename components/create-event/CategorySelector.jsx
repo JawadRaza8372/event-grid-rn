@@ -40,7 +40,7 @@ const CategorySelector = ({ options, title, value, onChangeValue }) => {
 			borderColor: colors.blackColor,
 		},
 		categoryTxt: {
-			fontSize: 7,
+			fontSize: 8,
 			fontWeight: "500",
 			color: colors.blackColor,
 		},

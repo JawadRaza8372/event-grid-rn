@@ -23,6 +23,7 @@ const defaultColors = {
 	eventKeyBg: "#F3F3FF",
 	inActiveTabTxtColor: "#B8B8B8",
 	profileItemsTxtColor: "#50555C",
+	greenTxt: "#29993C",
 	organizerTabBg: "#EBEBEB",
 	createEventInputBg: "#E3E3E3",
 	botmTab: "#fdfdfd",

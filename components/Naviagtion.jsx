@@ -23,6 +23,10 @@ const Naviagtion = () => {
 			<Stack.Screen name="edit-profile-organizer" />
 			<Stack.Screen name="e-ticket-wallet" />
 			<Stack.Screen name="(tabs)" />
+			<Stack.Screen name="location" />
+			<Stack.Screen name="payments" />
+			<Stack.Screen name="review-summary" />
+			<Stack.Screen name="event-details" />
 			<Stack.Screen name="+not-found" />
 		</Stack>
 	);
