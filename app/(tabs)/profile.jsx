@@ -1,14 +1,19 @@
 import { router } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../../assets/icons";
 import DeleteAccountModal from "../../components/DeleteAccountModal";
 import ProfileOption from "../../components/ProfileOption";
 import SideTopBar from "../../components/SideTopBar";
 import UserAvatar from "../../components/UserAvatar";
+import { AuthContext } from "../../constants/AuthContext";
 import { useThemeColors } from "../../hooks/useThemeColors";
+
 const Profile = () => {
 	const colors = useThemeColors();
+	const { role, switchRole } = useContext(AuthContext);
+	const isOrganizerHomeScreen = role !== "user";
+
 	const [openDeleteModal, setopenDeleteModal] = useState(false);
 	const switchOpenDeleteModal = () => {
 		setopenDeleteModal(!openDeleteModal);
@@ -75,12 +80,18 @@ const Profile = () => {
 		{
 			title: "Edit profile",
 			icon: <Icons.Edit size={25} />,
-			onClickFun: () => router.push({ pathname: "/edit-profile" }),
+			onClickFun: () => {
+				if (isOrganizerHomeScreen) {
+					router.push({ pathname: "/edit-profile-organizer" });
+				} else {
+					router.push({ pathname: "/edit-profile" });
+				}
+			},
 		},
 		{
-			title: "Edit profile Organizer",
+			title: "Switch Role",
 			icon: <Icons.Edit size={25} />,
-			onClickFun: () => router.push({ pathname: "/edit-profile-organizer" }),
+			onClickFun: () => switchRole(),
 		},
 		{
 			title: "Payment Method",
