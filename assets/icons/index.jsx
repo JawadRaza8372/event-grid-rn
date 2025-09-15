@@ -14,7 +14,9 @@ import Eye from "./eyeIcon.svg";
 import EyeOff from "./eyeoffIcon.svg";
 import Filter from "./filter.svg";
 import Gift from "./gift.svg";
+import HeartEmptyWhite from "./heart-empty-white.svg";
 import HeartEmpty from "./heart-empty.svg";
+import HeartFillWhite from "./heart-filled-white.svg";
 import HeartFill from "./heart-filled.svg";
 import PinFat from "./location-fat.svg";
 import Logout from "./logout.svg";
@@ -52,7 +54,9 @@ export const Icons = {
 	Email,
 	Gift,
 	HeartEmpty,
+	HeartEmptyWhite,
 	HeartFill,
+	HeartFillWhite,
 	PinFat,
 	Logout,
 	MinusIcon,

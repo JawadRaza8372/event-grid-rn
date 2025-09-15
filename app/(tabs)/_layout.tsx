@@ -1,16 +1,21 @@
 // app/(tabs)/_layout.jsx
+import { AuthContext } from "@/constants/AuthContext";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { Tabs } from "expo-router";
+import { useContext } from "react";
 import { StyleSheet } from "react-native";
 import CreateEvent from "../../assets/bottomIcons/CreateEvent";
+import FavoriteIcon from "../../assets/bottomIcons/FavoriteIcon";
 import HomeIcon from "../../assets/bottomIcons/HomeIcon";
 import NotificationIcon from "../../assets/bottomIcons/NotificationIcon";
 import ProfileIcon from "../../assets/bottomIcons/ProfileIcon";
 import TicketIcon from "../../assets/bottomIcons/TicketIcon";
-
-import { useThemeColors } from "@/hooks/useThemeColors";
 import TabIcon from "../../components/TabIcon";
 export default function TabLayout() {
 	const colors = useThemeColors();
+	const { role } = useContext(AuthContext);
+	const isOrganizer = role !== "user";
+
 	const styles = StyleSheet.create({
 		tabBarStyle: {
 			backgroundColor: colors.botmTab,
@@ -63,13 +68,13 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name={"create-event"}
+				name={"center-tab"}
 				options={{
-					title: "create-event",
+					title: "center-tab",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
 							focused={focused}
-							Icon={CreateEvent}
+							Icon={isOrganizer ? CreateEvent : FavoriteIcon}
 						/>
 					),
 				}}

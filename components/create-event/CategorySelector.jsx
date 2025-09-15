@@ -42,7 +42,6 @@ const CategorySelector = ({ options, title, value, onChangeValue }) => {
 		categoryTxt: {
 			fontSize: 8,
 			fontWeight: "500",
-			color: colors.blackColor,
 		},
 	});
 	return (
@@ -64,7 +63,14 @@ const CategorySelector = ({ options, title, value, onChangeValue }) => {
 										value === dat ? colors.blackColor : "transparent",
 								}}
 								onPress={() => onChangeValue(dat)}>
-								<Text style={styles.categoryTxt}>{dat}</Text>
+								<Text
+									style={{
+										...styles.categoryTxt,
+										color:
+											value === dat ? colors.mainBgColor : colors.blackColor,
+									}}>
+									{dat}
+								</Text>
 							</TouchableOpacity>
 					  ))
 					: null}

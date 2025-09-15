@@ -21,7 +21,8 @@ const TrendingEvent = ({
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
-			width: Dimensions.get("screen").width * 0.72,
+			width: Dimensions.get("screen").width - 42,
+			alignSelf: "center",
 			height: 200,
 			borderRadius: 20,
 			overflow: "hidden",

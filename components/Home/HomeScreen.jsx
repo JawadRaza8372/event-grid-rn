@@ -26,10 +26,6 @@ const HomeScreen = () => {
 			width: Dimensions.get("screen").width - 32,
 			alignSelf: "center",
 			height: "auto",
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			flexDirection: "column",
 			marginTop: 40,
 			gap: 16,
 		},
@@ -38,12 +34,12 @@ const HomeScreen = () => {
 			height: "100%",
 		},
 		trendingEventSeprator: {
-			width: 17,
-			height: "100%",
+			width: "100%",
+			height: 10,
 		},
 		bottomView: {
 			width: "100%",
-			height: 100,
+			height: 110,
 		},
 	});
 	const topEventCardData = [
@@ -184,8 +180,7 @@ const HomeScreen = () => {
 			/>
 			<View style={styles.trendingEventCardView}>
 				<FlatList
-					showsHorizontalScrollIndicator={false}
-					horizontal={true}
+					showsVerticalScrollIndicator={false}
 					data={trendingEventData}
 					renderItem={({ item }) => (
 						<TrendingEventCardView
@@ -202,29 +197,9 @@ const HomeScreen = () => {
 					ItemSeparatorComponent={() => (
 						<View style={styles.trendingEventSeprator} />
 					)}
-				/>
-				<FlatList
-					showsHorizontalScrollIndicator={false}
-					horizontal={true}
-					data={trendingEventData}
-					renderItem={({ item }) => (
-						<TrendingEventCardView
-							genralPrice={item.genralPrice}
-							imageLink={item.imageLink}
-							location={item.location}
-							name={item.name}
-							ratting={item.ratting}
-							vipPrice={item.vipPrice}
-							onPressFun={() => router.push({ pathname: "/event-details" })}
-						/>
-					)}
-					keyExtractor={(item, index) => index.toString()}
-					ItemSeparatorComponent={() => (
-						<View style={styles.trendingEventSeprator} />
-					)}
+					ListFooterComponent={<View style={styles.bottomView} />}
 				/>
 			</View>
-			<View style={styles.bottomView} />
 		</>
 	);
 };

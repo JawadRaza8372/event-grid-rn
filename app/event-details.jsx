@@ -11,6 +11,7 @@ import {
 	View,
 } from "react-native";
 import { Icons } from "../assets/icons";
+
 import placeHolderImage from "../assets/images/placeholderImage.jpg";
 import CustomButton from "../components/CustomButton";
 import EventDetailOverView from "../components/EventDetailOverView";
@@ -39,6 +40,7 @@ const EventDetails = () => {
 	};
 	const colors = useThemeColors();
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [isFavoriteEvent, setisFavoriteEvent] = useState(false);
 	const viewabilityConfig = useRef({
 		viewAreaCoveragePercentThreshold: 50,
 	}).current;
@@ -80,10 +82,25 @@ const EventDetails = () => {
 			alignItems: "center",
 			justifyContent: "flex-start",
 			flexDirection: "row",
+		},
+		favoriteBtn: {
+			width: 50,
+			height: 60,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "flex-end",
+			flexDirection: "row",
+		},
+		topHeaderView: {
 			position: "absolute",
 			top: 0,
-			left: 21,
 			zIndex: 2,
+			display: "flex",
+			width: Dimensions.get("screen").width - 42,
+			alignSelf: "center",
+			alignItems: "center",
+			justifyContent: "space-between",
+			flexDirection: "row",
 		},
 		bottmIndicator: {
 			bottom: 0,
@@ -185,11 +202,28 @@ const EventDetails = () => {
 		<View style={styles.mainContainer}>
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<View style={styles.imageContainer}>
-					<TouchableOpacity
-						onPress={() => router.back()}
-						style={styles.backBtn}>
-						<Icons.TaleArrowLeftWhite />
-					</TouchableOpacity>
+					<View style={styles.topHeaderView}>
+						<TouchableOpacity
+							onPress={() => router.back()}
+							style={styles.backBtn}>
+							<Icons.TaleArrowLeftWhite />
+						</TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => setisFavoriteEvent(!isFavoriteEvent)}
+							style={styles.favoriteBtn}>
+							{isFavoriteEvent ? (
+								<Icons.HeartFillWhite
+									width={25}
+									height={25}
+								/>
+							) : (
+								<Icons.HeartEmptyWhite
+									width={25}
+									height={25}
+								/>
+							)}
+						</TouchableOpacity>
+					</View>
 					<View style={styles.bottmIndicator}>
 						{eventData.imageLinks?.map((_, index) => (
 							<View
