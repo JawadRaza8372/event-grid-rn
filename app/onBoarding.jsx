@@ -35,7 +35,7 @@ const onBoarding = () => {
 			marginBottom: 20,
 		},
 		imageContainer: {
-			width: Dimensions.get("screen").width - 60,
+			width: Dimensions.get("screen").width - 120,
 			flex: 1,
 			alignItems: "center",
 			justifyContent: "center",
@@ -44,7 +44,7 @@ const onBoarding = () => {
 		mainImageStyle: {
 			width: "100%",
 			height: "100%",
-			resizeMode: "cover",
+			resizeMode: "contain",
 		},
 		textContainer: {
 			width: Dimensions.get("screen").width - 60,
@@ -93,7 +93,7 @@ const onBoarding = () => {
 			<View style={styles.imageContainer}>
 				<Image
 					style={styles.mainImageStyle}
-					source={boardingData[currentIndex]?.image ?? onBoardingImage}
+					source={onBoardingImage}
 				/>
 			</View>
 			<View style={styles.otherContainer}>
