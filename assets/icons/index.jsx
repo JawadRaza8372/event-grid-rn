@@ -34,9 +34,11 @@ import TaleArrowLeftWhite from "./tale_arrow-leftlight.svg";
 import Ticket from "./ticket.svg";
 import Time from "./time.svg";
 import TransactionHistory from "./transaction-history.svg";
+import ShareDark from "./u_share-alt-dark.svg";
 import Share from "./u_share-alt.svg";
 
 export const Icons = {
+	ShareDark,
 	Calendar,
 	Filter,
 	Search,

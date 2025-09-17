@@ -54,12 +54,14 @@ const FavoriteEvent = () => {
 					data={trendingEventData}
 					renderItem={({ item }) => (
 						<TrendingEventCardView
+							isFavoriteItem={true}
 							genralPrice={item.genralPrice}
 							imageLink={item.imageLink}
 							location={item.location}
 							name={item.name}
 							ratting={item.ratting}
 							vipPrice={item.vipPrice}
+							isFullWidth={true}
 							onPressFun={() => router.push({ pathname: "/event-details" })}
 						/>
 					)}

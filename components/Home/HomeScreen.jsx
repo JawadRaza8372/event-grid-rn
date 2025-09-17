@@ -34,8 +34,8 @@ const HomeScreen = () => {
 			height: "100%",
 		},
 		trendingEventSeprator: {
-			width: "100%",
-			height: 10,
+			width: 10,
+			height: 100,
 		},
 		bottomView: {
 			width: "100%",
@@ -180,7 +180,9 @@ const HomeScreen = () => {
 			/>
 			<View style={styles.trendingEventCardView}>
 				<FlatList
-					showsVerticalScrollIndicator={false}
+					horizontal={true}
+					showsHorizontalScrollIndicator={false}
+					ListHeaderComponent={<View style={styles.trendingEventSeprator} />}
 					data={trendingEventData}
 					renderItem={({ item }) => (
 						<TrendingEventCardView
@@ -197,9 +199,9 @@ const HomeScreen = () => {
 					ItemSeparatorComponent={() => (
 						<View style={styles.trendingEventSeprator} />
 					)}
-					ListFooterComponent={<View style={styles.bottomView} />}
 				/>
 			</View>
+			<View style={styles.bottomView} />
 		</>
 	);
 };

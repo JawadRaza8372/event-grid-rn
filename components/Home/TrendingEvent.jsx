@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
 	Dimensions,
 	Image,
@@ -17,13 +18,16 @@ const TrendingEvent = ({
 	vipPrice,
 	ratting,
 	onPressFun,
+	isFavoriteItem,
+	isFullWidth,
 }) => {
 	const colors = useThemeColors();
+	const [isFavorite, setisFavorite] = useState(isFavoriteItem);
 	const styles = StyleSheet.create({
 		mainContainer: {
-			width: Dimensions.get("screen").width - 42,
+			width: isFullWidth ? "95%" : Dimensions.get("screen").width * 0.82,
 			alignSelf: "center",
-			height: 200,
+			height: 260,
 			borderRadius: 20,
 			overflow: "hidden",
 			display: "flex",
@@ -40,7 +44,7 @@ const TrendingEvent = ({
 			marginBottom: 10,
 		},
 		imageContainer: {
-			height: 100,
+			height: 155,
 			width: "100%",
 		},
 		childContainer: {
@@ -113,6 +117,48 @@ const TrendingEvent = ({
 			alignItems: "flex-start",
 			justifyContent: "center",
 		},
+		favoriteBtn: {
+			position: "absolute",
+			zIndex: 2,
+			top: 15,
+			left: 15,
+			backgroundColor: colors.mainBgColor,
+			width: 35,
+			height: 35,
+			borderRadius: 45,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			shadowColor: colors.blackColor,
+			shadowOffset: {
+				width: 0,
+				height: 4,
+			},
+			shadowOpacity: 0.32,
+			shadowRadius: 5.46,
+			elevation: 9,
+		},
+		shareBtn: {
+			position: "absolute",
+			zIndex: 2,
+			top: 15,
+			right: 15,
+			backgroundColor: colors.mainBgColor,
+			width: 35,
+			height: 35,
+			borderRadius: 45,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			shadowColor: colors.blackColor,
+			shadowOffset: {
+				width: 0,
+				height: 4,
+			},
+			shadowOpacity: 0.32,
+			shadowRadius: 5.46,
+			elevation: 9,
+		},
 	});
 	const RenderComp = onPressFun ? TouchableOpacity : View;
 	const renderProps = onPressFun ? { onPress: onPressFun } : {};
@@ -130,6 +176,29 @@ const TrendingEvent = ({
 					}
 					style={styles.imageStyle}
 				/>
+				<TouchableOpacity
+					onPress={() => setisFavorite(!isFavorite)}
+					style={styles.favoriteBtn}>
+					{isFavorite ? (
+						<Icons.HeartFill
+							width={20}
+							height={20}
+						/>
+					) : (
+						<Icons.HeartEmpty
+							width={20}
+							height={20}
+						/>
+					)}
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => console.log("hy")}
+					style={styles.shareBtn}>
+					<Icons.ShareDark
+						width={20}
+						height={20}
+					/>
+				</TouchableOpacity>
 			</View>
 			<View style={styles.childContainer}>
 				<View style={styles.firstChild}>
