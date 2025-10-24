@@ -1,6 +1,5 @@
 import AppWrapper from "@/components/AppWrapper";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import Constants from "expo-constants";
 import {
 	AppRegistry,
 	KeyboardAvoidingView,
@@ -83,7 +82,7 @@ export default function RootLayout() {
 		"VirtualizedLists should never be nested",
 		"ReanimatedError: [Reanimated] Tried to synchronously call a non-worklet function `valueSetter`",
 	]);
-	const publishKeyValue = Constants?.expoConfig?.extra?.stripePublishKey;
+	const publishKeyValue = process.env.EXPO_PUBLIC_STRIPE_PUBLISHKEY ?? "";
 
 	return (
 		<StripeProvider
