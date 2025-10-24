@@ -1,18 +1,18 @@
 import { router } from "expo-router";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../../assets/icons";
 import DeleteAccountModal from "../../components/DeleteAccountModal";
 import ProfileOption from "../../components/ProfileOption";
 import SideTopBar from "../../components/SideTopBar";
 import UserAvatar from "../../components/UserAvatar";
-import { AuthContext } from "../../constants/AuthContext";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
 const Profile = () => {
 	const colors = useThemeColors();
-	const { role, switchRole } = useContext(AuthContext);
-	const isOrganizerHomeScreen = role !== "user";
+	const role = "";
+	const isOrganizerHomeScreen = role && role !== "user";
+	const switchRole = () => null;
 
 	const [openDeleteModal, setopenDeleteModal] = useState(false);
 	const switchOpenDeleteModal = () => {

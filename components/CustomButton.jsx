@@ -13,6 +13,14 @@ const CustomButton = ({
 	onPressFun,
 	btnAlignSelf,
 	btnRadius,
+	bgColor,
+	txtColor,
+	BtnIcon1,
+	BtnIcon2,
+	brdrColor,
+	showBrdr,
+	isDisabled,
+	txtSize,
 }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
@@ -24,23 +32,31 @@ const CustomButton = ({
 			alignItems: "center",
 			justifyContent: "center",
 			flexDirection: "row",
-			backgroundColor: colors.blackColor,
+			backgroundColor: bgColor ?? colors.blackColor,
 			borderRadius: btnRadius ?? 14,
+			gap: 12,
+			borderWidth: showBrdr ? 1 : 0,
+			borderColor: brdrColor ?? colors.blackColor,
+			opacity: isDisabled ? 0.6 : 1,
 		},
 		btnTxt: {
-			fontSize: 15,
+			fontSize: txtSize ?? 15,
 			fontWeight: "700",
-			color: colors.mainBgColor,
+			color: txtColor ?? colors.mainBgColor,
 		},
 	});
 	const RenderComponent = onPressFun ? TouchableOpacity : View;
-	const renderProps = onPressFun ? { onPress: onPressFun } : {};
+	const renderProps = onPressFun
+		? { onPress: onPressFun, disabled: isDisabled ?? false }
+		: {};
 
 	return (
 		<RenderComponent
 			{...renderProps}
 			style={styles.mainBtnContainer}>
+			{BtnIcon1 ? BtnIcon1 : null}
 			<Text style={styles.btnTxt}>{btnTitle ?? "Submit"}</Text>
+			{BtnIcon2 ? BtnIcon2 : null}
 		</RenderComponent>
 	);
 };

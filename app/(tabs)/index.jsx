@@ -1,14 +1,12 @@
-import { useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import HomeScreen from "../../components/Home/HomeScreen";
 import OrganizerHomeScreen from "../../components/Home/OrganizerHomeScreen";
-import { AuthContext } from "../../constants/AuthContext";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
 const Home = () => {
 	const colors = useThemeColors();
-	const { role } = useContext(AuthContext);
-	const isOrganizerHomeScreen = role !== "user";
+	const role = "";
+	const isOrganizerHomeScreen = role && role !== "user";
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",

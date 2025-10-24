@@ -36,7 +36,7 @@ const CustomSelector = ({ title, value, onChangeValue, options }) => {
 		borderedView: {
 			width: 16,
 			height: 16,
-			borderWidth: 1,
+			borderWidth: 1.3,
 			borderRadius: 4,
 			borderColor: colors.blackColor,
 			display: "flex",
@@ -46,7 +46,7 @@ const CustomSelector = ({ title, value, onChangeValue, options }) => {
 		},
 		optionContainer: {
 			width: "auto",
-			height: "auto",
+			height: 30,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "flex-start",

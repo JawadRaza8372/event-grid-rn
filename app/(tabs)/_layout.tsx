@@ -1,8 +1,6 @@
 // app/(tabs)/_layout.jsx
-import { AuthContext } from "@/constants/AuthContext";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Tabs } from "expo-router";
-import { useContext } from "react";
 import { StyleSheet } from "react-native";
 import CreateEvent from "../../assets/bottomIcons/CreateEvent";
 import FavoriteIcon from "../../assets/bottomIcons/FavoriteIcon";
@@ -13,8 +11,8 @@ import TicketIcon from "../../assets/bottomIcons/TicketIcon";
 import TabIcon from "../../components/TabIcon";
 export default function TabLayout() {
 	const colors = useThemeColors();
-	const { role } = useContext(AuthContext);
-	const isOrganizer = role !== "user";
+	const role = "";
+	const isOrganizer = role && role !== "user";
 
 	const styles = StyleSheet.create({
 		tabBarStyle: {

@@ -7,13 +7,23 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import Toast from "react-native-toast-message";
+import { useDispatch } from "react-redux";
 import { Icons } from "../assets/icons";
 import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
-import SocialContainer from "../components/SocialContainer";
+import RedirecetWrapper from "../components/RedirectWrapper";
+import SocialGoogleButton from "../components/SocialGoogleButton";
 import { useThemeColors } from "../hooks/useThemeColors";
+import {
+	isValidEmailFun,
+	isValidPasswordFun,
+	loginApi,
+} from "../services/endpoints";
+import { saveUserTokenToStorage, setUser } from "../services/store/userSlice";
 const Login = () => {
+	const dispatch = useDispatch();
 	const colors = useThemeColors();
 	const [formData, setformData] = useState({ email: "", password: "" });
 	const styles = StyleSheet.create({
@@ -108,60 +118,96 @@ const Login = () => {
 			marginTop: Dimensions.get("screen").height / 4.7,
 		},
 	});
+	const customLoginFun = async () => {
+		try {
+			if (!isValidEmailFun(formData.email)) {
+				Toast.show({
+					type: "error",
+					text1: "Please enter valid email address.",
+				});
+				return;
+			}
+			if (!isValidPasswordFun(formData.password)) {
+				Toast.show({
+					type: "error",
+					text1: "Please enter valid password of atleast 7 letters",
+				});
+				return;
+			}
+			const result = await loginApi(formData.email, formData.password);
+			if (result) {
+				console.log("Login success:", result?.user);
+				const { tokens, ...rest } = result?.user;
+				dispatch(setUser({ user: rest }));
+				await saveUserTokenToStorage(tokens?.accessToken, tokens?.refreshToken);
+			}
+		} catch (error) {
+			console.log("login failed: ", error);
+			Toast.show({
+				type: "error",
+				text1: error ?? textStrings.loginFailed,
+			});
+		}
+	};
 	return (
-		<AuthLayout>
-			<>
-				<View style={styles.topBarContainer}>
+		<RedirecetWrapper>
+			<AuthLayout>
+				<>
+					<View style={styles.topBarContainer}>
+						<TouchableOpacity
+							onPress={() => router.back()}
+							style={styles.backBtn}>
+							<Icons.ArrowBack
+								width={25}
+								height={25}
+							/>
+						</TouchableOpacity>
+					</View>
+					<Text style={styles.mainHeading}>Let’s Sign In</Text>
+					<CustomInput
+						title={"Email Address"}
+						placeHolderText={"jhondoe@gmail.com"}
+						value={formData.email}
+						onChangeValue={(text) => setformData({ ...formData, email: text })}
+					/>
+					<CustomInput
+						title={"Password"}
+						placeHolderText={"********"}
+						isPasswordType={true}
+						value={formData.password}
+						onChangeValue={(text) =>
+							setformData({ ...formData, password: text })
+						}
+					/>
 					<TouchableOpacity
-						onPress={() => router.back()}
-						style={styles.backBtn}>
-						<Icons.ArrowBack
-							width={25}
-							height={25}
-						/>
+						onPress={() => router.push({ pathname: "/forgot-password" })}
+						style={styles.recoveryContainer}>
+						<Text style={styles.recoverTxt}>Recover Password</Text>
 					</TouchableOpacity>
-				</View>
-				<Text style={styles.mainHeading}>Let’s Sign In</Text>
-				<CustomInput
-					title={"Email Address"}
-					placeHolderText={"jhondoe@gmail.com"}
-					value={formData.email}
-					onChangeValue={(text) => setformData({ ...formData, email: text })}
-				/>
-				<CustomInput
-					title={"Password"}
-					placeHolderText={"********"}
-					isPasswordType={true}
-					value={formData.password}
-					onChangeValue={(text) => setformData({ ...formData, password: text })}
-				/>
-				<TouchableOpacity
-					onPress={() => router.push({ pathname: "/forgot-password" })}
-					style={styles.recoveryContainer}>
-					<Text style={styles.recoverTxt}>Recover Password</Text>
-				</TouchableOpacity>
-				<CustomButton
-					btnWidth={"100%"}
-					btnTitle={"Sign In"}
-					onPressFun={() => router.push({ pathname: "/(tabs)" })}
-				/>
-				<View style={styles.loginWithTxtCont}>
-					<Text style={styles.orText}>OR</Text>
-					<Text style={styles.loginWithText}>Login With</Text>
-				</View>
-				<SocialContainer
-					onGooglePress={() => console.log("google")}
-					onFacebookPress={() => console.log("facebook")}
-					onInstaPress={() => console.log("insta")}
-				/>
-				<TouchableOpacity
-					onPress={() => router.push({ pathname: "/register" })}
-					style={styles.botmBtn}>
-					<Text style={styles.btmLoginWithText}>New User?</Text>
-					<Text style={styles.btmOrText}>Create Account</Text>
-				</TouchableOpacity>
-			</>
-		</AuthLayout>
+					<CustomButton
+						isDisabled={
+							formData.email.length < 5 || formData.password.length < 4
+								? true
+								: false
+						}
+						btnWidth={"100%"}
+						btnTitle={"Sign In"}
+						onPressFun={customLoginFun}
+					/>
+					<View style={styles.loginWithTxtCont}>
+						<Text style={styles.orText}>OR</Text>
+						<Text style={styles.loginWithText}>Login With</Text>
+					</View>
+					<SocialGoogleButton />
+					<TouchableOpacity
+						onPress={() => router.push({ pathname: "/register" })}
+						style={styles.botmBtn}>
+						<Text style={styles.btmLoginWithText}>New User?</Text>
+						<Text style={styles.btmOrText}>Create Account</Text>
+					</TouchableOpacity>
+				</>
+			</AuthLayout>
+		</RedirecetWrapper>
 	);
 };
 
