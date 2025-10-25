@@ -59,21 +59,24 @@ base.interceptors.response.use(
 					console.log("🚫 No refresh token available — user likely logged out");
 					return null;
 				}
+				console.log("===============>requested new tokens<=================");
 				// call backend refresh route
 				const res = await axios.post(`${mainUrl}auth/renew-token`, {
 					refreshToken: refreshToken,
 				});
-				console.log("requested new tokenns");
 				const newAccessToken = res?.data?.accessToken;
 				const newRefreshToken = res?.data?.refreshToken;
 				await saveUserTokenToStorage(newAccessToken, newRefreshToken);
-
+				console.log("===============>saved new tokens<=================");
 				// attach new token for retry
 				base.defaults.headers.common[
 					"Authorization"
 				] = `Bearer ${newAccessToken}`;
 				originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-				console.log("retrying orignal request");
+				console.log(
+					"===============>retrying orignal request<================="
+				);
+
 				return base(originalRequest); // retry original request
 			} catch (refreshError) {
 				console.error("Token refresh failed:", refreshError);

@@ -5,6 +5,19 @@ import { base, mainUrl } from "./apiUrl";
 function isValidJWT(token) {
 	return typeof token === "string" && token.split(".").length === 3;
 }
+export function getTimeBasedGreeting() {
+	const currentHour = new Date().getHours();
+
+	if (currentHour >= 5 && currentHour < 12) {
+		return "Good morning";
+	} else if (currentHour >= 12 && currentHour < 17) {
+		return "Good afternoon";
+	} else if (currentHour >= 17 && currentHour < 21) {
+		return "Good evening";
+	} else {
+		return "Good night";
+	}
+}
 export const shouldShowGetStarted = (user, sselectedTab) => {
 	const now = new Date();
 	const expiry = new Date(user.expiresAt);
@@ -183,6 +196,47 @@ export const getUserProfileApi = async () => {
 			: error?.message;
 	}
 };
+export const addFavoriteEventApi = async (eventId) => {
+	try {
+		const result = await base.put(
+			"auth/favorite-event",
+			{ eventId, type: "add" },
+			{ isPublic: false }
+		);
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const removeFavoriteEventApi = async (eventId) => {
+	try {
+		const result = await base.put(
+			"auth/favorite-event",
+			{ eventId, type: "remove" },
+			{ isPublic: false }
+		);
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const getUserFavoriteApi = async () => {
+	try {
+		const result = await base.get("auth/user-favorite-events", {
+			isPublic: false,
+		});
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+
 export const createPaymentIntentApi = async (planName) => {
 	try {
 		const result = await base.post(
@@ -201,12 +255,73 @@ export const createPaymentIntentApi = async (planName) => {
 			: error?.message;
 	}
 };
+export const isValidPhoneNumber = (phone) => {
+	const phoneRegex = /^\+?[0-9]+$/;
+	return phoneRegex.test(phone);
+};
 export const postPaymentSuccessApi = async (paymentIntentId) => {
 	try {
 		const result = await base.post(
 			`payment/payment-success`,
 			{
 				paymentIntentId: paymentIntentId,
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+const isJpgOrPng = (uri) => {
+	const fileExtension = uri.split(".").pop().toLowerCase();
+
+	return fileExtension;
+};
+export const uploadImageApi = async (imageUri, imgType) => {
+	try {
+		const formData = new FormData();
+		const imageType = isJpgOrPng(imageUri);
+
+		formData.append("image", {
+			uri: imageUri,
+			type: `image/${imageType}`,
+			name: `${imgType}-${Date.now()}.${imageType}`,
+		});
+
+		const response = await base.post("file/upload", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+			isPublic: true,
+		});
+
+		return response?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message || "An error occurred while uploading image";
+	}
+};
+
+export const updateProfileApi = async (
+	username,
+	profileImage,
+	email,
+	phone
+) => {
+	try {
+		const result = await base.put(
+			`auth/edit-profile`,
+			{
+				username,
+				profileImage,
+				email,
+				phone,
 			},
 			{
 				isPublic: false,

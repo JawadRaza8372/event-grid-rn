@@ -5,7 +5,6 @@ const initialState = {
 	user: {},
 	resetPasswordToken: null,
 	billPayments: [],
-	selectedLang: "en",
 };
 
 export const userSlice = createSlice({
@@ -26,22 +25,13 @@ export const userSlice = createSlice({
 		setResetPasswordToken: (state, action) => {
 			state.resetPasswordToken = action.payload.resetPasswordToken;
 		},
-		setSelectedLang: (state, action) => {
-			state.selectedLang = action.payload.selectedLang;
-			saveLangTypeToStorage(action.payload.selectedLang);
-		},
+
 		setBillPayments: (state, action) => {
 			state.billPayments = action.payload.billPayments;
 		},
 	},
 });
-const saveLangTypeToStorage = async (lng) => {
-	await localStorage.setItem("event-grid8372-lang", lng);
-};
-export const getLangTypefromStorage = async () => {
-	const fetchedLang = await localStorage.getItem("event-grid8372-lang");
-	return fetchedLang ?? "en";
-};
+
 export const saveUserTokenToStorage = async (accessToken, refreshToken) => {
 	if (!accessToken || !refreshToken) return;
 	await localStorage.setItem("event-grid8372-accessToken", accessToken);

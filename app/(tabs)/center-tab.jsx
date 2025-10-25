@@ -1,12 +1,12 @@
 import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 import CreateEvent from "../../components/center-tab/CreateEvent";
 import FavoriteEvent from "../../components/center-tab/FavoriteEvent";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
 const CenterTab = () => {
 	const colors = useThemeColors();
-	const role = "";
-	const isOrganizerHomeScreen = role && role !== "user";
+	const { user } = useSelector((state) => state?.user);
 
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -17,7 +17,11 @@ const CenterTab = () => {
 	});
 	return (
 		<View style={styles.mainContainer}>
-			{isOrganizerHomeScreen ? <CreateEvent /> : <FavoriteEvent />}
+			{user?.role === "user" ? (
+				<FavoriteEvent />
+			) : user?.role === "organizer" ? (
+				<CreateEvent />
+			) : null}
 		</View>
 	);
 };

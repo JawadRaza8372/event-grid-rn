@@ -2,6 +2,7 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Tabs } from "expo-router";
 import { StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
 import CreateEvent from "../../assets/bottomIcons/CreateEvent";
 import FavoriteIcon from "../../assets/bottomIcons/FavoriteIcon";
 import HomeIcon from "../../assets/bottomIcons/HomeIcon";
@@ -11,9 +12,7 @@ import TicketIcon from "../../assets/bottomIcons/TicketIcon";
 import TabIcon from "../../components/TabIcon";
 export default function TabLayout() {
 	const colors = useThemeColors();
-	const role = "";
-	const isOrganizer = role && role !== "user";
-
+	const { user } = useSelector((state: any) => state?.user);
 	const styles = StyleSheet.create({
 		tabBarStyle: {
 			backgroundColor: colors.botmTab,
@@ -72,7 +71,13 @@ export default function TabLayout() {
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
 							focused={focused}
-							Icon={isOrganizer ? CreateEvent : FavoriteIcon}
+							Icon={
+								user?.role === "organizer"
+									? CreateEvent
+									: user?.role === "user"
+									? FavoriteIcon
+									: null
+							}
 						/>
 					),
 				}}

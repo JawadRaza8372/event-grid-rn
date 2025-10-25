@@ -16,6 +16,7 @@ const CustomInput = ({
 	onChangeValue,
 	isPasswordType,
 	secondVarient,
+	isNumber,
 }) => {
 	const colors = useThemeColors();
 	const [hidePassword, sethidePassword] = useState(false);
@@ -75,6 +76,7 @@ const CustomInput = ({
 					value={value}
 					onChangeText={onChangeValue}
 					style={styles.inputMainStyle}
+					keyboardType={isNumber ? "number-pad" : "default"}
 					secureTextEntry={isPasswordType ? !hidePassword : false}
 				/>
 				{isPasswordType ? (

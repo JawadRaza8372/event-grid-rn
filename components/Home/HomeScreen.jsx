@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import { useState } from "react";
 import { Dimensions, FlatList, StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 import CategoryView from "./CategoryView";
 import SearchInput from "./SearchInput";
 import SeeAllView from "./SeeAllView";
@@ -8,6 +9,7 @@ import TopEventCard from "./TopEventCard";
 import TrendingEventCardView from "./TrendingEvent";
 import WelcomeTopComponent from "./WelcomeTopComponent";
 const HomeScreen = () => {
+	const { user } = useSelector((state) => state?.user);
 	const [searchTearm, setsearchTearm] = useState("");
 	const [selectedCategory, setselectedCategory] = useState("All");
 	const styles = StyleSheet.create({
@@ -132,10 +134,7 @@ const HomeScreen = () => {
 	];
 	return (
 		<>
-			<WelcomeTopComponent
-				name={"Jhon Doe"}
-				welcomeTxt={"Good Morning"}
-			/>
+			<WelcomeTopComponent />
 			<SearchInput
 				value={searchTearm}
 				onChangeValue={(text) => setsearchTearm(text)}

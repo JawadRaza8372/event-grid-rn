@@ -114,10 +114,7 @@ const OrganizerHomeScreen = () => {
 
 	return (
 		<>
-			<WelcomeTopComponent
-				name={"Jhon Doe"}
-				welcomeTxt={"Good Morning"}
-			/>
+			<WelcomeTopComponent />
 			<View style={styles.upperMainContainer}>
 				<View style={styles.valueContainer}>
 					<Icons.CoinsDollar />

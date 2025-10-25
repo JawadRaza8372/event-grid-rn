@@ -6,10 +6,14 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { Icons } from "../../assets/icons";
 import { useThemeColors } from "../../hooks/useThemeColors";
+import { getTimeBasedGreeting } from "../../services/endpoints";
 import UserAvatar from "../UserAvatar";
-const WelcomeTopComponent = ({ name, imageLink, welcomeTxt }) => {
+const WelcomeTopComponent = ({ imageLink }) => {
+	const welcomeTxt = getTimeBasedGreeting();
+	const { user } = useSelector((state) => state?.user);
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -61,11 +65,11 @@ const WelcomeTopComponent = ({ name, imageLink, welcomeTxt }) => {
 		<View style={styles.mainContainer}>
 			<UserAvatar
 				size={47}
-				imgUrl={imageLink ?? ""}
+				imgUrl={user?.profileImage ?? ""}
 			/>
 			<View style={styles.textContainer}>
 				<Text style={styles.morningTxt}>{welcomeTxt ?? "Welcome"}</Text>
-				<Text style={styles.nameTxt}>{name ?? ""}</Text>
+				<Text style={styles.nameTxt}>{user?.username ?? ""}</Text>
 			</View>
 			<TouchableOpacity
 				onPress={() => router.push({ pathname: "/notification" })}
