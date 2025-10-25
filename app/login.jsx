@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
 	Dimensions,
@@ -23,6 +23,7 @@ import {
 } from "../services/endpoints";
 import { saveUserTokenToStorage, setUser } from "../services/store/userSlice";
 const Login = () => {
+	const router = useRouter();
 	const dispatch = useDispatch();
 	const colors = useThemeColors();
 	const [formData, setformData] = useState({ email: "", password: "" });

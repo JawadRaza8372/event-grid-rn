@@ -5,13 +5,12 @@ import { Icons } from "../assets/icons";
 import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import InputWithIcons from "../components/InputWithIcons";
-import TabContainer from "../components/TabContainer";
 import { useThemeColors } from "../hooks/useThemeColors";
+import { forgotPasswordApi, isValidEmailFun } from "../services/endpoints";
 const ForgotPassword = () => {
 	const router = useRouter();
 	const colors = useThemeColors();
-	const [selectedTab, setSelectedTab] = useState("Email");
-	const [formData, setformData] = useState({ email: "", phone: "" });
+	const [formData, setformData] = useState({ email: "" });
 	const styles = StyleSheet.create({
 		topBarContainer: {
 			width: "100%",
@@ -58,7 +57,31 @@ const ForgotPassword = () => {
 			height: 10,
 		},
 	});
-
+	const customForgotPasswordFun = async () => {
+		try {
+			if (!isValidEmailFun(formData.email)) {
+				Toast.show({
+					type: "error",
+					text1: "Please enter valid email address.",
+				});
+				return;
+			}
+			const result = await forgotPasswordApi(formData.email);
+			if (result) {
+				console.log("Forgot password success code:", result?.code);
+				router.replace({
+					pathname: "/otp-verification",
+					params: { dbCode: result?.code, email: formData.email },
+				});
+			}
+		} catch (error) {
+			console.log("forgot password failed: ", error);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Forgot password failed",
+			});
+		}
+	};
 	return (
 		<AuthLayout hideBgImg={true}>
 			<>
@@ -75,37 +98,22 @@ const ForgotPassword = () => {
 				<View style={styles?.titleContainer}>
 					<Text style={styles.mainHeading}>Forgot Your Password?</Text>
 					<Text style={styles.subHeading}>
-						Enter your email or your phone number, we will send you confirmation
-						code
+						Please enter your email, we will send you confirmation code
 					</Text>
 				</View>
-				<View style={styles.tabContainer}>
-					<TabContainer
-						options={["Email", "Phone"]}
-						value={selectedTab}
-						onchange={(text) => setSelectedTab(text)}
-					/>
-				</View>
-				{selectedTab === "Email" ? (
-					<InputWithIcons
-						placeHolderText={""}
-						value={formData.email}
-						onChangeValue={(text) => setformData({ ...formData, email: text })}
-						LeftIcon={<Icons.Email />}
-					/>
-				) : (
-					<InputWithIcons
-						placeHolderText={""}
-						value={formData.email}
-						onChangeValue={(text) => setformData({ ...formData, email: text })}
-						LeftIcon={<Icons.Call />}
-					/>
-				)}
+				<InputWithIcons
+					placeHolderText={""}
+					value={formData.email}
+					onChangeValue={(text) => setformData({ ...formData, email: text })}
+					LeftIcon={<Icons.Email />}
+				/>
+
 				<View style={styles?.topSpacing} />
 				<CustomButton
+					isDisabled={formData.email.length < 5 ? true : false}
 					btnWidth={"100%"}
 					btnTitle={"Reset Password"}
-					onPressFun={() => router.push({ pathname: "/change-password" })}
+					onPressFun={customForgotPasswordFun}
 				/>
 			</>
 		</AuthLayout>
