@@ -236,13 +236,48 @@ export const getUserFavoriteApi = async () => {
 			: error?.message;
 	}
 };
-
 export const createPaymentIntentApi = async (planName) => {
 	try {
 		const result = await base.post(
 			`payment/create-payment-intent`,
 			{
 				planName: planName,
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const createNewEventApi = async (
+	title,
+	category,
+	status,
+	location,
+	date,
+	startTime,
+	endTime,
+	description,
+	ticketTiers
+) => {
+	try {
+		const result = await base.post(
+			`event/create`,
+			{
+				title,
+				category,
+				status,
+				location,
+				date,
+				startTime,
+				endTime,
+				description,
+				ticketTiers,
 			},
 			{
 				isPublic: false,
