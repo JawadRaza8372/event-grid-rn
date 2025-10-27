@@ -269,6 +269,40 @@ export const getUserProfileApi = async () => {
 			: error?.message;
 	}
 };
+export const getOrganizerStatsApi = async () => {
+	try {
+		const result = await base.get("event/my-events-stats", { isPublic: false });
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const publishDraftEventApi = async (eventId) => {
+	try {
+		const result = await base.put(`event/publish-draft/${eventId}`, {
+			isPublic: false,
+		});
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const deleteDraftEventApi = async (eventId) => {
+	try {
+		const result = await base.delete(`event/delete-draft/${eventId}`, {
+			isPublic: false,
+		});
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
 export const addFavoriteEventApi = async (eventId) => {
 	try {
 		const result = await base.put(
@@ -316,6 +350,78 @@ export const createPaymentIntentApi = async (planName) => {
 			{
 				planName: planName,
 			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const getUserHomeEventApi = async () => {
+	//highlights
+	try {
+		const result = await base.get(`event/highlights`, {
+			isPublic: false,
+		});
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const getTicketFromBarCodeApi = async (barcodeValue) => {
+	try {
+		const result = await base.get(`ticket/barcode/${barcodeValue}`, {
+			isPublic: false,
+		});
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const getUserTicketHistoryApi = async () => {
+	try {
+		const result = await base.get(`ticket/ticket-history`, {
+			isPublic: false,
+		});
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const markTicketAsUsedApi = async (eventId, ticketId) => {
+	try {
+		const result = await base.put(
+			`ticket/mark-ticket-used`,
+			{
+				eventId,
+				ticketId,
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw error?.response?.data?.message
+			? error?.response?.data?.message
+			: error?.message;
+	}
+};
+export const addViewToEventApi = async (eventId) => {
+	try {
+		const result = await base.post(
+			`event/add-view/${eventId}`,
+			{},
 			{
 				isPublic: false,
 			}

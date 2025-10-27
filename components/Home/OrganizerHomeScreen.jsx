@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../../assets/icons";
@@ -9,9 +10,9 @@ import SeeAllView from "./SeeAllView";
 import WelcomeTopComponent from "./WelcomeTopComponent";
 
 const OrganizerHomeScreen = () => {
+	const router = useRouter();
 	const colors = useThemeColors();
 	const [selectedCategory, setselectedCategory] = useState("All");
-	const [selectedTab, setselectedTab] = useState("Events");
 	const currentUserData = {
 		revenue: "420k",
 		events: "4",
@@ -157,7 +158,7 @@ const OrganizerHomeScreen = () => {
 			/>
 			<SeeAllView
 				title={"Your Events"}
-				onPressFun={() => console.log("")}
+				onPressFun={() => router.push({ pathname: "/organizer-events" })}
 			/>
 			<View style={styles.mainItemsContainer}>
 				<FlatList

@@ -1,25 +1,26 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
-import { Icons } from "../../assets/icons";
-import ProfileOption from "../../components/ProfileOption";
-import SideTopBar from "../../components/SideTopBar";
-import UserAvatar from "../../components/UserAvatar";
-import YesNoModal from "../../components/YesNoModal";
-import { useThemeColors } from "../../hooks/useThemeColors";
-import { setAuthToken } from "../../services/apiUrl";
-import { deleteAccountApi } from "../../services/endpoints";
+import { Icons } from "../assets/icons";
+import ProfileOption from "../components/ProfileOption";
+import SideTopBar from "../components/SideTopBar";
+import TabContainer from "../components/TabContainer";
+import YesNoModal from "../components/YesNoModal";
+import { useThemeColors } from "../hooks/useThemeColors";
+import { setAuthToken } from "../services/apiUrl";
+import { deleteAccountApi } from "../services/endpoints";
 import {
 	removeUserTokenfromStorage,
 	resetUser,
-} from "../../services/store/userSlice";
-const Profile = () => {
+} from "../services/store/userSlice";
+const OrganizerEvents = () => {
 	const { user } = useSelector((state) => state?.user);
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const colors = useThemeColors();
+	const [selectedEventType, setSelectedEventType] = useState("Published");
 	const [openDeleteModal, setopenDeleteModal] = useState(false);
 	const [openLogoutModal, setopenLogoutModal] = useState(false);
 
@@ -51,6 +52,7 @@ const Profile = () => {
 			width: "100%",
 			height: "100%",
 			backgroundColor: colors.mainBgColor,
+			paddingHorizontal: 16,
 		},
 		bottomPadding: {
 			width: "100%",
@@ -143,28 +145,17 @@ const Profile = () => {
 	};
 	return (
 		<View style={styles.mainContainer}>
+			<SideTopBar
+				isTailIcon={true}
+				title={"My Events"}
+			/>
+			<TabContainer
+				value={selectedEventType}
+				onchange={(text) => setSelectedEventType(text)}
+				options={["Published", "Drafts", "Completed"]}
+			/>
 			<FlatList
 				showsVerticalScrollIndicator={false}
-				ListHeaderComponent={
-					<>
-						<SideTopBar
-							isTailIcon={true}
-							title={"Profile"}
-						/>
-						<View style={styles.userContainer}>
-							<UserAvatar
-								imgUrl={user?.profileImage}
-								size={103}
-							/>
-							<Text
-								numberOfLines={1}
-								ellipsizeMode="tail"
-								style={styles.usernameTxt}>
-								{user?.username ?? ""}
-							</Text>
-						</View>
-					</>
-				}
 				data={menuOptions}
 				renderItem={({ item }) => (
 					<ProfileOption
@@ -195,4 +186,4 @@ const Profile = () => {
 	);
 };
 
-export default Profile;
+export default OrganizerEvents;

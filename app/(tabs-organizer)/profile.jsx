@@ -181,11 +181,13 @@ const Profile = () => {
 				showModal={openDeleteModal}
 				hideModal={switchOpenDeleteModal}
 				onYesFun={deleteAccountFun}
+				onNoFun={switchOpenDeleteModal}
 			/>
 			<YesNoModal
 				title={"Logout Account"}
 				description={"Are you sure you want to logout\nyour account?"}
 				showModal={openLogoutModal}
+				onNoFun={switchOpenLogoutModal}
 				hideModal={switchOpenLogoutModal}
 				onYesFun={logoutAccountFun}
 			/>

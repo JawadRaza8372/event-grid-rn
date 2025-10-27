@@ -9,7 +9,16 @@ import {
 } from "react-native";
 import deletImage from "../assets/images/Question.png";
 import { useThemeColors } from "../hooks/useThemeColors";
-const YesNoModal = ({ showModal, hideModal, onYesFun, title, description }) => {
+const YesNoModal = ({
+	showModal,
+	hideModal,
+	onYesFun,
+	onNoFun,
+	title,
+	description,
+	yesTxt,
+	noTxt,
+}) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -126,14 +135,14 @@ const YesNoModal = ({ showModal, hideModal, onYesFun, title, description }) => {
 					</View>
 					<View style={styles.sideBySideView}>
 						<TouchableOpacity
-							onPress={hideModal}
+							onPress={onNoFun}
 							style={styles.noBtn}>
-							<Text style={styles.noTxt}>No</Text>
+							<Text style={styles.noTxt}>{noTxt ?? "No"}</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={onYesFun}
 							style={styles.yesBtn}>
-							<Text style={styles.yesTxt}>Yes</Text>
+							<Text style={styles.yesTxt}>{yesTxt ?? "Yes"}</Text>
 						</TouchableOpacity>
 					</View>
 				</View>

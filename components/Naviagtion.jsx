@@ -29,6 +29,7 @@ const Naviagtion = () => {
 			<Stack.Screen name="payments" />
 			<Stack.Screen name="review-summary" />
 			<Stack.Screen name="event-details" />
+			<Stack.Screen name="organizer-events" />
 			<Stack.Screen name="+not-found" />
 		</Stack>
 	);

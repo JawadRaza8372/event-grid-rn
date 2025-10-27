@@ -19,11 +19,14 @@ import CustomLocationInput from "../create-event/CustomLocationInput";
 import CustomTimePicker from "../create-event/CustomTimePicker";
 import TicketOverview from "../create-event/TicketOverview";
 import SideTopBar from "../SideTopBar";
+import YesNoModal from "../YesNoModal";
 import TicketSelector from "./TicketSelector";
 const CreateEvent = () => {
 	const totalSteps = 2;
 	const [currentStep, setcurrentStep] = useState(0);
 	const [isScroll, setisScroll] = useState(false);
+	const [showSaveOptions, setshowSaveOptions] = useState(false);
+	const switchSaveOptions = () => setshowSaveOptions(!showSaveOptions);
 	const [formData, setformData] = useState({
 		title: "",
 		category: "",
@@ -106,7 +109,7 @@ const CreateEvent = () => {
 		setcurrentStep(currentStep - 1);
 	};
 	const result = getTicketSummary(formData);
-	const submitEventFun = async () => {
+	const onSaveBtnClick = () => {
 		if (formData.ticketTiers.length <= 0) {
 			Toast.show({
 				type: "error",
@@ -114,6 +117,53 @@ const CreateEvent = () => {
 			});
 			return;
 		}
+		switchSaveOptions();
+	};
+	const submitEventFunAsDraft = async () => {
+		try {
+			await createNewEventApi(
+				formData.title,
+				formData.category,
+				"Draft",
+				formData.location,
+				formData.date,
+				formData.fromTime,
+				formData.toTime,
+				formData.description,
+				formData.ticketTiers
+			);
+			setcurrentStep(0);
+			setformData({
+				title: "",
+				category: "",
+				location: {
+					address: "",
+					name: "",
+					coordinates: {
+						lat: 0,
+						lng: 0,
+					},
+				},
+				date: new Date(),
+				fromTime: new Date(),
+				toTime: new Date(),
+				description: "",
+				ticketTiers: [],
+			});
+			setisScroll(true);
+			setshowSaveOptions(false);
+			Toast.show({
+				type: "success",
+				text1: "Event saved as draft successfully",
+			});
+		} catch (error) {
+			Toast.show({
+				type: "error",
+				text1: error ?? "Draft Event failed",
+			});
+		}
+	};
+	const submitEventFunAsPublished = async () => {
 		try {
 			await createNewEventApi(
 				formData.title,
@@ -145,11 +195,12 @@ const CreateEvent = () => {
 				ticketTiers: [],
 			});
 			setisScroll(true);
-			Toast.show({ type: "success", text1: "Event Created successfully" });
+			setshowSaveOptions(false);
+			Toast.show({ type: "success", text1: "Event Published successfully" });
 		} catch (error) {
 			Toast.show({
 				type: "error",
-				text1: error ?? "Create Event failed",
+				text1: error ?? "Publish Event failed",
 			});
 		}
 	};
@@ -401,10 +452,22 @@ const CreateEvent = () => {
 					onBackFun={backBtnFun}
 					onNextFun={nextBtnFun}
 					onResetFun={resetEventFun}
-					onSubmitFun={submitEventFun}
+					onSubmitFun={onSaveBtnClick}
 					showfirstPair={currentStep === 0}
 				/>
 				<View style={styles.bottomPadding} />
+				<YesNoModal
+					title={"Event Status"}
+					description={
+						"Select whether to publish your event now\nor save it as a draft."
+					}
+					showModal={showSaveOptions}
+					hideModal={switchSaveOptions}
+					onYesFun={submitEventFunAsPublished}
+					onNoFun={submitEventFunAsDraft}
+					yesTxt={"Publish Now"}
+					noTxt={"Draft"}
+				/>
 			</>
 		</AuthLayout>
 	);
