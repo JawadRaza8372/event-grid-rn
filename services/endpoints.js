@@ -5,6 +5,17 @@ import { base, mainUrl } from "./apiUrl";
 function isValidJWT(token) {
 	return typeof token === "string" && token.split(".").length === 3;
 }
+export const combineDateAndTime = (date, time) => {
+	if (!date || !time) return null;
+
+	const combined = new Date(date);
+	combined.setHours(time.getHours());
+	combined.setMinutes(time.getMinutes());
+	combined.setSeconds(time.getSeconds());
+	combined.setMilliseconds(0);
+
+	return combined;
+};
 export const formatTo12Hour = (timeValue) => {
 	try {
 		const date = new Date(timeValue);

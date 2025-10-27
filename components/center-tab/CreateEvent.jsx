@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { categoriesArry } from "../../constants/rawData";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import {
+	combineDateAndTime,
 	createNewEventApi,
 	getTicketSummary,
 	validateEventData,
@@ -212,6 +213,30 @@ const CreateEvent = () => {
 			paddingVertical: 20,
 		},
 	});
+	useEffect(() => {
+		if (formData.date && formData.fromTime) {
+			const formattedStartTime = combineDateAndTime(
+				formData.date,
+				formData.fromTime
+			);
+			if (formattedStartTime.getTime() !== formData.fromTime.getTime()) {
+				setformData((prev) => ({ ...prev, fromTime: formattedStartTime }));
+			}
+		}
+	}, [formData.date, formData.fromTime]);
+
+	useEffect(() => {
+		if (formData.date && formData.toTime) {
+			const formattedEndTime = combineDateAndTime(
+				formData.date,
+				formData.toTime
+			);
+			if (formattedEndTime.getTime() !== formData.toTime.getTime()) {
+				setformData((prev) => ({ ...prev, toTime: formattedEndTime }));
+			}
+		}
+	}, [formData.date, formData.toTime]);
+
 	return (
 		<AuthLayout
 			hideBgImg={true}
