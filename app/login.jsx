@@ -146,7 +146,7 @@ const Login = () => {
 			console.log("login failed: ", error);
 			Toast.show({
 				type: "error",
-				text1: error ?? textStrings.loginFailed,
+				text1: error ?? "Login failed",
 			});
 		}
 	};

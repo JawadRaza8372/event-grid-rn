@@ -5,6 +5,24 @@ import { base, mainUrl } from "./apiUrl";
 function isValidJWT(token) {
 	return typeof token === "string" && token.split(".").length === 3;
 }
+export const formatTo12Hour = (timeValue) => {
+	try {
+		const date = new Date(timeValue);
+		if (isNaN(date.getTime())) return "";
+
+		let hours = date.getHours();
+		const minutes = date.getMinutes();
+		const ampm = hours >= 12 ? "PM" : "AM";
+
+		hours = hours % 12 || 12; // Convert 0 => 12
+		const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+		return `${hours}:${formattedMinutes} ${ampm}`;
+	} catch (error) {
+		console.error("Error formatting time:", error);
+		return "";
+	}
+};
 export const getTicketSummary = (formData) => {
 	const tiers = formData?.ticketTiers || [];
 
@@ -309,6 +327,9 @@ export const createNewEventApi = async (
 	description,
 	ticketTiers
 ) => {
+	const formattedDate = new Date(date).toISOString(); // full date
+	const formattedStartTime = new Date(startTime).toISOString(); // proper time
+	const formattedEndTime = new Date(endTime).toISOString();
 	try {
 		const result = await base.post(
 			`event/create`,
@@ -317,9 +338,9 @@ export const createNewEventApi = async (
 				category,
 				status,
 				location,
-				date,
-				startTime,
-				endTime,
+				date: formattedDate,
+				startTime: formattedStartTime,
+				endTime: formattedEndTime,
 				description,
 				ticketTiers,
 			},

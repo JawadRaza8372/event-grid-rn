@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
+import { categoriesArry } from "../../constants/rawData";
 import { useThemeColors } from "../../hooks/useThemeColors";
-import { getTicketSummary, validateEventData } from "../../services/endpoints";
+import {
+	createNewEventApi,
+	getTicketSummary,
+	validateEventData,
+} from "../../services/endpoints";
 import AuthLayout from "../AuthLayout";
 import BottomButtons from "../create-event/BottomButtons";
 import CategorySelector from "../create-event/CategorySelector";
@@ -21,10 +26,11 @@ const CreateEvent = () => {
 		title: "",
 		category: "",
 		location: {
+			name: "",
 			address: "",
 			coordinates: {
-				lat: "",
-				lng: "",
+				lat: 0,
+				lng: 0,
 			},
 		},
 		date: new Date(),
@@ -39,9 +45,10 @@ const CreateEvent = () => {
 			category: "",
 			location: {
 				address: "",
+				name: "",
 				coordinates: {
-					lat: "",
-					lng: "",
+					lat: 0,
+					lng: 0,
 				},
 			},
 			date: new Date(),
@@ -53,13 +60,6 @@ const CreateEvent = () => {
 		Toast.show({ type: "error", text1: "Reset Successfull." });
 	};
 	const nextBtnFun = () => {
-		setcurrentStep(currentStep + 1);
-	};
-	const backBtnFun = () => {
-		setcurrentStep(currentStep - 1);
-	};
-	const result = getTicketSummary(formData);
-	const submitEventFun = () => {
 		const validation = validateEventData(formData);
 
 		if (formData.title?.length < 5) {
@@ -71,13 +71,15 @@ const CreateEvent = () => {
 			return;
 		}
 		if (
+			formData.location?.name?.length === 0 ||
 			formData.location?.address?.length === 0 ||
-			formData.location?.coordinates?.lat?.length === 0 ||
-			formData.location?.coordinates?.lng?.length === 0
+			(formData.location?.coordinates?.lat?.length === 0 &&
+				formData.location?.coordinates?.lng?.length === 0)
 		) {
 			Toast.show({ type: "error", text1: "Please enter valid location" });
 			return;
 		}
+
 		if (!validation.valid) {
 			Toast.show({
 				type: "error",
@@ -95,12 +97,39 @@ const CreateEvent = () => {
 			});
 			return;
 		}
+		setcurrentStep(currentStep + 1);
+	};
+	const backBtnFun = () => {
+		setcurrentStep(currentStep - 1);
+	};
+	const result = getTicketSummary(formData);
+	const submitEventFun = async () => {
 		if (formData.ticketTiers.length <= 0) {
 			Toast.show({
 				type: "error",
 				text1: "Please enter atleast one Ticket Tiers",
 			});
 			return;
+		}
+		try {
+			await createNewEventApi(
+				formData.title,
+				formData.category,
+				"Published",
+				formData.location,
+				formData.date,
+				formData.fromTime,
+				formData.toTime,
+				formData.description,
+				formData.ticketTiers
+			);
+			resetEventFun();
+			Toast.show({ type: "success", text1: "Event Created successfully" });
+		} catch (error) {
+			Toast.show({
+				type: "error",
+				text1: error ?? "Create Event failed",
+			});
 		}
 	};
 	const colors = useThemeColors();
@@ -185,7 +214,7 @@ const CreateEvent = () => {
 	return (
 		<AuthLayout
 			hideBgImg={true}
-			goScrollToTop={nulll}>
+			goScrollToTop={null}>
 			<>
 				<View style={styles.topContainer}>
 					<SideTopBar
@@ -214,12 +243,12 @@ const CreateEvent = () => {
 								onChangeValue={(value) =>
 									setformData({ ...formData, category: value })
 								}
-								options={["Music", "Art", "Workshop", "Tech"]}
+								options={categoriesArry}
 							/>
 							<CustomLocationInput
 								title={"Location"}
 								placeHolder={"Enter event location"}
-								value={formData.location}
+								value={formData.location.address}
 								onChangeValue={(text) =>
 									setformData({ ...formData, location: text })
 								}

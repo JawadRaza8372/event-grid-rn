@@ -1,16 +1,25 @@
 import { GooglePlacesAutocomplete } from "expo-google-places-autocomplete";
-import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
-import { Icons } from "../../assets/icons";
+import { useCallback } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { useThemeColors } from "../../hooks/useThemeColors";
-
-const CustomLocationInput = ({ title, value, onChangeValue, placeHolder }) => {
-	const onSearchError = React.useCallback((error) => {
-		console.log(error);
+const CustomLocationInput = ({ title, onChangeValue, placeHolder }) => {
+	const onSearchError = useCallback((error) => {
+		console.log("place error", error);
 	}, []);
-
-	const onPlaceSelected = React.useCallback((place) => {
-		console.log(place);
-	}, []);
+	const onPlaceSelected = useCallback(
+		(place) => {
+			const addressData = {
+				name: place?.name ?? "",
+				address: place?.formattedAddress ?? "",
+				coordinates: {
+					lat: place?.coordinate?.latitude ?? 0,
+					lng: place?.coordinate?.longitude ?? 0,
+				},
+			};
+			onChangeValue(addressData);
+		},
+		[onChangeValue]
+	);
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -52,25 +61,20 @@ const CustomLocationInput = ({ title, value, onChangeValue, placeHolder }) => {
 			justifyContent: "center",
 		},
 		textInputContainer: {
-			width: Dimensions.get("screen").width / 1.1,
-			height: 60,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "flex-start",
-			flexDirection: "row",
-			backgroundColor: "red",
-			borderRadius: 15,
-			paddingHorizontal: 15,
-			alignSelf: "center",
-			borderWidth: 1,
+			width: "100%",
+			borderRadius: 8,
+			height: 38,
+			backgroundColor: colors.createEventInputBg,
+			padding: 0,
 		},
 		textInputStyle: {
-			flex: 1,
-			height: 55,
-			color: "blue",
-			fontSize: 13,
-			fontFamily: "Manrope-Medium",
-			marginLeft: 8,
+			width: "100%",
+			height: 38,
+			margin: 0,
+			paddingHorizontal: 15,
+			fontSize: 12,
+			fontWeight: "500",
+			color: colors.authTitleColor,
 		},
 	});
 	return (
@@ -81,26 +85,48 @@ const CustomLocationInput = ({ title, value, onChangeValue, placeHolder }) => {
 				style={styles.inputLabel}>
 				{title ?? ""}
 			</Text>
-			<View style={styles.inputContainer}>
-				<View style={styles.iconContainer}>
-					<Icons.PinFat
-						width={16}
-						height={16}
-					/>
-				</View>
-				<TextInput
-					placeholderTextColor={colors.createInputLabelColor}
-					placeholder={placeHolder ?? ""}
-					value={value}
-					onChangeText={onChangeValue}
-					style={styles.inputMainStyle}
-				/>
-			</View>
+
 			<GooglePlacesAutocomplete
-				apiKey={EXPO_PUBLIC_GOOGLE_MAP_API_KEY}
+				placeholder={placeHolder ?? ""}
+				apiKey={process.env.EXPO_PUBLIC_GOOGLE_MAP_API_KEY}
 				requestConfig={{ countries: ["US"] }}
 				onPlaceSelected={onPlaceSelected}
 				onSearchError={onSearchError}
+				enablePoweredByContainer={false}
+				listFooterStyle={{ display: "none" }}
+				searchInputStyle={styles.textInputStyle}
+				inputContainerStyle={styles.textInputContainer}
+				styles={{
+					container: {
+						flex: 0,
+						width: "100%",
+					},
+					textInputContainer: {
+						width: "100%",
+						height: 38,
+						margin: 0,
+						paddingHorizontal: 7,
+						fontSize: 12,
+						fontWeight: "500",
+						color: colors.authTitleColor,
+					},
+					textInput: {
+						height: 38,
+						fontSize: 12,
+						color: colors.authTitleColor,
+						paddingHorizontal: 7,
+					},
+					listView: {
+						backgroundColor: colors.mainBgColor,
+						borderRadius: 10,
+						position: "absolute",
+						top: 45,
+						width: "100%",
+						zIndex: 1000,
+						elevation: 10,
+					},
+				}}
+				fetchDetails={true}
 			/>
 		</View>
 	);

@@ -15,3 +15,11 @@ export const boardingData = [
 			"Find, book, and enjoy your favorite events\ninstantly — anytime, anywhere.",
 	},
 ];
+export const categoriesArry = [
+	"Music",
+	"Art",
+	"Workshop",
+	"Tech",
+	"Fun",
+	"Paint",
+];
