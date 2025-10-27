@@ -1,7 +1,7 @@
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect } from "react";
-import { StatusBar } from "react-native";
+import { Appearance, StatusBar } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useThemeColors } from "../hooks/useThemeColors";
 import { disconnectSocket, initiateSocket } from "../services/socketService";
@@ -15,6 +15,7 @@ const AppWrapper = () => {
 					ScreenOrientation.OrientationLock.PORTRAIT
 				);
 				await NavigationBar.setButtonStyleAsync("dark");
+				Appearance.setColorScheme("light");
 			} catch (err) {
 				console.log("Failed to lock orientation:", err);
 			}

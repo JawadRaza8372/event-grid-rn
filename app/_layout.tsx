@@ -83,7 +83,6 @@ export default function RootLayout() {
 		"ReanimatedError: [Reanimated] Tried to synchronously call a non-worklet function `valueSetter`",
 	]);
 	const publishKeyValue = process.env.EXPO_PUBLIC_STRIPE_PUBLISHKEY ?? "";
-
 	return (
 		<StripeProvider
 			urlScheme="com.eventgrid"
