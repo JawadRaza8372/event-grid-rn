@@ -24,6 +24,7 @@ const Naviagtion = () => {
 			<Stack.Screen name="edit-profile-organizer" />
 			<Stack.Screen name="e-ticket-wallet" />
 			<Stack.Screen name="(tabs)" />
+			<Stack.Screen name="(tabs-organizer)" />
 			<Stack.Screen name="location" />
 			<Stack.Screen name="payments" />
 			<Stack.Screen name="review-summary" />

@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
-import HomeScreen from "../../components/Home/HomeScreen";
+import OrganizerHomeScreen from "../../components/Home/OrganizerHomeScreen";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
 	return (
 		<View style={styles.mainContainer}>
 			<ScrollView showsVerticalScrollIndicator={false}>
-				<HomeScreen />
+				<OrganizerHomeScreen />
 			</ScrollView>
 		</View>
 	);

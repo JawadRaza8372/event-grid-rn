@@ -1,6 +1,5 @@
 import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
-import CreateEvent from "../../components/center-tab/CreateEvent";
 import FavoriteEvent from "../../components/center-tab/FavoriteEvent";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
@@ -17,11 +16,7 @@ const CenterTab = () => {
 	});
 	return (
 		<View style={styles.mainContainer}>
-			{user?.role === "user" ? (
-				<FavoriteEvent />
-			) : user?.role === "organizer" ? (
-				<CreateEvent />
-			) : null}
+			<FavoriteEvent />
 		</View>
 	);
 };

@@ -37,7 +37,9 @@ const Splash = () => {
 						tokens?.accessToken,
 						tokens?.refreshToken
 					);
-					router.replace({ pathname: "/(tabs)" });
+					router.replace({
+						pathname: rest?.role === "user" ? "/(tabs)" : "/(tabs-organizer)",
+					});
 				})
 				.catch((err) => {
 					console.log("err", err);

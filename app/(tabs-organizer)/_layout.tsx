@@ -8,11 +8,11 @@ import FavoriteIcon from "../../assets/bottomIcons/FavoriteIcon";
 import HomeIcon from "../../assets/bottomIcons/HomeIcon";
 import NotificationIcon from "../../assets/bottomIcons/NotificationIcon";
 import ProfileIcon from "../../assets/bottomIcons/ProfileIcon";
+import TicketIcon from "../../assets/bottomIcons/TicketIcon";
 import TabIcon from "../../components/TabIcon";
 export default function TabLayout() {
 	const colors = useThemeColors();
 	const { user } = useSelector((state: any) => state?.user);
-	console.log(user?.role);
 	const styles = StyleSheet.create({
 		tabBarStyle: {
 			backgroundColor: colors.botmTab,
@@ -52,9 +52,21 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name={"fav-event"}
+				name={"ticket"}
 				options={{
-					title: "fav-event",
+					title: "ticket",
+					tabBarIcon: ({ focused }) => (
+						<TabIcon
+							focused={focused}
+							Icon={TicketIcon}
+						/>
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name={"create-event"}
+				options={{
+					title: "create-event",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
 							focused={focused}

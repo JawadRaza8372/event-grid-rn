@@ -212,7 +212,7 @@ const OtpVerification = () => {
 			<>
 				<View style={styles.topBarContainer}>
 					<TouchableOpacity
-						onPress={() => router.replace("/login")}
+						onPress={() => router.replace({ pathname: "/login" })}
 						style={styles.backBtn}>
 						<Icons.ArrowBack
 							width={25}

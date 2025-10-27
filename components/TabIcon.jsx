@@ -1,17 +1,28 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Dimensions, StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 
 const TabIcon = ({ focused, Icon }) => {
 	const colors = useThemeColors();
+	const { user } = useSelector((state) => state?.user);
+
 	const styles = StyleSheet.create({
 		defaultTab: {
 			justifyContent: "flex-start",
 			alignItems: "center",
-			width: Dimensions.get("screen").width / 5.5,
-			height: 90,
+			width:
+				user?.role === "user"
+					? Dimensions.get("screen").width / 4
+					: Dimensions.get("screen").width / 5,
+			height: 70,
 			gap: 5,
 			zIndex: 3,
-			backgroundColor: "transparent",
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			backgroundColor: "blue",
+			marginBottom: -18,
+			backgroundColor: colors.botmTab,
 		},
 		normalView: {
 			height: 56,

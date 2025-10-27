@@ -38,7 +38,9 @@ const SocialGoogleButton = () => {
 				const { tokens, ...rest } = userObj;
 				dispatch(setUser({ user: rest }));
 				await saveUserTokenToStorage(tokens?.accessToken, tokens?.refreshToken);
-				router.replace({ pathname: "/(tabs)" });
+				router.replace({
+					pathname: rest?.role === "user" ? "/(tabs)" : "/(tabs-organizer)",
+				});
 			}
 		} catch (error) {
 			console.log("google login failed: ", error);
