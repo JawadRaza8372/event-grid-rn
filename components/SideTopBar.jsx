@@ -9,7 +9,7 @@ import {
 import { Icons } from "../assets/icons";
 import { useThemeColors } from "../hooks/useThemeColors";
 
-const SideTopBar = ({ title, isTailIcon }) => {
+const SideTopBar = ({ title, isTailIcon, hideBackBtn }) => {
 	const colors = useThemeColors();
 
 	const styles = StyleSheet.create({
@@ -39,21 +39,23 @@ const SideTopBar = ({ title, isTailIcon }) => {
 	});
 	return (
 		<View style={styles.topBarContainer}>
-			<TouchableOpacity
-				onPress={() => router.back()}
-				style={styles.backBtn}>
-				{isTailIcon ? (
-					<Icons.TaleArrowLeft
-						width={25}
-						height={25}
-					/>
-				) : (
-					<Icons.ArrowBack
-						width={25}
-						height={25}
-					/>
-				)}
-			</TouchableOpacity>
+			{!hideBackBtn ? (
+				<TouchableOpacity
+					onPress={() => router.back()}
+					style={styles.backBtn}>
+					{isTailIcon ? (
+						<Icons.TaleArrowLeft
+							width={25}
+							height={25}
+						/>
+					) : (
+						<Icons.ArrowBack
+							width={25}
+							height={25}
+						/>
+					)}
+				</TouchableOpacity>
+			) : null}
 			<Text style={styles.screenHeaderTitle}>{title ?? ""}</Text>
 		</View>
 	);

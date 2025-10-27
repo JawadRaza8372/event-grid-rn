@@ -1,8 +1,20 @@
+import { useEffect, useRef } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import backgroudImage from "../assets/images/Signin-bg.png";
 import { useThemeColors } from "../hooks/useThemeColors";
-const AuthLayout = ({ children, hideBgImg }) => {
+const AuthLayout = ({ children, hideBgImg, goScrollToTop }) => {
 	const colors = useThemeColors();
+	const scrollRef = useRef(null);
+
+	const scrollToTop = () => {
+		scrollRef.current?.scrollTo({ y: 0, animated: true });
+	};
+	useEffect(() => {
+		if (goScrollToTop) {
+			scrollToTop();
+		}
+	}, [goScrollToTop]);
+
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",
@@ -41,7 +53,9 @@ const AuthLayout = ({ children, hideBgImg }) => {
 				/>
 			)}
 			<View style={styles.childContainer}>
-				<ScrollView showsVerticalScrollIndicator={false}>
+				<ScrollView
+					ref={scrollRef}
+					showsVerticalScrollIndicator={false}>
 					<View style={styles.formContainer}>{children}</View>
 				</ScrollView>
 			</View>

@@ -5,6 +5,50 @@ import { base, mainUrl } from "./apiUrl";
 function isValidJWT(token) {
 	return typeof token === "string" && token.split(".").length === 3;
 }
+export const getTicketSummary = (formData) => {
+	const tiers = formData?.ticketTiers || [];
+
+	if (tiers.length === 0) {
+		return {
+			totalCapacity: 0,
+			priceRange: "N/A",
+			type: 0,
+		};
+	}
+
+	// Convert to numbers safely
+	const capacities = tiers?.map((t) => Number(t.capacity) || 0);
+	const prices = tiers?.map((t) => Number(t.price) || 0);
+
+	const totalCapacity = capacities.reduce((sum, c) => sum + c, 0);
+	const minPrice = Math.min(...prices);
+	const maxPrice = Math.max(...prices);
+
+	const priceRange =
+		minPrice === maxPrice ? `$${minPrice}` : `$${minPrice} - $${maxPrice}`;
+
+	return { totalCapacity, priceRange, type: tiers?.length ?? 0 };
+};
+
+export const validateEventData = (formData) => {
+	const { date, fromTime, toTime } = formData;
+	// Check if date is in the past (ignoring time)
+	const selectedDate = new Date(date);
+	selectedDate.setHours(0, 0, 0, 0);
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+	if (selectedDate < today) {
+		return { valid: false, message: "Date cannot be in the past." };
+	}
+
+	// Check time difference (toTime must be after fromTime)
+	if (new Date(toTime) <= new Date(fromTime)) {
+		return { valid: false, message: "End time must be after start time." };
+	}
+
+	return { valid: true };
+};
+
 export function getTimeBasedGreeting() {
 	const currentHour = new Date().getHours();
 

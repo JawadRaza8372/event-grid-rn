@@ -1,8 +1,16 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { GooglePlacesAutocomplete } from "expo-google-places-autocomplete";
+import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { Icons } from "../../assets/icons";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
 const CustomLocationInput = ({ title, value, onChangeValue, placeHolder }) => {
+	const onSearchError = React.useCallback((error) => {
+		console.log(error);
+	}, []);
+
+	const onPlaceSelected = React.useCallback((place) => {
+		console.log(place);
+	}, []);
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -43,6 +51,27 @@ const CustomLocationInput = ({ title, value, onChangeValue, placeHolder }) => {
 			alignItems: "center",
 			justifyContent: "center",
 		},
+		textInputContainer: {
+			width: Dimensions.get("screen").width / 1.1,
+			height: 60,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "flex-start",
+			flexDirection: "row",
+			backgroundColor: "red",
+			borderRadius: 15,
+			paddingHorizontal: 15,
+			alignSelf: "center",
+			borderWidth: 1,
+		},
+		textInputStyle: {
+			flex: 1,
+			height: 55,
+			color: "blue",
+			fontSize: 13,
+			fontFamily: "Manrope-Medium",
+			marginLeft: 8,
+		},
 	});
 	return (
 		<View style={styles.mainContainer}>
@@ -67,6 +96,12 @@ const CustomLocationInput = ({ title, value, onChangeValue, placeHolder }) => {
 					style={styles.inputMainStyle}
 				/>
 			</View>
+			<GooglePlacesAutocomplete
+				apiKey={EXPO_PUBLIC_GOOGLE_MAP_API_KEY}
+				requestConfig={{ countries: ["US"] }}
+				onPlaceSelected={onPlaceSelected}
+				onSearchError={onSearchError}
+			/>
 		</View>
 	);
 };

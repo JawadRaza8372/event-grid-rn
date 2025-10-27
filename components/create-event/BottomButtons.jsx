@@ -1,7 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
-const BottomButtons = ({ onCancelFun, onNextFun }) => {
+const BottomButtons = ({
+	onResetFun,
+	onBackFun,
+	onNextFun,
+	onSubmitFun,
+	showfirstPair,
+}) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		sideBySideView: {
@@ -46,16 +52,33 @@ const BottomButtons = ({ onCancelFun, onNextFun }) => {
 	});
 	return (
 		<View style={styles.sideBySideView}>
-			<TouchableOpacity
-				onPress={onCancelFun}
-				style={styles.noBtn}>
-				<Text style={styles.noTxt}>Back</Text>
-			</TouchableOpacity>
-			<TouchableOpacity
-				onPress={onNextFun}
-				style={styles.yesBtn}>
-				<Text style={styles.yesTxt}>Next</Text>
-			</TouchableOpacity>
+			{showfirstPair ? (
+				<>
+					<TouchableOpacity
+						onPress={onResetFun}
+						style={styles.noBtn}>
+						<Text style={styles.noTxt}>Reset</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={onNextFun}
+						style={styles.yesBtn}>
+						<Text style={styles.yesTxt}>Next</Text>
+					</TouchableOpacity>
+				</>
+			) : (
+				<>
+					<TouchableOpacity
+						onPress={onBackFun}
+						style={styles.noBtn}>
+						<Text style={styles.noTxt}>Back</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={onSubmitFun}
+						style={styles.yesBtn}>
+						<Text style={styles.yesTxt}>Submit</Text>
+					</TouchableOpacity>
+				</>
+			)}
 		</View>
 	);
 };
