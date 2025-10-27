@@ -41,9 +41,11 @@ const SeeAllView = ({ title, onPressFun }) => {
 				ellipsizeMode="tail">
 				{title ?? ""}
 			</Text>
-			<TouchableOpacity onPress={onPressFun}>
-				<Text style={styles.seeTxt}>See All</Text>
-			</TouchableOpacity>
+			{onPressFun ? (
+				<TouchableOpacity onPress={onPressFun}>
+					<Text style={styles.seeTxt}>See All</Text>
+				</TouchableOpacity>
+			) : null}
 		</View>
 	);
 };

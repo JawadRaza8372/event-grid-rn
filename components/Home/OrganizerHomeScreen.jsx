@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../../assets/icons";
+import { allCategoriesArry } from "../../constants/rawData";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import MyEventComp from "../MyEventComp";
-import TabContainer from "../TabContainer";
 import CategoryView from "./CategoryView";
 import SeeAllView from "./SeeAllView";
 import WelcomeTopComponent from "./WelcomeTopComponent";
@@ -148,26 +148,12 @@ const OrganizerHomeScreen = () => {
 					</View>
 				</View>
 			</View>
-			<View style={styles.tabContainer}>
-				<TabContainer
-					borderWidth={2}
-					activeTxtColor={colors.blackColor}
-					inActiveTxtColor={colors.blackColor}
-					inActiveBg={colors.organizerTabBg}
-					onchange={(text) => setselectedTab(text)}
-					options={["Events", "Analytics", "Attendees"]}
-					value={selectedTab}
-				/>
-			</View>
 
-			<SeeAllView
-				title={"Categories"}
-				onPressFun={() => console.log("")}
-			/>
+			<SeeAllView title={"Categories"} />
 			<CategoryView
 				value={selectedCategory}
 				onChangeValue={(text) => setselectedCategory(text)}
-				options={["All", "Music", "Art", "Workshop", "Fun", "Paint"]}
+				options={allCategoriesArry}
 			/>
 			<SeeAllView
 				title={"Your Events"}

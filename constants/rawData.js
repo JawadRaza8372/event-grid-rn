@@ -23,3 +23,11 @@ export const categoriesArry = [
 	"Fun",
 	"Paint",
 ];
+export const allCategoriesArry = [
+	"All",
+	"Music",
+	"Art",
+	"Workshop",
+	"Fun",
+	"Paint",
+];
