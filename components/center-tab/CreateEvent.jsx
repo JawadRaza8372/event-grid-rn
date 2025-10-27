@@ -124,6 +124,7 @@ const CreateEvent = () => {
 				formData.ticketTiers
 			);
 			resetEventFun();
+			setcurrentStep(0);
 			Toast.show({ type: "success", text1: "Event Created successfully" });
 		} catch (error) {
 			Toast.show({

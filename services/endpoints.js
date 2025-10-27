@@ -43,7 +43,7 @@ export const getTicketSummary = (formData) => {
 	const maxPrice = Math.max(...prices);
 
 	const priceRange =
-		minPrice === maxPrice ? `$${minPrice}` : `$${minPrice} - $${maxPrice}`;
+		minPrice === maxPrice ? `${minPrice}` : `${minPrice} - ${maxPrice}`;
 
 	return { totalCapacity, priceRange, type: tiers?.length ?? 0 };
 };
@@ -330,6 +330,13 @@ export const createNewEventApi = async (
 	const formattedDate = new Date(date).toISOString(); // full date
 	const formattedStartTime = new Date(startTime).toISOString(); // proper time
 	const formattedEndTime = new Date(endTime).toISOString();
+	const formattedTicketTiers = ticketTiers?.map((dat) => {
+		return {
+			...dat,
+			capacity: typeof capacity === "string" ? parseInt(capacity) : capacity,
+			price: typeof price === "string" ? parseFloat(price) : price,
+		};
+	});
 	try {
 		const result = await base.post(
 			`event/create`,
@@ -342,7 +349,7 @@ export const createNewEventApi = async (
 				startTime: formattedStartTime,
 				endTime: formattedEndTime,
 				description,
-				ticketTiers,
+				ticketTiers: formattedTicketTiers,
 			},
 			{
 				isPublic: false,
