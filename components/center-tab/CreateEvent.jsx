@@ -23,6 +23,7 @@ import TicketSelector from "./TicketSelector";
 const CreateEvent = () => {
 	const totalSteps = 2;
 	const [currentStep, setcurrentStep] = useState(0);
+	const [isScroll, setisScroll] = useState(false);
 	const [formData, setformData] = useState({
 		title: "",
 		category: "",
@@ -58,6 +59,7 @@ const CreateEvent = () => {
 			description: "",
 			ticketTiers: [],
 		});
+		setisScroll(true);
 		Toast.show({ type: "error", text1: "Reset Successfull." });
 	};
 	const nextBtnFun = () => {
@@ -124,8 +126,25 @@ const CreateEvent = () => {
 				formData.description,
 				formData.ticketTiers
 			);
-			resetEventFun();
 			setcurrentStep(0);
+			setformData({
+				title: "",
+				category: "",
+				location: {
+					address: "",
+					name: "",
+					coordinates: {
+						lat: 0,
+						lng: 0,
+					},
+				},
+				date: new Date(),
+				fromTime: new Date(),
+				toTime: new Date(),
+				description: "",
+				ticketTiers: [],
+			});
+			setisScroll(true);
 			Toast.show({ type: "success", text1: "Event Created successfully" });
 		} catch (error) {
 			Toast.show({
@@ -236,11 +255,16 @@ const CreateEvent = () => {
 			}
 		}
 	}, [formData.date, formData.toTime]);
+	useEffect(() => {
+		if (isScroll) {
+			setisScroll(false);
+		}
+	}, [isScroll]);
 
 	return (
 		<AuthLayout
 			hideBgImg={true}
-			goScrollToTop={null}>
+			goScrollToTop={isScroll}>
 			<>
 				<View style={styles.topContainer}>
 					<SideTopBar

@@ -12,7 +12,8 @@ const CustomDescription = ({ value, onChangeValue }) => {
 		inputLabel: {
 			fontSize: 9,
 			fontWeight: "500",
-			color: colors.profileItemsTxtColor,
+			color:
+				value?.length <= 500 ? colors.profileItemsTxtColor : colors.redColor,
 			lineHeight: 20,
 		},
 		inputMainStyle: {
@@ -37,8 +38,9 @@ const CustomDescription = ({ value, onChangeValue }) => {
 				value={value}
 				onChangeText={onChangeValue}
 				style={styles.inputMainStyle}
+				maxLength={500}
 			/>
-			<Text style={styles.inputLabel}>{value?.length}/500 characyers</Text>
+			<Text style={styles.inputLabel}>{value?.length}/500 characters</Text>
 		</View>
 	);
 };

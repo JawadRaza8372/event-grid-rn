@@ -98,7 +98,7 @@ const CustomTimePicker = ({ width, value, onChangeValue, title }) => {
 						/>
 					</View>
 					<Text style={styles.inputMainStyle}>
-						{value ? moment(value).format("HH:mm a") : "--:-- --"}
+						{value ? moment(value).format("hh:mm a") : "--:-- --"}
 					</Text>
 				</TouchableOpacity>
 			</View>

@@ -35,6 +35,7 @@ const defaultColors = {
 	dataTitleColor: "#030319",
 	backBtnBorder: "#B8C2CF",
 	createInputLabelColor: "#545961",
+	redColor: "red",
 };
 export const useThemeColors = () => {
 	const colors = defaultColors;
