@@ -1,8 +1,10 @@
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { useEffect } from "react";
 import { StatusBar } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useThemeColors } from "../hooks/useThemeColors";
+import { disconnectSocket, initiateSocket } from "../services/socketService";
 import Navigation from "./Naviagtion";
 const AppWrapper = () => {
 	const colors = useThemeColors();

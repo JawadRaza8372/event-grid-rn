@@ -89,7 +89,6 @@ const CustomLocationInput = ({ title, onChangeValue, placeHolder }) => {
 			<GooglePlacesAutocomplete
 				placeholder={placeHolder ?? ""}
 				apiKey={process.env.EXPO_PUBLIC_GOOGLE_MAP_API_KEY}
-				requestConfig={{ countries: ["US"] }}
 				onPlaceSelected={onPlaceSelected}
 				onSearchError={onSearchError}
 				enablePoweredByContainer={false}
