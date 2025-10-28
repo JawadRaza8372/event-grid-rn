@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useSelector } from "react-redux";
 import AuthLayout from "../components/AuthLayout";
-import CustomButton from "../components/CustomButton";
+import CustomButtonWithLoading from "../components/CustomButtonWithLoading.jsx";
 import MyEventComp from "../components/MyEventComp.jsx";
 import SideTopBar from "../components/SideTopBar";
 import SuccessModal from "../components/SuccessModal";
@@ -207,7 +207,7 @@ const ReviewSummary = () => {
 						</Text>
 					</View>
 				</View>
-				<CustomButton
+				<CustomButtonWithLoading
 					btnWidth={"100%"}
 					btnTitle={"Continue"}
 					onPressFun={startPayment}

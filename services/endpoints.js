@@ -388,6 +388,12 @@ export const createPaymentIntentApi = async (
 		);
 		return result?.data;
 	} catch (error) {
+		console.log(
+			"payment error",
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 		throw parseDatabaseErrorMessage(
 			error?.response?.data?.message
 				? error?.response?.data?.message

@@ -1,7 +1,9 @@
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../assets/icons";
+import eventImage from "../assets/images/eventDetails.png";
 import { useThemeColors } from "../hooks/useThemeColors";
 import TwoButtons from "./TwoButtons";
+
 const MyEventComp = ({
 	address,
 	date,
@@ -144,9 +146,7 @@ const MyEventComp = ({
 			<View style={styles.imageContainer}>
 				<Image
 					style={styles.imageStyle}
-					source={{
-						uri: "https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-					}}
+					source={eventImage}
 				/>
 			</View>
 			<View style={styles.childContainer}>

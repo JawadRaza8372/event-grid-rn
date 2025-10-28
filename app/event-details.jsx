@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	Dimensions,
 	Image,
@@ -9,28 +9,32 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import Toast from "react-native-toast-message";
+import { useSelector } from "react-redux";
 import { Icons } from "../assets/icons";
+import eventImage from "../assets/images/eventDetails.png";
 import CustomButton from "../components/CustomButton";
 import EventDetailOverView from "../components/EventDetailOverView";
 import MapContainer from "../components/MapContainer";
 import { useThemeColors } from "../hooks/useThemeColors";
-
+import {
+	addFavoriteEventApi,
+	removeFavoriteEventApi,
+} from "../services/endpoints";
 const EventDetails = () => {
+	const { favEvents } = useSelector((state) => state?.user);
+	console.log("favorite events", favEvents);
 	const unformattedEventData = useLocalSearchParams()?.eventData;
 	const eventData = JSON.parse(unformattedEventData);
-	console.log("here ", eventData);
 	const colors = useThemeColors();
-	const [currentIndex, setCurrentIndex] = useState(0);
+	const findEventInFavorites = favEvents?.find(
+		(dat) => dat?.id === eventData?.id
+	);
 	const [isFavoriteEvent, setisFavoriteEvent] = useState(false);
-	const viewabilityConfig = useRef({
-		viewAreaCoveragePercentThreshold: 50,
-	}).current;
+	useEffect(() => {
+		setisFavoriteEvent(findEventInFavorites ? true : false);
+	}, [findEventInFavorites, favEvents]);
 
-	const onViewableItemsChanged = useRef(({ viewableItems }) => {
-		if (viewableItems.length > 0) {
-			setCurrentIndex(viewableItems[0].index);
-		}
-	}).current;
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",
@@ -49,7 +53,7 @@ const EventDetails = () => {
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
-			backgroundColor: "red",
+			backgroundColor: colors.dateBorder,
 		},
 		imageStyle: {
 			width: "100%",
@@ -179,6 +183,23 @@ const EventDetails = () => {
 			height: 100,
 		},
 	});
+	const favoriteBtnClickFun = async () => {
+		try {
+			if (!findEventInFavorites) {
+				await addFavoriteEventApi(eventData?.id);
+				setisFavoriteEvent(true);
+			} else {
+				await removeFavoriteEventApi(eventData?.id);
+				setisFavoriteEvent(true);
+			}
+		} catch (error) {
+			console.log("event fav error: ", error);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Event Favorite failed.",
+			});
+		}
+	};
 	return (
 		<View style={styles.mainContainer}>
 			<ScrollView showsVerticalScrollIndicator={false}>
@@ -190,7 +211,7 @@ const EventDetails = () => {
 							<Icons.TaleArrowLeftWhite />
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() => setisFavoriteEvent(!isFavoriteEvent)}
+							onPress={favoriteBtnClickFun}
 							style={styles.favoriteBtn}>
 							{isFavoriteEvent ? (
 								<Icons.HeartFillWhite
@@ -209,9 +230,7 @@ const EventDetails = () => {
 					<View style={styles.imageContainerView}>
 						<Image
 							style={styles.imageStyle}
-							source={{
-								uri: "https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-							}}
+							source={eventImage}
 						/>
 					</View>
 				</View>

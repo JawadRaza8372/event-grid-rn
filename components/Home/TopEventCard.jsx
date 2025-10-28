@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "../../assets/icons";
+import eventImage from "../../assets/images/eventDetails.png";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
 const TopEventCard = ({ eventName, date, address, isFavorite, onPressFun }) => {
@@ -87,9 +88,7 @@ const TopEventCard = ({ eventName, date, address, isFavorite, onPressFun }) => {
 			style={styles.mainContainer}>
 			<View style={styles.imageContainer}>
 				<Image
-					source={{
-						uri: "https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-					}}
+					source={eventImage}
 					style={styles.imageView}
 				/>
 			</View>
