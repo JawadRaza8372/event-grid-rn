@@ -66,7 +66,7 @@ const HomeScreen = () => {
 							onPressFun={() =>
 								router.push({
 									pathname: "/event-details",
-									params: { eventData: item },
+									params: { eventData: JSON.stringify(item) },
 								})
 							}
 						/>
@@ -97,7 +97,7 @@ const HomeScreen = () => {
 							onPressFun={() =>
 								router.push({
 									pathname: "/event-details",
-									params: { eventData: item },
+									params: { eventData: JSON.stringify(item) },
 								})
 							}
 						/>

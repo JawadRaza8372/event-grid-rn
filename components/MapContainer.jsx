@@ -1,6 +1,7 @@
 import { router } from "expo-router";
-import { StyleSheet, TouchableOpacity } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import eventLocationPin from "../assets/images/locationIcon.png";
 import { useThemeColors } from "../hooks/useThemeColors";
 
 const MapContainer = ({ coordinates, location }) => {
@@ -20,20 +21,42 @@ const MapContainer = ({ coordinates, location }) => {
 			height: "100%",
 		},
 	});
+	console.log(coordinates);
 
 	return (
 		<TouchableOpacity
-			onPress={() => router.push({ pathname: "/location" })}
+			onPress={() =>
+				router.push({
+					pathname: "/location",
+					params: {
+						coordinates: JSON.stringify(coordinates),
+						location,
+					},
+				})
+			}
 			style={styles.mainContainer}>
-			<MapView style={styles.map}>
+			<MapView
+				provider={PROVIDER_GOOGLE}
+				initialRegion={{
+					latitude: coordinates?.lat || 37.78825,
+					longitude: coordinates?.lng || -122.4324,
+					latitudeDelta: 0.01,
+					longitudeDelta: 0.01,
+				}}
+				style={styles.map}>
 				<Marker
 					coordinate={{
 						latitude: coordinates?.lat,
 						longitude: coordinates?.lng,
 					}}
-					pinColor={colors.blackColor}
-					title={location ?? ""}
-				/>
+					anchor={{ x: 0.5, y: 1 }}
+					title={location ?? ""}>
+					<Image
+						source={eventLocationPin}
+						style={{ width: 45, height: 45 }}
+						resizeMode="contain"
+					/>
+				</Marker>
 			</MapView>
 		</TouchableOpacity>
 	);

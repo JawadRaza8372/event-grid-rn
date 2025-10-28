@@ -2,7 +2,6 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
 import {
 	Dimensions,
-	FlatList,
 	Image,
 	ScrollView,
 	StyleSheet,
@@ -11,14 +10,15 @@ import {
 	View,
 } from "react-native";
 import { Icons } from "../assets/icons";
-import placeHolderImage from "../assets/images/placeholderImage.jpg";
 import CustomButton from "../components/CustomButton";
 import EventDetailOverView from "../components/EventDetailOverView";
 import MapContainer from "../components/MapContainer";
 import { useThemeColors } from "../hooks/useThemeColors";
-const EventDetails = () => {
-	const { eventData } = useLocalSearchParams();
 
+const EventDetails = () => {
+	const unformattedEventData = useLocalSearchParams()?.eventData;
+	const eventData = JSON.parse(unformattedEventData);
+	console.log("here ", eventData);
 	const colors = useThemeColors();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [isFavoriteEvent, setisFavoriteEvent] = useState(false);
@@ -205,40 +205,15 @@ const EventDetails = () => {
 							)}
 						</TouchableOpacity>
 					</View>
-					<View style={styles.bottmIndicator}>
-						{eventData.imageLinks?.map((_, index) => (
-							<View
-								key={index}
-								style={
-									currentIndex === index
-										? styles.activeIndicatorView
-										: styles.indicatorView
-								}
-							/>
-						))}
+
+					<View style={styles.imageContainerView}>
+						<Image
+							style={styles.imageStyle}
+							source={{
+								uri: "https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+							}}
+						/>
 					</View>
-					<FlatList
-						onViewableItemsChanged={onViewableItemsChanged}
-						viewabilityConfig={viewabilityConfig}
-						pagingEnabled={true}
-						horizontal={true}
-						data={eventData?.imageLinks}
-						keyExtractor={(item, index) => index.toString()}
-						renderItem={({ item }) => {
-							return (
-								<View style={styles.imageContainerView}>
-									<Image
-										style={styles.imageStyle}
-										source={
-											typeof item === "string"
-												? { uri: item }
-												: placeHolderImage
-										}
-									/>
-								</View>
-							);
-						}}
-					/>
 				</View>
 
 				<View style={styles.childContainer}>
@@ -249,9 +224,9 @@ const EventDetails = () => {
 					<View style={styles.borderedView} />
 					<EventDetailOverView
 						date={eventData?.date}
-						location={eventData?.location}
-						locationDesc={eventData?.locationDesc}
-						priceRange={eventData?.price}
+						location={eventData?.location?.name}
+						locationDesc={eventData?.location?.address}
+						priceRange={eventData?.ticketOverview?.priceRange}
 						time={eventData?.time}
 					/>
 					<View style={styles.borderedView} />
@@ -262,11 +237,13 @@ const EventDetails = () => {
 					<Text style={styles.headingTxt}>Location</Text>
 					<View style={styles.locationView}>
 						<Icons.PinFat />
-						<Text style={styles.locationText}>{eventData.location}</Text>
+						<Text style={styles.locationText}>
+							{eventData.location?.address}
+						</Text>
 					</View>
 					<MapContainer
-						location={eventData?.location}
-						coordinates={eventData?.locationCoordinates}
+						location={eventData?.location?.address}
+						coordinates={eventData?.location?.coordinates}
 					/>
 					<CustomButton
 						btnWidth={"100%"}
