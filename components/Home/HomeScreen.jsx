@@ -94,6 +94,7 @@ const HomeScreen = () => {
 							date={item?.startEndDate}
 							name={item?.title}
 							vipPrice={item?.vipPrice}
+							id={item?.id}
 							onPressFun={() =>
 								router.push({
 									pathname: "/event-details",

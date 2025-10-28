@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	Dimensions,
 	Image,
@@ -7,22 +7,48 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import Toast from "react-native-toast-message";
+import { useSelector } from "react-redux";
 import { Icons } from "../../assets/icons";
 import eventImage from "../../assets/images/eventDetails.png";
 import { useThemeColors } from "../../hooks/useThemeColors";
+import { addFavoriteEventApi } from "../../services/endpoints";
 
 const TrendingEvent = ({
+	id,
 	name,
 	location,
 	genralPrice,
 	vipPrice,
 	date,
 	onPressFun,
-	isFavoriteItem,
 	isFullWidth,
 }) => {
+	const { favEvents } = useSelector((state) => state?.user);
+	const findEventInFavorites = favEvents?.find((dat) => dat?.id === id);
 	const colors = useThemeColors();
-	const [isFavorite, setisFavorite] = useState(isFavoriteItem);
+	const [isFavorite, setisFavorite] = useState(false);
+	useEffect(() => {
+		setisFavorite(findEventInFavorites ? true : false);
+	}, [findEventInFavorites, favEvents]);
+
+	const favoriteBtnClickFun = async () => {
+		try {
+			if (!findEventInFavorites) {
+				await addFavoriteEventApi(id);
+				setisFavorite(true);
+			} else {
+				await removeFavoriteEventApi(id);
+				setisFavorite(true);
+			}
+		} catch (error) {
+			console.log("event fav error: ", error);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Event Favorite failed.",
+			});
+		}
+	};
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: isFullWidth ? "95%" : Dimensions.get("screen").width * 0.82,
@@ -173,7 +199,7 @@ const TrendingEvent = ({
 					style={styles.imageStyle}
 				/>
 				<TouchableOpacity
-					onPress={() => setisFavorite(!isFavorite)}
+					onPress={favoriteBtnClickFun}
 					style={styles.favoriteBtn}>
 					{isFavorite ? (
 						<Icons.HeartFill

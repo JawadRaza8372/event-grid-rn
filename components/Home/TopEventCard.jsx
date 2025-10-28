@@ -1,9 +1,19 @@
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Icons } from "../../assets/icons";
 import eventImage from "../../assets/images/eventDetails.png";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
-const TopEventCard = ({ eventName, date, address, isFavorite, onPressFun }) => {
+const TopEventCard = ({ eventName, date, address, eventId, onPressFun }) => {
+	const { favEvents } = useSelector((state) => state?.user);
+	const findEventInFavorites = favEvents?.find((dat) => dat?.id === eventId);
+
+	const [isFavorite, setisFavorite] = useState(false);
+	useEffect(() => {
+		setisFavorite(findEventInFavorites ? true : false);
+	}, [findEventInFavorites, favEvents]);
+
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
