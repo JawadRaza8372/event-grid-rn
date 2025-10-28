@@ -7,8 +7,10 @@ import {
 	View,
 } from "react-native";
 import { Icons } from "../../assets/icons";
+import { ticketTierName } from "../../constants/rawData";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import CustomInput from "../create-event/CustomInput";
+import CustomValueSelection from "../CustomValueSelection";
 
 const TicketSelector = ({ formData, setformData }) => {
 	const colors = useThemeColors();
@@ -127,11 +129,12 @@ const TicketSelector = ({ formData, setformData }) => {
 					/>
 				</TouchableOpacity>
 			</View>
-			<CustomInput
+			<CustomValueSelection
 				title={"Ticket Name"}
+				data={ticketTierName}
 				value={ticketTier.name}
-				onChangeValue={(value) => setticketTier({ ...ticketTier, name: value })}
-				placeHolder={"General Admission"}
+				setValue={(value) => setticketTier({ ...ticketTier, name: value })}
+				placeHolder="Select Ticket Name"
 			/>
 			<View style={styles.sideBySide}>
 				<CustomInput

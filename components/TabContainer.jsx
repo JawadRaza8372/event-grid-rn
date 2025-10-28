@@ -9,6 +9,7 @@ const TabContainer = ({
 	inActiveTxtColor,
 	inActiveBg,
 	borderWidth,
+	borderColor,
 }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
@@ -18,7 +19,7 @@ const TabContainer = ({
 			borderRadius: 29,
 			backgroundColor: inActiveBg ?? colors.recoveryTabInactiveColor,
 			borderWidth: borderWidth ?? 1,
-			borderColor: inActiveBg ?? colors.recoveryTabInactiveBorderColor,
+			borderColor: borderColor ?? colors.recoveryTabInactiveBorderColor,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",

@@ -5,6 +5,7 @@ import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import { Icons } from "../../assets/icons";
 import ProfileOption from "../../components/ProfileOption";
+import ProtectRedirectWrapper from "../../components/ProtectRedirectWrapper";
 import SideTopBar from "../../components/SideTopBar";
 import UserAvatar from "../../components/UserAvatar";
 import YesNoModal from "../../components/YesNoModal";
@@ -59,38 +60,19 @@ const Profile = () => {
 	});
 	const menuOptions = [
 		{
-			title: "My Tickets",
-			icon: (
-				<Icons.Ticket
-					width={25}
-					height={25}
-				/>
-			),
-			onClickFun: () => null,
-		},
-		{
-			title: "Ticket History",
+			title: "My Events",
 			icon: (
 				<Icons.TransactionHistory
 					width={25}
 					height={25}
 				/>
 			),
-			onClickFun: () => null,
+			onClickFun: () => router.push({ pathname: "/organizer-events" }),
 		},
 		{
 			title: "Edit profile",
 			icon: <Icons.Edit size={25} />,
-			onClickFun: () => {
-				if (user?.role === "organizer") {
-					router.push({ pathname: "/edit-profile-organizer" });
-				} else if (user?.role === "user") {
-					router.push({ pathname: "/edit-profile" });
-				} else {
-					Toast.show({ type: "error", text1: "Unknow user type." });
-					return;
-				}
-			},
+			onClickFun: () => router.push({ pathname: "/edit-profile-organizer" }),
 		},
 
 		{
@@ -119,9 +101,6 @@ const Profile = () => {
 		dispatch(resetUser());
 		setAuthToken(null);
 		switchOpenLogoutModal();
-		setTimeout(() => {
-			router.replace({ pathname: "/login" });
-		}, 100);
 	};
 	const deleteAccountFun = async () => {
 		try {
@@ -130,9 +109,6 @@ const Profile = () => {
 			dispatch(resetUser());
 			setAuthToken(null);
 			switchOpenDeleteModal();
-			setTimeout(() => {
-				router.replace({ pathname: "/login" });
-			}, 100);
 		} catch (error) {
 			console.log("Delete Account failed: ", error);
 			Toast.show({
@@ -142,56 +118,58 @@ const Profile = () => {
 		}
 	};
 	return (
-		<View style={styles.mainContainer}>
-			<FlatList
-				showsVerticalScrollIndicator={false}
-				ListHeaderComponent={
-					<>
-						<SideTopBar
-							isTailIcon={true}
-							title={"Profile"}
-						/>
-						<View style={styles.userContainer}>
-							<UserAvatar
-								imgUrl={user?.profileImage}
-								size={103}
+		<ProtectRedirectWrapper>
+			<View style={styles.mainContainer}>
+				<FlatList
+					showsVerticalScrollIndicator={false}
+					ListHeaderComponent={
+						<>
+							<SideTopBar
+								isTailIcon={true}
+								title={"Profile"}
 							/>
-							<Text
-								numberOfLines={1}
-								ellipsizeMode="tail"
-								style={styles.usernameTxt}>
-								{user?.username ?? ""}
-							</Text>
-						</View>
-					</>
-				}
-				data={menuOptions}
-				renderItem={({ item }) => (
-					<ProfileOption
-						title={item?.title}
-						onPressFun={item.onClickFun}
-						icon={item.icon}
-					/>
-				)}
-				ListFooterComponent={<View style={styles.bottomPadding} />}
-			/>
-			<YesNoModal
-				title={"Delete Account"}
-				description={"Are you sure you want to delete\nyour account?"}
-				showModal={openDeleteModal}
-				hideModal={switchOpenDeleteModal}
-				onYesFun={deleteAccountFun}
-				onNoFun={switchOpenDeleteModal}
-			/>
-			<YesNoModal
-				title={"Logout Account"}
-				description={"Are you sure you want to logout\nyour account?"}
-				showModal={openLogoutModal}
-				onNoFun={switchOpenLogoutModal}
-				hideModal={switchOpenLogoutModal}
-				onYesFun={logoutAccountFun}
-			/>
-		</View>
+							<View style={styles.userContainer}>
+								<UserAvatar
+									imgUrl={user?.profileImage}
+									size={103}
+								/>
+								<Text
+									numberOfLines={1}
+									ellipsizeMode="tail"
+									style={styles.usernameTxt}>
+									{user?.username ?? ""}
+								</Text>
+							</View>
+						</>
+					}
+					data={menuOptions}
+					renderItem={({ item }) => (
+						<ProfileOption
+							title={item?.title}
+							onPressFun={item.onClickFun}
+							icon={item.icon}
+						/>
+					)}
+					ListFooterComponent={<View style={styles.bottomPadding} />}
+				/>
+				<YesNoModal
+					title={"Delete Account"}
+					description={"Are you sure you want to delete\nyour account?"}
+					showModal={openDeleteModal}
+					hideModal={switchOpenDeleteModal}
+					onYesFun={deleteAccountFun}
+					onNoFun={switchOpenDeleteModal}
+				/>
+				<YesNoModal
+					title={"Logout Account"}
+					description={"Are you sure you want to logout\nyour account?"}
+					showModal={openLogoutModal}
+					onNoFun={switchOpenLogoutModal}
+					hideModal={switchOpenLogoutModal}
+					onYesFun={logoutAccountFun}
+				/>
+			</View>
+		</ProtectRedirectWrapper>
 	);
 };
 

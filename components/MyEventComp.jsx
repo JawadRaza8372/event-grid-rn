@@ -1,15 +1,17 @@
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../assets/icons";
-import placeHolderImage from "../assets/images/placeholderImage.jpg";
 import { useThemeColors } from "../hooks/useThemeColors";
+import TwoButtons from "./TwoButtons";
 const MyEventComp = ({
-	imageLink,
 	address,
 	date,
 	title,
 	totalTickets,
 	soldTickets,
 	totalAmount,
+	showSmallButtons,
+	onDeleteFun,
+	onPublishFun,
 }) => {
 	const colors = useThemeColors();
 	const showComponentCondition =
@@ -142,11 +144,9 @@ const MyEventComp = ({
 			<View style={styles.imageContainer}>
 				<Image
 					style={styles.imageStyle}
-					source={
-						typeof imageLink === "string"
-							? { uri: imageLink }
-							: placeHolderImage
-					}
+					source={{
+						uri: "https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+					}}
 				/>
 			</View>
 			<View style={styles.childContainer}>
@@ -174,7 +174,19 @@ const MyEventComp = ({
 						{address ?? ""}
 					</Text>
 				</View>
-				{showComponentCondition ? (
+				{showSmallButtons && onDeleteFun && onPublishFun ? (
+					<View style={styles.sideBySideView}>
+						<TwoButtons
+							txtSize={10}
+							height={32}
+							firstBg={colors.redColor}
+							firstText={"Delete"}
+							secTxt={"Publish"}
+							onfirstFun={onDeleteFun}
+							onSecondFun={onPublishFun}
+						/>
+					</View>
+				) : showComponentCondition ? (
 					<View style={styles?.ticketSoldMainContainer}>
 						<View style={styles.sideBySideView}>
 							<Text style={styles.soldText}>

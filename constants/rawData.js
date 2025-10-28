@@ -32,3 +32,7 @@ export const allCategoriesArry = [
 	"Fun",
 	"Paint",
 ];
+export const ticketTierName = [
+	{ label: "General Admission", value: "General Admission" },
+	{ label: "VIP", value: "VIP" },
+];

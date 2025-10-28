@@ -14,7 +14,7 @@ import WelcomeTopComponent from "./WelcomeTopComponent";
 const OrganizerHomeScreen = () => {
 	const router = useRouter();
 	const colors = useThemeColors();
-	const { user, organizerStats, organizerEvents } = useSelector(
+	const { organizerStats, organizerEvents } = useSelector(
 		(state) => state?.user
 	);
 
@@ -154,9 +154,6 @@ const OrganizerHomeScreen = () => {
 						<MyEventComp
 							address={item?.address}
 							date={item?.date}
-							imageLink={
-								"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8"
-							}
 							soldTickets={item?.stats?.ticketsSold}
 							title={item?.title}
 							totalTickets={item?.stats?.totalTickets}

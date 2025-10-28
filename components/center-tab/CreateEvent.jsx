@@ -18,12 +18,14 @@ import CustomInput from "../create-event/CustomInput";
 import CustomLocationInput from "../create-event/CustomLocationInput";
 import CustomTimePicker from "../create-event/CustomTimePicker";
 import TicketOverview from "../create-event/TicketOverview";
+import LoadingView from "../LoadingView";
 import SideTopBar from "../SideTopBar";
 import YesNoModal from "../YesNoModal";
 import TicketSelector from "./TicketSelector";
 const CreateEvent = () => {
 	const totalSteps = 2;
 	const [currentStep, setcurrentStep] = useState(0);
+	const [isLoading, setisLoading] = useState(false);
 	const [isScroll, setisScroll] = useState(false);
 	const [showSaveOptions, setshowSaveOptions] = useState(false);
 	const switchSaveOptions = () => setshowSaveOptions(!showSaveOptions);
@@ -63,6 +65,7 @@ const CreateEvent = () => {
 			ticketTiers: [],
 		});
 		setisScroll(true);
+		setisLoading(false);
 		Toast.show({ type: "error", text1: "Reset Successfull." });
 	};
 	const nextBtnFun = () => {
@@ -121,6 +124,7 @@ const CreateEvent = () => {
 	};
 	const submitEventFunAsDraft = async () => {
 		try {
+			setisLoading(true);
 			await createNewEventApi(
 				formData.title,
 				formData.category,
@@ -152,11 +156,16 @@ const CreateEvent = () => {
 			});
 			setisScroll(true);
 			setshowSaveOptions(false);
+			setisLoading(false);
+
 			Toast.show({
 				type: "success",
 				text1: "Event saved as draft successfully",
 			});
 		} catch (error) {
+			setisLoading(false);
+			console.log("error", error);
+
 			Toast.show({
 				type: "error",
 				text1: error ?? "Draft Event failed",
@@ -165,6 +174,7 @@ const CreateEvent = () => {
 	};
 	const submitEventFunAsPublished = async () => {
 		try {
+			setisLoading(true);
 			await createNewEventApi(
 				formData.title,
 				formData.category,
@@ -196,8 +206,11 @@ const CreateEvent = () => {
 			});
 			setisScroll(true);
 			setshowSaveOptions(false);
+			setisLoading(false);
 			Toast.show({ type: "success", text1: "Event Published successfully" });
 		} catch (error) {
+			setisLoading(false);
+			console.log("error", error);
 			Toast.show({
 				type: "error",
 				text1: error ?? "Publish Event failed",
@@ -468,6 +481,7 @@ const CreateEvent = () => {
 					yesTxt={"Publish Now"}
 					noTxt={"Draft"}
 				/>
+				<LoadingView loading={isLoading} />
 			</>
 		</AuthLayout>
 	);

@@ -448,8 +448,9 @@ export const createNewEventApi = async (
 	const formattedStartTime = new Date(startTime).toISOString(); // proper time
 	const formattedEndTime = new Date(endTime).toISOString();
 	const formattedTicketTiers = ticketTiers?.map((dat) => {
+		const { capacity, price, ...rest } = dat;
 		return {
-			...dat,
+			...rest,
 			capacity: typeof capacity === "string" ? parseInt(capacity) : capacity,
 			price: typeof price === "string" ? parseFloat(price) : price,
 		};
