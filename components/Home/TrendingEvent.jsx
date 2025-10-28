@@ -8,15 +8,13 @@ import {
 	View,
 } from "react-native";
 import { Icons } from "../../assets/icons";
-import placeHolderImage from "../../assets/images/placeholderImage.jpg";
 import { useThemeColors } from "../../hooks/useThemeColors";
 const TrendingEvent = ({
-	imageLink,
 	name,
 	location,
 	genralPrice,
 	vipPrice,
-	ratting,
+	date,
 	onPressFun,
 	isFavoriteItem,
 	isFullWidth,
@@ -169,11 +167,9 @@ const TrendingEvent = ({
 			style={styles.mainContainer}>
 			<View style={styles.imageContainer}>
 				<Image
-					source={
-						typeof imageLink === "string"
-							? { uri: imageLink }
-							: placeHolderImage
-					}
+					source={{
+						uri: "https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+					}}
 					style={styles.imageStyle}
 				/>
 				<TouchableOpacity
@@ -203,10 +199,7 @@ const TrendingEvent = ({
 			<View style={styles.childContainer}>
 				<View style={styles.firstChild}>
 					<Text style={styles.eventNameTxt}>{name ?? ""}</Text>
-					<View style={styles.inLineContent}>
-						<Icons.Star />
-						<Text style={styles.addressTxt}>{ratting ?? 0}</Text>
-					</View>
+					<Text style={styles.addressTxt}>{date ?? 0}</Text>
 					<View style={styles.inLineContent}>
 						<Icons.SendIcon />
 						<Text style={styles.addressTxt}>{location ?? ""}</Text>

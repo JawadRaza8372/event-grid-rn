@@ -1,9 +1,11 @@
+import { useRouter } from "expo-router";
 import { FlatList, StyleSheet, View } from "react-native";
 import AuthLayout from "../AuthLayout";
 import TrendingEventCardView from "../Home/TrendingEvent";
 import SideTopBar from "../SideTopBar";
 
 const FavoriteEvent = () => {
+	const router = useRouter();
 	const trendingEventData = [
 		{
 			imageLink:

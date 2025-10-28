@@ -82,9 +82,23 @@ const AppWrapper = () => {
 						return null;
 					}),
 				]);
-				dispatch(setHomeEvents({ homeEvents: homeEvent }));
-				dispatch(setFavEvents({ favEvents: favEvent }));
-				dispatch(setTicketHistory({ ticketHistory: ticketHistory }));
+				console.log(
+					"home event==============>",
+					homeEvent,
+					"fav events==============>",
+					favEvent,
+					"tickethistory==============>",
+					ticketHistory
+				);
+				dispatch(
+					setHomeEvents({
+						home: homeEvent?.allPublishedEvents,
+						top: homeEvent?.topEvents,
+						trends: homeEvent?.trendingEvents,
+					})
+				);
+				dispatch(setFavEvents({ favEvents: favEvent?.myFavoriteEvents }));
+				dispatch(setTicketHistory({ ticketHistory: ticketHistory?.tickets }));
 			}
 		} catch (error) {
 			console.error("Error fetching data:", error);

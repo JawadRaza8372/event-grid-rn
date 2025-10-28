@@ -10,7 +10,10 @@
 		"newArchEnabled": true,
 		"ios": {
 			"bundleIdentifier": "com.eventgrid",
-			"supportsTablet": true
+			"supportsTablet": true,
+			"config": {
+				"googleMapsApiKey": "AIzaSyBpdnNu1ukg_ghV33WcU3DWXQke-zt9f1g"
+			}
 		},
 		"android": {
 			"adaptiveIcon": {
@@ -18,7 +21,12 @@
 				"backgroundColor": "#ffffff"
 			},
 			"edgeToEdgeEnabled": true,
-			"package": "com.eventgrid"
+			"package": "com.eventgrid",
+			"config": {
+				"googleMaps": {
+					"apiKey": "AIzaSyBpdnNu1ukg_ghV33WcU3DWXQke-zt9f1g"
+				}
+			}
 		},
 		"web": {
 			"bundler": "metro",

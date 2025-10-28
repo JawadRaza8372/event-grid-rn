@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
 import {
 	Dimensions,
@@ -11,33 +11,14 @@ import {
 	View,
 } from "react-native";
 import { Icons } from "../assets/icons";
-
 import placeHolderImage from "../assets/images/placeholderImage.jpg";
 import CustomButton from "../components/CustomButton";
 import EventDetailOverView from "../components/EventDetailOverView";
 import MapContainer from "../components/MapContainer";
 import { useThemeColors } from "../hooks/useThemeColors";
 const EventDetails = () => {
-	const eventData = {
-		imageLinks: [
-			"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-			"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-			"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-		],
-		title: "National Music Festival",
-		category: "Music",
-		date: "Monday, September 01, 2025",
-		time: "18.00 -23.00 PM (GMT +07.00)",
-		location: "Grand Park, New York City, US",
-		locationDesc: "Grand City St.100, New York, United States.",
-		locationCoordinates: {
-			lat: 0,
-			lng: 0,
-		},
-		price: "$20.00 - $100.00",
-		description:
-			"The National Music Festival is a grand celebration of music, culture, and creativity that brings together artists, performers, and music lovers from across the country. This annual event showcases a diverse mix of musical genres—ranging from classical, folk, and traditional sounds to contemporary, pop, rock, and fusion performances.",
-	};
+	const { eventData } = useLocalSearchParams();
+
 	const colors = useThemeColors();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [isFavoriteEvent, setisFavoriteEvent] = useState(false);

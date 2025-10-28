@@ -7,6 +7,8 @@ const initialState = {
 	billPayments: [],
 	homeEvents: [],
 	favEvents: [],
+	topEvents: [],
+	trendingEvents: [],
 	ticketHistory: [],
 	organizerStats: {
 		totalEvents: 0,
@@ -43,7 +45,9 @@ export const userSlice = createSlice({
 			state.favEvents = action.payload.favEvents;
 		},
 		setHomeEvents: (state, action) => {
-			state.homeEvents = action.payload.homeEvents;
+			state.homeEvents = action.payload.home;
+			state.topEvents = action.payload.top;
+			state.trendingEvents = action.payload.trends;
 		},
 		setOrganizerEvents: (state, action) => {
 			state.organizerEvents = action.payload.organizerEvents;

@@ -1,10 +1,14 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import barCodeImage from "../assets/images/code.png";
+import { useLocalSearchParams } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
+import Barcode from "react-native-barcode-svg";
 import AuthLayout from "../components/AuthLayout";
 import SideTopBar from "../components/SideTopBar";
 import { useThemeColors } from "../hooks/useThemeColors";
+
 const ETicketWallet = () => {
 	const colors = useThemeColors();
+	const { eventData } = useLocalSearchParams();
+
 	const styles = StyleSheet.create({
 		barCodeContainer: {
 			width: "100%",
@@ -72,9 +76,13 @@ const ETicketWallet = () => {
 					isTailIcon={true}
 				/>
 				<View style={styles.barCodeContainer}>
-					<Image
-						style={styles?.barCodeImage}
-						source={barCodeImage}
+					<Barcode
+						value={eventData?.id}
+						format="EAN13"
+						width={2}
+						height={100}
+						background={colors.mainBgColor}
+						lineColor={colors.blackColor}
 					/>
 				</View>
 				<View style={styles.dataContainer}>

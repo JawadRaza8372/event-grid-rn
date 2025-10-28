@@ -1,17 +1,16 @@
-import { router } from "expo-router";
-import { useState } from "react";
+import { useRouter } from "expo-router";
 import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
-import CategoryView from "./CategoryView";
-import SearchInput from "./SearchInput";
 import SeeAllView from "./SeeAllView";
 import TopEventCard from "./TopEventCard";
 import TrendingEventCardView from "./TrendingEvent";
 import WelcomeTopComponent from "./WelcomeTopComponent";
 const HomeScreen = () => {
-	const { user } = useSelector((state) => state?.user);
-	const [searchTearm, setsearchTearm] = useState("");
-	const [selectedCategory, setselectedCategory] = useState("All");
+	const { topEvents, trendingEvents, homeEvents } = useSelector(
+		(state) => state?.user
+	);
+	console.log(homeEvents?.[0]);
+	const router = useRouter();
 	const styles = StyleSheet.create({
 		TopEventCardView: {
 			width: Dimensions.get("screen").width - 20,
@@ -44,101 +43,11 @@ const HomeScreen = () => {
 			height: 110,
 		},
 	});
-	const topEventCardData = [
-		{
-			isFavorite: false,
-			address: "Grand Park, New Grand Park, New",
-			date: "Mon, Dec 24 . 18.00 - 23.00",
-			eventName: "Art WorkShops",
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-		},
-		{
-			isFavorite: true,
-			address: "Grand Park, New Grand Park, New",
-			date: "Mon, Dec 24 . 18.00 - 23.00",
-			eventName: "Art WorkShops",
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-		},
-		{
-			isFavorite: false,
-			address: "Grand Park, New Grand Park, New",
-			date: "Mon, Dec 24 . 18.00 - 23.00",
-			eventName: "Art WorkShops",
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-		},
-		{
-			isFavorite: true,
-			address: "Grand Park, New Grand Park, New",
-			date: "Mon, Dec 24 . 18.00 - 23.00",
-			eventName: "Art WorkShops",
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-		},
-		{
-			isFavorite: false,
-			address: "Grand Park, New Grand Park, New",
-			date: "Mon, Dec 24 . 18.00 - 23.00",
-			eventName: "Art WorkShops",
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-		},
-		{
-			isFavorite: true,
-			address: "Grand Park, New Grand Park, New",
-			date: "Mon, Dec 24 . 18.00 - 23.00",
-			eventName: "Art WorkShops",
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-		},
-	];
-	const trendingEventData = [
-		{
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-			name: "National Art WorkShops",
-			location: "5 miles from location",
-			genralPrice: 25,
-			vipPrice: 50,
-			ratting: 4,
-		},
-		{
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-			name: "National Art WorkShops",
-			location: "5 miles from location",
-			genralPrice: 25,
-			vipPrice: 50,
-			ratting: 4,
-		},
-		{
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-			name: "National Art WorkShops",
-			location: "5 miles from location",
-			genralPrice: 25,
-			vipPrice: 50,
-			ratting: 4,
-		},
-		{
-			imageLink:
-				"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-			name: "National Art WorkShops",
-			location: "5 miles from location",
-			genralPrice: 25,
-			vipPrice: 50,
-			ratting: 4,
-		},
-	];
+
 	return (
 		<>
 			<WelcomeTopComponent />
-			<SearchInput
-				value={searchTearm}
-				onChangeValue={(text) => setsearchTearm(text)}
-			/>
+
 			<SeeAllView
 				title={"Top Events"}
 				onPressFun={() => console.log("")}
@@ -147,32 +56,27 @@ const HomeScreen = () => {
 				<FlatList
 					showsHorizontalScrollIndicator={false}
 					horizontal={true}
-					data={topEventCardData}
+					data={topEvents}
 					renderItem={({ item }) => (
 						<TopEventCard
-							address={item.address}
-							date={item.date}
-							eventName={item.eventName}
-							imageLink={item.imageLink}
-							isFavorite={item.isFavorite}
-							onPressFun={() => router.push({ pathname: "/event-details" })}
+							eventId={item?.id}
+							address={item?.location?.address}
+							date={item?.startEndDate}
+							eventName={item?.title}
+							onPressFun={() =>
+								router.push({
+									pathname: "/event-details",
+									params: { eventData: item },
+								})
+							}
 						/>
 					)}
-					keyExtractor={(item, index) => index.toString()}
+					keyExtractor={(item, index) => item?.id}
 					ItemSeparatorComponent={() => (
 						<View style={styles.topEventSeprator} />
 					)}
 				/>
 			</View>
-			<SeeAllView
-				title={"Categories"}
-				onPressFun={() => console.log("")}
-			/>
-			<CategoryView
-				value={selectedCategory}
-				onChangeValue={(text) => setselectedCategory(text)}
-				options={["All", "Music", "Art", "Workshop", "Fun", "Paint"]}
-			/>
 			<SeeAllView
 				title={"Trending Events"}
 				onPressFun={() => console.log("")}
@@ -182,19 +86,23 @@ const HomeScreen = () => {
 					horizontal={true}
 					showsHorizontalScrollIndicator={false}
 					ListHeaderComponent={<View style={styles.trendingEventSeprator} />}
-					data={trendingEventData}
+					data={trendingEvents}
 					renderItem={({ item }) => (
 						<TrendingEventCardView
-							genralPrice={item.genralPrice}
-							imageLink={item.imageLink}
-							location={item.location}
-							name={item.name}
-							ratting={item.ratting}
-							vipPrice={item.vipPrice}
-							onPressFun={() => router.push({ pathname: "/event-details" })}
+							genralPrice={item?.generaladmissionPrice}
+							location={item?.location?.address}
+							date={item?.startEndDate}
+							name={item?.title}
+							vipPrice={item?.vipPrice}
+							onPressFun={() =>
+								router.push({
+									pathname: "/event-details",
+									params: { eventData: item },
+								})
+							}
 						/>
 					)}
-					keyExtractor={(item, index) => index.toString()}
+					keyExtractor={(item, index) => item?.id}
 					ItemSeparatorComponent={() => (
 						<View style={styles.trendingEventSeprator} />
 					)}

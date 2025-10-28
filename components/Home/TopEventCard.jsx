@@ -1,16 +1,8 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "../../assets/icons";
-import placeHolderImage from "../../assets/images/placeholderImage.jpg";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
-const TopEventCard = ({
-	imageLink,
-	eventName,
-	date,
-	address,
-	isFavorite,
-	onPressFun,
-}) => {
+const TopEventCard = ({ eventName, date, address, isFavorite, onPressFun }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -95,11 +87,9 @@ const TopEventCard = ({
 			style={styles.mainContainer}>
 			<View style={styles.imageContainer}>
 				<Image
-					source={
-						typeof imageLink === "string"
-							? { uri: imageLink }
-							: placeHolderImage
-					}
+					source={{
+						uri: "https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+					}}
 					style={styles.imageView}
 				/>
 			</View>
