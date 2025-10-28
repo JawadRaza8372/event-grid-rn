@@ -1,10 +1,8 @@
 import { ScrollView, StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
 import OrganizerHomeScreen from "../../components/Home/OrganizerHomeScreen";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
 const Home = () => {
-	const { user } = useSelector((state) => state?.user);
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {

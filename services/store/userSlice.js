@@ -5,6 +5,16 @@ const initialState = {
 	user: {},
 	resetPasswordToken: null,
 	billPayments: [],
+	homeEvents: [],
+	favEvents: [],
+	ticketHistory: [],
+	organizerStats: {
+		totalEvents: 0,
+		totalRevenue: 0,
+		totalTicketsSold: 0,
+		totalViews: 0,
+	},
+	organizerEvents: [],
 };
 
 export const userSlice = createSlice({
@@ -28,6 +38,21 @@ export const userSlice = createSlice({
 
 		setBillPayments: (state, action) => {
 			state.billPayments = action.payload.billPayments;
+		},
+		setFavEvents: (state, action) => {
+			state.favEvents = action.payload.favEvents;
+		},
+		setHomeEvents: (state, action) => {
+			state.homeEvents = action.payload.homeEvents;
+		},
+		setOrganizerEvents: (state, action) => {
+			state.organizerEvents = action.payload.organizerEvents;
+		},
+		setTicketHistory: (state, action) => {
+			state.ticketHistory = action.payload.ticketHistory;
+		},
+		setOrganizerStats: (state, action) => {
+			state.organizerStats = action.payload.organizerStats;
 		},
 	},
 });
@@ -57,6 +82,11 @@ export const {
 	setSelectedLang,
 	setResetPasswordToken,
 	setBillPayments,
+	setFavEvents,
+	setHomeEvents,
+	setOrganizerEvents,
+	setOrganizerStats,
+	setTicketHistory,
 } = userSlice.actions;
 
 export default userSlice.reducer;
