@@ -248,7 +248,19 @@ const EventDetails = () => {
 					<CustomButton
 						btnWidth={"100%"}
 						btnTitle={"Book Event"}
-						onPressFun={() => router.push({ pathname: "/book-event" })}
+						onPressFun={() =>
+							router.push({
+								pathname: "/book-event",
+								params: {
+									gaPrice: eventData?.generaladmissionPrice,
+									vipPrice: eventData?.vipPrice,
+									eventId: eventData?.id ?? "",
+									title: eventData?.title,
+									startDate: eventData?.startEndDate,
+									address: eventData?.location?.address,
+								},
+							})
+						}
 					/>
 					<View style={styles.botomPadding} />
 				</View>

@@ -167,9 +167,11 @@ export const loginApi = async (email, password) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const registerApi = async (
@@ -191,9 +193,11 @@ export const registerApi = async (
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const forgotPasswordApi = async (email) => {
@@ -205,9 +209,11 @@ export const forgotPasswordApi = async (email) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const verifyOtpApi = async (email, enteredOtp, dbOtp) => {
@@ -219,9 +225,11 @@ export const verifyOtpApi = async (email, enteredOtp, dbOtp) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const resetPasswordApi = async (password, resetToken) => {
@@ -238,9 +246,11 @@ export const resetPasswordApi = async (password, resetToken) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const changePasswordApi = async (password) => {
@@ -254,9 +264,11 @@ export const changePasswordApi = async (password) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const getUserProfileApi = async () => {
@@ -264,9 +276,11 @@ export const getUserProfileApi = async () => {
 		const result = await base.get("auth/userProfile", { isPublic: false });
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const getOrganizerStatsApi = async () => {
@@ -274,9 +288,11 @@ export const getOrganizerStatsApi = async () => {
 		const result = await base.get("event/my-events-stats", { isPublic: false });
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const publishDraftEventApi = async (eventId) => {
@@ -286,9 +302,11 @@ export const publishDraftEventApi = async (eventId) => {
 		});
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const deleteDraftEventApi = async (eventId) => {
@@ -298,9 +316,11 @@ export const deleteDraftEventApi = async (eventId) => {
 		});
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const addFavoriteEventApi = async (eventId) => {
@@ -312,9 +332,11 @@ export const addFavoriteEventApi = async (eventId) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const removeFavoriteEventApi = async (eventId) => {
@@ -326,9 +348,11 @@ export const removeFavoriteEventApi = async (eventId) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const getUserFavoriteApi = async () => {
@@ -338,17 +362,25 @@ export const getUserFavoriteApi = async () => {
 		});
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
-export const createPaymentIntentApi = async (planName) => {
+export const createPaymentIntentApi = async (
+	eventId,
+	ticketTierName,
+	quantity
+) => {
 	try {
 		const result = await base.post(
 			`payment/create-payment-intent`,
 			{
-				planName: planName,
+				eventId,
+				ticketTierName,
+				quantity: parseInt(quantity),
 			},
 			{
 				isPublic: false,
@@ -356,9 +388,11 @@ export const createPaymentIntentApi = async (planName) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const getUserHomeEventApi = async () => {
@@ -369,9 +403,11 @@ export const getUserHomeEventApi = async () => {
 		});
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const getTicketFromBarCodeApi = async (barcodeValue) => {
@@ -381,9 +417,11 @@ export const getTicketFromBarCodeApi = async (barcodeValue) => {
 		});
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const getUserTicketHistoryApi = async () => {
@@ -393,9 +431,11 @@ export const getUserTicketHistoryApi = async () => {
 		});
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const markTicketAsUsedApi = async (eventId, ticketId) => {
@@ -412,9 +452,11 @@ export const markTicketAsUsedApi = async (eventId, ticketId) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const addViewToEventApi = async (eventId) => {
@@ -428,9 +470,11 @@ export const addViewToEventApi = async (eventId) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const createNewEventApi = async (
@@ -475,9 +519,11 @@ export const createNewEventApi = async (
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const isValidPhoneNumber = (phone) => {
@@ -497,9 +543,11 @@ export const postPaymentSuccessApi = async (paymentIntentId) => {
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 const isJpgOrPng = (uri) => {
@@ -527,9 +575,11 @@ export const uploadImageApi = async (imageUri, imgType) => {
 
 		return response?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message || "An error occurred while uploading image";
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message || "An error occurred while uploading image"
+		);
 	}
 };
 
@@ -554,9 +604,11 @@ export const updateProfileApi = async (
 		);
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };
 export const deleteAccountApi = async () => {
@@ -566,8 +618,10 @@ export const deleteAccountApi = async () => {
 		});
 		return result?.data;
 	} catch (error) {
-		throw error?.response?.data?.message
-			? error?.response?.data?.message
-			: error?.message;
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
 	}
 };

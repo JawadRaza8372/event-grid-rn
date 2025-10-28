@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
 	Dimensions,
@@ -12,10 +12,20 @@ import CustomButton from "../components/CustomButton";
 import SideTopBar from "../components/SideTopBar";
 import { useThemeColors } from "../hooks/useThemeColors";
 const BookEvent = () => {
+	const { gaPrice, vipPrice, eventId, title, startDate, address } =
+		useLocalSearchParams();
+
 	const colors = useThemeColors();
-	const [selectedOption, setselectedOption] = useState("Economy");
+	const [selectedOption, setselectedOption] = useState(
+		gaPrice ? "General Admission" : vipPrice ? "VIP" : ""
+	);
 	const [totalTickets, settotalTickets] = useState(1);
-	const price = selectedOption === "Economy" ? 50 : 100;
+	const price =
+		selectedOption === "General Admission"
+			? gaPrice * totalTickets
+			: selectedOption === "VIP"
+			? vipPrice * totalTickets
+			: null;
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",
@@ -108,22 +118,24 @@ const BookEvent = () => {
 			<View style={styles.childContainer}>
 				<View style={styles.tabContainer}>
 					<TouchableOpacity
-						onPress={() => setselectedOption("Economy")}
+						disabled={!gaPrice}
+						onPress={() => setselectedOption("General Admission")}
 						style={
-							selectedOption === "Economy"
+							selectedOption === "General Admission"
 								? styles.activeTab
 								: styles.inActiveTab
 						}>
 						<Text
 							style={
-								selectedOption === "Economy"
+								selectedOption === "General Admission"
 									? styles.activeTxt
 									: styles.inActiveTxt
 							}>
-							Economy
+							General Admission
 						</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
+						disabled={!vipPrice}
 						onPress={() => setselectedOption("VIP")}
 						style={
 							selectedOption === "VIP" ? styles.activeTab : styles.inActiveTab
@@ -139,22 +151,49 @@ const BookEvent = () => {
 				<Text style={styles.headingTxt}>Choose number of Tickets</Text>
 				<View style={styles.buttonsContainer}>
 					<TouchableOpacity
-						onPress={() => settotalTickets(totalTickets - 1)}
-						style={styles.btnCont}>
+						onPress={() =>
+							totalTickets > 1 && settotalTickets(totalTickets - 1)
+						}
+						disabled={totalTickets === 1}
+						style={[
+							styles.btnCont,
+							totalTickets === 1 && { opacity: 0.4 }, // visual feedback for disabled state
+						]}>
 						<Icons.MinusIcon />
 					</TouchableOpacity>
 					<Text style={styles.btnTxt}>{totalTickets}</Text>
 					<TouchableOpacity
-						onPress={() => settotalTickets(totalTickets + 1)}
-						style={styles.btnCont}>
+						onPress={() =>
+							totalTickets < 5 && settotalTickets(totalTickets + 1)
+						}
+						disabled={totalTickets === 5}
+						style={[
+							styles.btnCont,
+							totalTickets === 5 && { opacity: 0.4 }, // visual feedback for disabled state
+						]}>
 						<Icons.PlusIcon />
 					</TouchableOpacity>
 				</View>
 			</View>
-			<CustomButton
-				btnTitle={`Continue - $${price}`}
-				onPressFun={() => router.push({ pathname: "/payments" })}
-			/>
+			{gaPrice || vipPrice || price ? (
+				<CustomButton
+					btnTitle={`Continue - $${price}`}
+					onPressFun={() =>
+						router.push({
+							pathname: "/review-summary",
+							params: {
+								eventId,
+								title,
+								startDate,
+								address,
+								sum: price,
+								tickets: totalTickets,
+								type: selectedOption,
+							},
+						})
+					}
+				/>
+			) : null}
 		</View>
 	);
 };

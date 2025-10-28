@@ -1,16 +1,27 @@
-import { router } from "expo-router";
+import { useStripe } from "@stripe/stripe-react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import masterCardImage from "../assets/images/mastercard.png";
+import Toast from "react-native-toast-message";
+import { useSelector } from "react-redux";
 import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import MyEventComp from "../components/MyEventComp.jsx";
-import PaymentComp from "../components/PaymentComp";
 import SideTopBar from "../components/SideTopBar";
 import SuccessModal from "../components/SuccessModal";
 import { useThemeColors } from "../hooks/useThemeColors";
-
+import {
+	createPaymentIntentApi,
+	postPaymentSuccessApi,
+} from "../services/endpoints.js";
 const ReviewSummary = () => {
+	const { initPaymentSheet, presentPaymentSheet, confirmPayment } = useStripe();
+
+	const { user } = useSelector((state) => state?.user);
+	const router = useRouter();
+	console.log(user);
+	const { eventId, title, startDate, address, sum, tickets, type } =
+		useLocalSearchParams();
 	const colors = useThemeColors();
 	const [openModal, setopenModal] = useState(false);
 	const switchOpenModal = () => {
@@ -67,12 +78,60 @@ const ReviewSummary = () => {
 			gap: 20,
 		},
 	});
-	const eventData = {
-		address: "Grand Park, New Grand Park, New",
-		date: "Mon, Dec 24 . 18.00 - 23.00",
-		eventName: "Art WorkShops",
-		imageLink:
-			"https://plus.unsplash.com/premium_photo-1757343190565-3b99182167e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+	const startPayment = async () => {
+		try {
+			// 1️⃣ Get Payment Intent from your backend
+			const result = await createPaymentIntentApi(eventId, type, tickets);
+			const clientSecret = result?.paymentIntent?.client_secret;
+			const currentPaymentId = result?.paymentIntent?.id;
+			// 2️⃣ Initialize Payment Sheet
+			const { error: initError } = await initPaymentSheet({
+				paymentIntentClientSecret: clientSecret,
+				merchantDisplayName: "Event Grid",
+				allowsDelayedPaymentMethods: true,
+				defaultBillingDetails: {
+					email: user?.email || "",
+				},
+				// googlePay: true,
+				// googlePay: {
+				// 	merchantCountryCode: "US",
+				// 	testEnv: true,
+				// },
+				// applePay: true,
+				// applePay: {
+				// 	merchantCountryCode: "US",
+				// },
+			});
+
+			if (initError) {
+				console.log("init error", initError);
+				Toast.show({
+					type: "error",
+					text1: initError.message ?? textStrings.paymentInitFailedMsg,
+				});
+				return;
+			}
+			// 3️⃣ Present the Payment Sheet
+			const { error: paymentError } = await presentPaymentSheet();
+			if (paymentError) {
+				console.log("payment error", paymentError);
+				Toast.show({
+					type: "error",
+					text1: paymentError.message ?? textStrings.paymentFailedMsg,
+				});
+				return;
+			}
+
+			// 4️⃣ Notify backend of success
+			await postPaymentSuccessApi(currentPaymentId);
+			switchOpenModal();
+		} catch (error) {
+			console.log("Payment failed error:", error);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Payment Failed",
+			});
+		}
 	};
 	return (
 		<AuthLayout hideBgImg={true}>
@@ -82,10 +141,9 @@ const ReviewSummary = () => {
 					isTailIcon={true}
 				/>
 				<MyEventComp
-					address={eventData?.address}
-					date={eventData?.date}
-					title={eventData?.eventName}
-					imageLink={eventData?.imageLink}
+					address={address}
+					date={startDate}
+					title={title}
 				/>
 				<View style={styles.dataContainer}>
 					<View style={styles.sideBySideContainer}>
@@ -94,7 +152,7 @@ const ReviewSummary = () => {
 							numberOfLines={1}
 							ellipsizeMode="tail"
 							style={styles.labelValue}>
-							Jhon Doe
+							{user?.username ?? "--"}
 						</Text>
 					</View>
 					<View style={styles.sideBySideContainer}>
@@ -103,7 +161,7 @@ const ReviewSummary = () => {
 							numberOfLines={1}
 							ellipsizeMode="tail"
 							style={styles.labelValue}>
-							********
+							{user?.phone ?? "--"}
 						</Text>
 					</View>
 					<View style={styles.sideBySideContainer}>
@@ -112,55 +170,56 @@ const ReviewSummary = () => {
 							numberOfLines={1}
 							ellipsizeMode="tail"
 							style={styles.labelValue}>
-							jhondoe@gmail.com
+							{user?.email ?? "--"}
 						</Text>
 					</View>
 				</View>
 				<View style={styles.dataContainer}>
 					<View style={styles.sideBySideContainer}>
-						<Text style={styles.labelTxt}>Payment Method</Text>
+						<Text style={styles.labelTxt}>
+							{tickets} Ticket(s) (
+							{type === "General Admission" ? "Economy" : type})
+						</Text>
 						<Text
 							numberOfLines={1}
 							ellipsizeMode="tail"
 							style={styles.labelValue}>
-							MasterCard
+							${sum ?? 0}
 						</Text>
 					</View>
 					<View style={styles.sideBySideContainer}>
-						<Text style={styles.labelTxt}>Order ID</Text>
+						<Text style={styles.labelTxt}>Tax</Text>
 						<Text
 							numberOfLines={1}
 							ellipsizeMode="tail"
 							style={styles.labelValue}>
-							5678548
+							$5
 						</Text>
 					</View>
 					<View style={styles.borderedView} />
 					<View style={styles.sideBySideContainer}>
-						<Text style={styles.labelTxt}>Status</Text>
+						<Text style={styles.labelTxt}>Total</Text>
 						<Text
 							numberOfLines={1}
 							ellipsizeMode="tail"
 							style={styles.labelValue}>
-							Paid
+							${parseFloat(sum) + 5}
 						</Text>
 					</View>
 				</View>
-				<PaymentComp
-					image={masterCardImage}
-					isChangeFun={() => router.back()}
-					title={"********2589"}
-				/>
 				<CustomButton
 					btnWidth={"100%"}
 					btnTitle={"Continue"}
-					onPressFun={switchOpenModal}
+					onPressFun={startPayment}
 				/>
 				<View style={styles.bottomPadding} />
 			</View>
 			<SuccessModal
 				showModal={openModal}
-				hideModal={switchOpenModal}
+				hideModal={() => {
+					switchOpenModal();
+					router.push({ pathname: "/(tabs)" });
+				}}
 				title={"Congratulations!!"}
 				description={
 					"You have successfully placed an\norder for National Music Festival."
