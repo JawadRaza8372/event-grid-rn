@@ -14,7 +14,6 @@ const LocationScreen = () => {
 	const colors = useThemeColors();
 
 	const [userLocation, setUserLocation] = useState(null);
-	const GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY"; // put your key here
 
 	useEffect(() => {
 		const requestLocationPermission = async () => {
