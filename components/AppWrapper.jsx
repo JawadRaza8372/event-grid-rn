@@ -54,7 +54,6 @@ const AppWrapper = () => {
 						return null;
 					}),
 				]);
-				console.log("check stats", organizerStats?.data?.events);
 				dispatch(
 					setOrganizerStats({
 						organizerStats: {

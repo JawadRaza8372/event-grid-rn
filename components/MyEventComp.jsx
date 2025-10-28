@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { Icons } from "../assets/icons";
 import placeHolderImage from "../assets/images/placeholderImage.jpg";
 import { useThemeColors } from "../hooks/useThemeColors";
@@ -12,16 +12,18 @@ const MyEventComp = ({
 	totalAmount,
 }) => {
 	const colors = useThemeColors();
+	const showComponentCondition =
+		totalTickets > 0 || soldTickets > 0 || totalAmount > 0 ? true : false;
 	const styles = StyleSheet.create({
 		mainContainer: {
-			width: "100%",
+			width: Dimensions.get("screen").width - 34,
 			paddingVertical: 11,
 			paddingHorizontal: 10,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "flex-start",
 			flexDirection: "row",
-			gap: 22,
+			gap: 10,
 			backgroundColor: colors.topEventBg,
 			borderRadius: 25,
 			height: 133,
@@ -50,7 +52,7 @@ const MyEventComp = ({
 		},
 		revenueTxt: {
 			fontSize: 9,
-			fontWeight: "400",
+			fontWeight: "500",
 			color: colors.greenTxt,
 		},
 		imageContainer: {
@@ -69,15 +71,13 @@ const MyEventComp = ({
 			resizeMode: "cover",
 		},
 		childContainer: {
-			height: "auto",
+			height: "100%",
 			display: "flex",
 			alignItems: "flex-start",
 			justifyContent: "center",
 			flexDirection: "column",
 			marginRight: 5,
-			...(totalTickets > 0 && soldTickets > 0 && totalAmount > 0
-				? { flex: 1 }
-				: { height: 85 }),
+			...(showComponentCondition ? { flex: 1 } : { height: 85 }),
 		},
 		sideBySideView: {
 			height: "auto",
@@ -126,8 +126,8 @@ const MyEventComp = ({
 			height: 20,
 		},
 		ticketSoldMainContainer: {
-			width: "100%",
 			height: 40,
+			width: "100%",
 			display: "flex",
 			flexDirection: "column",
 			alignItems: "flex-start",
@@ -174,7 +174,7 @@ const MyEventComp = ({
 						{address ?? ""}
 					</Text>
 				</View>
-				{totalAmount > 0 && totalTickets > 0 && soldTickets > 0 ? (
+				{showComponentCondition ? (
 					<View style={styles?.ticketSoldMainContainer}>
 						<View style={styles.sideBySideView}>
 							<Text style={styles.soldText}>

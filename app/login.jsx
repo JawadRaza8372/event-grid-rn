@@ -13,6 +13,7 @@ import { Icons } from "../assets/icons";
 import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
+import LoadingView from "../components/LoadingView";
 import RedirecetWrapper from "../components/RedirectWrapper";
 import SocialGoogleButton from "../components/SocialGoogleButton";
 import { useThemeColors } from "../hooks/useThemeColors";
@@ -26,6 +27,7 @@ const Login = () => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const colors = useThemeColors();
+	const [isLoading, setisLoading] = useState(false);
 	const [formData, setformData] = useState({ email: "", password: "" });
 	const styles = StyleSheet.create({
 		topBarContainer: {
@@ -135,6 +137,7 @@ const Login = () => {
 				});
 				return;
 			}
+			setisLoading(true);
 			const result = await loginApi(formData.email, formData.password);
 			if (result) {
 				console.log("Login success:", result?.user);
@@ -142,8 +145,11 @@ const Login = () => {
 				dispatch(setUser({ user: rest }));
 				await saveUserTokenToStorage(tokens?.accessToken, tokens?.refreshToken);
 			}
+			setisLoading(false);
 		} catch (error) {
 			console.log("login failed: ", error);
+			setisLoading(false);
+
 			Toast.show({
 				type: "error",
 				text1: error ?? "Login failed",
@@ -206,6 +212,7 @@ const Login = () => {
 						<Text style={styles.btmLoginWithText}>New User?</Text>
 						<Text style={styles.btmOrText}>Create Account</Text>
 					</TouchableOpacity>
+					<LoadingView loading={isLoading} />
 				</>
 			</AuthLayout>
 		</RedirecetWrapper>

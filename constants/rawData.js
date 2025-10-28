@@ -28,6 +28,7 @@ export const allCategoriesArry = [
 	"Music",
 	"Art",
 	"Workshop",
+	"Tech",
 	"Fun",
 	"Paint",
 ];

@@ -13,6 +13,7 @@ import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import CustomSelector from "../components/CustomSelector";
+import LoadingView from "../components/LoadingView";
 import RedirecetWrapper from "../components/RedirectWrapper";
 import SocialGoogleButton from "../components/SocialGoogleButton";
 import SuccessModal from "../components/SuccessModal";
@@ -32,6 +33,7 @@ const Register = () => {
 		email: "",
 		password: "",
 	});
+	const [isLoading, setisLoading] = useState(false);
 	const [openOrganizeModal, setopenOrganizeModal] = useState(false);
 	const switchOpenOrganizeModal = () => {
 		setopenOrganizeModal(!openOrganizeModal);
@@ -153,7 +155,7 @@ const Register = () => {
 				});
 				return;
 			}
-
+			setisLoading(true);
 			const result = await registerApi(
 				formData.name,
 				formData.email,
@@ -173,8 +175,10 @@ const Register = () => {
 					text1: "Account created successfully. Please Login.",
 				});
 			}
+			setisLoading(false);
 		} catch (error) {
 			console.log("register failed: ", error);
+			setisLoading(false);
 			Toast.show({
 				type: "error",
 				text1: error
@@ -258,6 +262,7 @@ const Register = () => {
 						showModal={openOrganizeModal}
 						hideModal={switchOpenOrganizeModal}
 					/>
+					<LoadingView loading={isLoading} />
 				</>
 			</AuthLayout>
 		</RedirecetWrapper>

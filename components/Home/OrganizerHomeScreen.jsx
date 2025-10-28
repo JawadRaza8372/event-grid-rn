@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Icons } from "../../assets/icons";
 import { allCategoriesArry } from "../../constants/rawData";
 import { useThemeColors } from "../../hooks/useThemeColors";
+import EmptyComponent from "../EmptyComponent";
 import MyEventComp from "../MyEventComp";
 import CategoryView from "./CategoryView";
 import SeeAllView from "./SeeAllView";
@@ -16,9 +17,7 @@ const OrganizerHomeScreen = () => {
 	const { user, organizerStats, organizerEvents } = useSelector(
 		(state) => state?.user
 	);
-	const homeOrganizerEvents = organizerEvents?.filter(
-		(dat) => dat?.status === "Published"
-	);
+
 	const [selectedCategory, setselectedCategory] = useState("All");
 	const styles = StyleSheet.create({
 		bottomPadding: {
@@ -81,7 +80,12 @@ const OrganizerHomeScreen = () => {
 			color: colors.dataTitleColor,
 		},
 	});
-
+	const homeOrganizerEvents =
+		organizerEvents?.filter(
+			(dat) =>
+				dat?.status === "Published" &&
+				(selectedCategory === "All" || dat?.category === selectedCategory)
+		) ?? [];
 	return (
 		<>
 			<WelcomeTopComponent />
@@ -135,7 +139,11 @@ const OrganizerHomeScreen = () => {
 			/>
 			<SeeAllView
 				title={"Your Events"}
-				onPressFun={() => router.push({ pathname: "/organizer-events" })}
+				onPressFun={
+					organizerEvents?.length > 0
+						? () => router.push({ pathname: "/organizer-events" })
+						: null
+				}
 			/>
 			<View style={styles.mainItemsContainer}>
 				<FlatList
@@ -155,6 +163,15 @@ const OrganizerHomeScreen = () => {
 							totalAmount={item?.stats?.revenue}
 						/>
 					)}
+					ListEmptyComponent={
+						<EmptyComponent
+							title={
+								selectedCategory === "All"
+									? "No Published Events"
+									: `No events for ${selectedCategory} category`
+							}
+						/>
+					}
 				/>
 			</View>
 			<View style={styles.bottomPadding} />
