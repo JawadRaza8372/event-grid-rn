@@ -32,6 +32,7 @@ const Naviagtion = () => {
 			<Stack.Screen name="ticket-history" />
 			<Stack.Screen name="my-tickets" />
 			<Stack.Screen name="organizer-events" />
+			<Stack.Screen name="all-user-events" />
 			<Stack.Screen name="+not-found" />
 		</Stack>
 	);

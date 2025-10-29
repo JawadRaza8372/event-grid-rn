@@ -16,11 +16,11 @@ export default function TabLayout() {
 	const styles = StyleSheet.create({
 		tabBarStyle: {
 			backgroundColor: colors.botmTab,
-			height: 70,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			flexDirection: "row",
+			height: 60,
+			// display: "flex",
+			// alignItems: "center",
+			// justifyContent: "center",
+			// flexDirection: "row",
 			shadowColor: colors.botmTabShadow,
 			shadowOffset: {
 				width: 0,

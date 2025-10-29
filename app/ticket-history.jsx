@@ -40,7 +40,7 @@ const TicketHistory = () => {
 	return (
 		<View style={styles.mainContainer}>
 			<CenteredTitleTopBar
-				title={"My Tickets"}
+				title={"Ticket History"}
 				showBackBtn={true}
 			/>
 			<FlatList
@@ -68,7 +68,9 @@ const TicketHistory = () => {
 					);
 				}}
 				ItemSeparatorComponent={() => <View style={styles.sepratorView} />}
-				ListEmptyComponent={<EmptyComponent title={`No My Tickets`} />}
+				ListEmptyComponent={
+					<EmptyComponent title={`Ticket History not found`} />
+				}
 				ListFooterComponent={<View style={styles.bottomPadding} />}
 			/>
 			<LoadingView loading={isLoading} />

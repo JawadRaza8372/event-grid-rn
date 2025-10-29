@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
-const CategoryView = ({ options, value, onChangeValue }) => {
+const CategoryView = ({ options, value, onChangeValue, viewWidth, mt, mb }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		categoryView: {
@@ -30,14 +30,14 @@ const CategoryView = ({ options, value, onChangeValue }) => {
 		},
 		inputMainContainer: {
 			height: "auto",
-			width: Dimensions.get("screen").width - 32,
+			width: viewWidth ?? Dimensions.get("screen").width - 32,
 			alignSelf: "center",
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "flex-start",
 			flexDirection: "row",
-			marginTop: 15,
-			marginBottom: 26,
+			marginTop: mt ?? 15,
+			marginBottom: mb ?? 26,
 		},
 		sepratorView: {
 			width: 6,

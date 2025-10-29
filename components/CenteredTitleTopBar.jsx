@@ -54,7 +54,6 @@ const CenteredTitleTopBar = ({ title, showBackBtn }) => {
 			) : (
 				<View style={styles.sideBtn} />
 			)}
-			<View style={styles.sideBtn}></View>
 			<Text style={styles.screenHeaderTitle}>{title ?? ""}</Text>
 			<View style={styles.sideBtn} />
 		</View>

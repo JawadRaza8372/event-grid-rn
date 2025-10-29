@@ -20,8 +20,6 @@ const TabIcon = ({ focused, Icon }) => {
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
-			backgroundColor: "blue",
-			marginBottom: -18,
 			backgroundColor: colors.botmTab,
 		},
 		normalView: {
