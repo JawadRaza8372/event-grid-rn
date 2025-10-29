@@ -29,44 +29,6 @@ export const initiateSocket = () => {
 
 export const getSocket = () => socket;
 
-export const joinRoom = (roomId) => {
-	if (socket) {
-		socket.emit("joinRoom", roomId);
-		console.log("join room", roomId);
-		if (!activeRooms.includes(roomId)) {
-			activeRooms.push(roomId);
-		}
-	}
-};
-export const leaveRoom = (roomId) => {
-	if (socket) {
-		socket.emit("leaveRoom", roomId);
-		console.log("left room:", roomId);
-		activeRooms = activeRooms.filter((r) => r !== roomId);
-	}
-};
-export const sendMessage = (message) => {
-	if (socket) {
-		socket.emit("sendMessage", message);
-		console.log("message send", message);
-	}
-};
-const reconnectRooms = () => {
-	if (socket && socket.connected && activeRooms.length > 0) {
-		console.log("Reconnecting to rooms:", activeRooms);
-		activeRooms.forEach((roomId) => {
-			socket.emit("joinRoom", roomId);
-		});
-	}
-};
-export const receiveMessage = (callback) => {
-	if (socket) {
-		socket.on("newMessage", (message) => {
-			console.log("message recived", message);
-			callback(message);
-		});
-	}
-};
 export const userProfileUpdated = (callback) => {
 	if (socket) {
 		socket.on("userProfileUpdated", (message) => {
@@ -75,15 +37,46 @@ export const userProfileUpdated = (callback) => {
 		});
 	}
 };
-export const userPaymentUpdated = (callback) => {
+export const userFavoriteEventsUpdated = (callback) => {
 	if (socket) {
-		socket.on("userPaymentUpdated", (message) => {
+		socket.on("userFavoriteEventsUpdated", (message) => {
 			callback(message);
-			console.log("user payment updated", message);
+			console.log("user favorite events updated", message);
 		});
 	}
 };
-
+export const organizerEventsUpdated = (callback) => {
+	if (socket) {
+		socket.on("organizerEventsUpdated", (message) => {
+			callback(message);
+			console.log("organizer event updated", message);
+		});
+	}
+};
+export const homeEventsUpdated = (callback) => {
+	if (socket) {
+		socket.on("eventsUpdated", (message) => {
+			callback(message);
+			console.log("home event updated", message);
+		});
+	}
+};
+export const userTicketsUpdated = (callback) => {
+	if (socket) {
+		socket.on("userTicketsUpdated", (message) => {
+			callback(message);
+			console.log("user ticckets updated", message);
+		});
+	}
+};
+export const notificationUpdated = (callback) => {
+	if (socket) {
+		socket.on("notificationUpdated", (message) => {
+			callback(message);
+			console.log("notifications updated", message);
+		});
+	}
+};
 export const disconnectSocket = () => {
 	if (socket) {
 		socket.disconnect();

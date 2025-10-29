@@ -128,16 +128,7 @@ const ETicketWallet = () => {
 							numberOfLines={1}
 							ellipsizeMode="tail"
 							style={styles.labelValue}>
-							${parseFloat(ticketData?.pricePaid) - 5}
-						</Text>
-					</View>
-					<View style={styles.sideBySideContainer}>
-						<Text style={styles.labelTxt}>Tax</Text>
-						<Text
-							numberOfLines={1}
-							ellipsizeMode="tail"
-							style={styles.labelValue}>
-							$5.00
+							${ticketData?.pricePaid}
 						</Text>
 					</View>
 					<View style={styles.borderedView} />

@@ -17,6 +17,7 @@ const initialState = {
 		totalViews: 0,
 	},
 	organizerEvents: [],
+	userNotifications: [],
 };
 
 export const userSlice = createSlice({
@@ -58,6 +59,9 @@ export const userSlice = createSlice({
 		setOrganizerStats: (state, action) => {
 			state.organizerStats = action.payload.organizerStats;
 		},
+		setUserNotifications: (state, action) => {
+			state.userNotifications = action.payload.userNotifications;
+		},
 	},
 });
 
@@ -91,6 +95,7 @@ export const {
 	setOrganizerEvents,
 	setOrganizerStats,
 	setTicketHistory,
+	setUserNotifications,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -4,6 +4,7 @@ import {
 	setOrganizerEvents,
 	setOrganizerStats,
 	setTicketHistory,
+	setUserNotifications,
 } from "@/services/store/userSlice";
 import * as NavigationBar from "expo-navigation-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -16,6 +17,7 @@ import {
 	getOrganizerStatsApi,
 	getUserFavoriteApi,
 	getUserHomeEventApi,
+	getUserNotificationApi,
 	getUserTicketHistoryApi,
 } from "../services/endpoints";
 import { disconnectSocket, initiateSocket } from "../services/socketService";
@@ -48,9 +50,13 @@ const AppWrapper = () => {
 		try {
 			if (user?.role === "organizer") {
 				console.log("isorganizer");
-				const [organizerStats] = await Promise.all([
+				const [organizerStats, userNotification] = await Promise.all([
 					getOrganizerStatsApi().catch((err) => {
 						console.error("Error in getOrganizerStats:", err);
+						return null;
+					}),
+					getUserNotificationApi().catch((err) => {
+						console.error("Error in getUserTicketHistoryApi:", err);
 						return null;
 					}),
 				]);
@@ -67,22 +73,31 @@ const AppWrapper = () => {
 				dispatch(
 					setOrganizerEvents({ organizerEvents: organizerStats?.data?.events })
 				);
+				dispatch(
+					setUserNotifications({
+						userNotifications: userNotification?.notifications,
+					})
+				);
 			} else {
-				const [homeEvent, favEvent, ticketHistory] = await Promise.all([
-					getUserHomeEventApi().catch((err) => {
-						console.error("Error in getUserHomeEventApi:", err);
-						return null;
-					}),
-					getUserFavoriteApi().catch((err) => {
-						console.error("Error in getUserFavoriteApi:", err);
-						return null;
-					}),
-					getUserTicketHistoryApi().catch((err) => {
-						console.error("Error in getUserTicketHistoryApi:", err);
-						return null;
-					}),
-				]);
-
+				const [homeEvent, favEvent, ticketHistory, userNotification] =
+					await Promise.all([
+						getUserHomeEventApi().catch((err) => {
+							console.error("Error in getUserHomeEventApi:", err);
+							return null;
+						}),
+						getUserFavoriteApi().catch((err) => {
+							console.error("Error in getUserFavoriteApi:", err);
+							return null;
+						}),
+						getUserTicketHistoryApi().catch((err) => {
+							console.error("Error in getUserTicketHistoryApi:", err);
+							return null;
+						}),
+						getUserNotificationApi().catch((err) => {
+							console.error("Error in getUserTicketHistoryApi:", err);
+							return null;
+						}),
+					]);
 				dispatch(
 					setHomeEvents({
 						home: homeEvent?.allPublishedEvents,
@@ -92,6 +107,11 @@ const AppWrapper = () => {
 				);
 				dispatch(setFavEvents({ favEvents: favEvent?.myFavoriteEvents }));
 				dispatch(setTicketHistory({ ticketHistory: ticketHistory?.tickets }));
+				dispatch(
+					setUserNotifications({
+						userNotifications: userNotification?.notifications,
+					})
+				);
 			}
 		} catch (error) {
 			console.error("Error fetching data:", error);

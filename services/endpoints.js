@@ -271,6 +271,20 @@ export const changePasswordApi = async (password) => {
 		);
 	}
 };
+export const getUserNotificationApi = async () => {
+	try {
+		const result = await base.get("auth/user-notification", {
+			isPublic: false,
+		});
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
 export const getUserProfileApi = async () => {
 	try {
 		const result = await base.get("auth/userProfile", { isPublic: false });
