@@ -2,8 +2,6 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Tabs } from "expo-router";
 import { StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
-import CreateEvent from "../../assets/bottomIcons/CreateEvent";
 import FavoriteIcon from "../../assets/bottomIcons/FavoriteIcon";
 import HomeIcon from "../../assets/bottomIcons/HomeIcon";
 import NotificationIcon from "../../assets/bottomIcons/NotificationIcon";
@@ -11,8 +9,7 @@ import ProfileIcon from "../../assets/bottomIcons/ProfileIcon";
 import TabIcon from "../../components/TabIcon";
 export default function TabLayout() {
 	const colors = useThemeColors();
-	const { user } = useSelector((state: any) => state?.user);
-	console.log(user?.role);
+	const totalItems = 4;
 	const styles = StyleSheet.create({
 		tabBarStyle: {
 			backgroundColor: colors.botmTab,
@@ -45,6 +42,7 @@ export default function TabLayout() {
 					title: "index",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
 							Icon={HomeIcon}
 						/>
@@ -57,14 +55,9 @@ export default function TabLayout() {
 					title: "fav-event",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
-							Icon={
-								user?.role === "organizer"
-									? CreateEvent
-									: user?.role === "user"
-									? FavoriteIcon
-									: null
-							}
+							Icon={FavoriteIcon}
 						/>
 					),
 				}}
@@ -75,6 +68,7 @@ export default function TabLayout() {
 					title: "notification",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
 							Icon={NotificationIcon}
 						/>
@@ -87,6 +81,7 @@ export default function TabLayout() {
 					title: "profile",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
 							Icon={ProfileIcon}
 						/>

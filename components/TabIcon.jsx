@@ -1,19 +1,14 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
 
-const TabIcon = ({ focused, Icon }) => {
+const TabIcon = ({ focused, Icon, totalItems }) => {
 	const colors = useThemeColors();
-	const { user } = useSelector((state) => state?.user);
 
 	const styles = StyleSheet.create({
 		defaultTab: {
 			justifyContent: "flex-start",
 			alignItems: "center",
-			width:
-				user?.role === "user"
-					? Dimensions.get("screen").width / 4
-					: Dimensions.get("screen").width / 5,
+			width: Dimensions.get("screen").width / totalItems,
 			height: 70,
 			gap: 5,
 			zIndex: 3,

@@ -2,9 +2,7 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Tabs } from "expo-router";
 import { StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
 import CreateEvent from "../../assets/bottomIcons/CreateEvent";
-import FavoriteIcon from "../../assets/bottomIcons/FavoriteIcon";
 import HomeIcon from "../../assets/bottomIcons/HomeIcon";
 import NotificationIcon from "../../assets/bottomIcons/NotificationIcon";
 import ProfileIcon from "../../assets/bottomIcons/ProfileIcon";
@@ -12,7 +10,8 @@ import TicketIcon from "../../assets/bottomIcons/TicketIcon";
 import TabIcon from "../../components/TabIcon";
 export default function TabLayout() {
 	const colors = useThemeColors();
-	const { user } = useSelector((state: any) => state?.user);
+	const totalItems = 5;
+
 	const styles = StyleSheet.create({
 		tabBarStyle: {
 			backgroundColor: colors.botmTab,
@@ -45,6 +44,7 @@ export default function TabLayout() {
 					title: "index",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
 							Icon={HomeIcon}
 						/>
@@ -57,6 +57,7 @@ export default function TabLayout() {
 					title: "ticket",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
 							Icon={TicketIcon}
 						/>
@@ -69,14 +70,9 @@ export default function TabLayout() {
 					title: "create-event",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
-							Icon={
-								user?.role === "organizer"
-									? CreateEvent
-									: user?.role === "user"
-									? FavoriteIcon
-									: null
-							}
+							Icon={CreateEvent}
 						/>
 					),
 				}}
@@ -87,6 +83,7 @@ export default function TabLayout() {
 					title: "notification",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
 							Icon={NotificationIcon}
 						/>
@@ -99,6 +96,7 @@ export default function TabLayout() {
 					title: "profile",
 					tabBarIcon: ({ focused }) => (
 						<TabIcon
+							totalItems={totalItems}
 							focused={focused}
 							Icon={ProfileIcon}
 						/>
