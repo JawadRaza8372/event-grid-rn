@@ -4,6 +4,8 @@ import {
 	setOrganizerEvents,
 	setOrganizerStats,
 	setTicketHistory,
+	setTokens,
+	setUser,
 	setUserNotifications,
 } from "@/services/store/userSlice";
 import * as NavigationBar from "expo-navigation-bar";
@@ -14,19 +16,31 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
+	decodeUserId,
 	getOrganizerStatsApi,
 	getUserFavoriteApi,
 	getUserHomeEventApi,
 	getUserNotificationApi,
+	getUserProfileApi,
 	getUserTicketHistoryApi,
 } from "../services/endpoints";
-import { disconnectSocket, initiateSocket } from "../services/socketService";
+import {
+	disconnectSocket,
+	homeEventsUpdated,
+	initiateSocket,
+	notificationUpdated,
+	organizerEventsUpdated,
+	userFavoriteEventsUpdated,
+	userProfileUpdated,
+	userTicketsUpdated,
+} from "../services/socketService";
 import Navigation from "./Naviagtion";
 const AppWrapper = () => {
 	const isFetchingRef = useRef(false);
 	const previousUserIdRef = useRef(null);
 	const dispatch = useDispatch();
-	const { user } = useSelector((state) => state?.user);
+	const { user, tokens } = useSelector((state) => state?.user);
+	const currentUserId = decodeUserId(tokens?.accessToken);
 	const colors = useThemeColors();
 	useEffect(() => {
 		const lockOrientation = async () => {
@@ -141,6 +155,116 @@ const AppWrapper = () => {
 		};
 		run();
 	}, [user?.email, fetchDataWhenLogedIn]);
+	useEffect(() => {
+		notificationUpdated(async (userId) => {
+			if (userId === currentUserId) {
+				getUserNotificationApi()
+					.then((dat) => {
+						dispatch(
+							setUserNotifications({
+								userNotifications: dat?.notifications,
+							})
+						);
+					})
+					.catch((err) => {
+						console.error("Error in getUserTicketHistoryApi in sockets:", err);
+						return null;
+					});
+			}
+		});
+		userTicketsUpdated(async (userId) => {
+			if ((userId === currentUserId && user?.role) === "user") {
+				getUserTicketHistoryApi()
+					.then((dat) => {
+						dispatch(
+							setTicketHistory({
+								ticketHistory: dat?.tickets,
+							})
+						);
+					})
+					.catch((err) => {
+						console.error("Error in getUserTicketHistoryApi:", err);
+						return null;
+					});
+			}
+		});
+		homeEventsUpdated(async () => {
+			if (userId === currentUserId) {
+				await getUserHomeEventApi()
+					.then((dat) => {
+						dispatch(
+							setHomeEvents({
+								home: dat?.allPublishedEvents,
+								top: dat?.topEvents,
+								trends: dat?.trendingEvents,
+							})
+						);
+					})
+					.catch((err) => {
+						console.error("Error in getUserHomeEventApi in sockets:", err);
+					});
+			}
+		});
+		organizerEventsUpdated(async (userId) => {
+			if (userId === currentUserId && user?.role === "organizer") {
+				getOrganizerStatsApi()
+					.then((dat) => {
+						console.log("datat", dat);
+						dispatch(
+							setOrganizerStats({
+								organizerStats: {
+									totalEvents: dat?.data?.totalEvents ?? 0,
+									totalRevenue: dat?.data?.totalRevenue ?? 0,
+									totalTicketsSold: dat?.data?.totalTicketsSold ?? 0,
+									totalViews: dat?.data?.totalViews ?? 0,
+								},
+							})
+						);
+						dispatch(
+							setOrganizerEvents({
+								organizerEvents: dat?.data?.events,
+							})
+						);
+					})
+					.catch((err) => {
+						console.error("Error in getOrganizerStats IN SOCKETS:", err);
+						return null;
+					});
+			}
+		});
+		userFavoriteEventsUpdated(async (userId) => {
+			if (userId === currentUserId && user?.role === "user") {
+				getUserFavoriteApi()
+					.then((dat) => {
+						dispatch(setFavEvents({ favEvents: dat?.myFavoriteEvents }));
+					})
+					.catch((err) => {
+						console.error("Error in getUserFavoriteApi in sockets:", err);
+					});
+			}
+		});
+		userProfileUpdated(async (userId) => {
+			if (userId === currentUserId) {
+				await getUserProfileApi()
+					.then((dat) => {
+						const { tokens, ...rest } = dat?.user;
+						dispatch(setUser({ user: rest }));
+						console.log("setting tokens in sockets");
+						dispatch(
+							setTokens({
+								tokens: {
+									accessToken: tokens?.accessToken,
+									refreshToken: tokens?.refreshToken,
+								},
+							})
+						);
+					})
+					.catch((err) => {
+						console.error("Error in getUserProfileApi in sockets:", err);
+					});
+			}
+		});
+	}, [dispatch, currentUserId, tokens, user]);
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView

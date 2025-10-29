@@ -37,6 +37,8 @@ const SocialGoogleButton = () => {
 				console.log("google Login success:", userObj);
 				const { tokens, ...rest } = userObj;
 				dispatch(setUser({ user: rest }));
+				console.log("setting tokens in social login");
+
 				dispatch(
 					setTokens({
 						tokens: {

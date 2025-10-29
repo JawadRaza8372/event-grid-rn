@@ -66,17 +66,24 @@ export const userSlice = createSlice({
 		setUserNotifications: (state, action) => {
 			state.userNotifications = action.payload.userNotifications;
 		},
-		setTokens: async (state, action) => {
+		setTokens: (state, action) => {
+			console.log("here is payload", action.payload.tokens);
 			state.tokens = action.payload.tokens;
-			await saveUserTokenToStorage(tokens?.accessToken, tokens?.refreshToken);
+			saveUserTokenToStorage(
+				action.payload.tokens?.accessToken,
+				action.payload.tokens?.refreshToken
+			);
 		},
 	},
 });
 
 export const saveUserTokenToStorage = async (accessToken, refreshToken) => {
-	if (!accessToken || !refreshToken) return;
-	await localStorage.setItem("event-grid8372-accessToken", accessToken);
-	await localStorage.setItem("event-grid8372-refreshToken", refreshToken);
+	if (accessToken) {
+		await localStorage.setItem("event-grid8372-accessToken", accessToken);
+	}
+	if (refreshToken) {
+		await localStorage.setItem("event-grid8372-refreshToken", refreshToken);
+	}
 };
 export const removeUserTokenfromStorage = async () => {
 	await localStorage.removeItem("event-grid8372-accessToken");

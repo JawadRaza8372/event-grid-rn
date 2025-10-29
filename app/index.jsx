@@ -33,6 +33,7 @@ const Splash = () => {
 
 					const { tokens, ...rest } = result?.user;
 					dispatch(setUser({ user: rest }));
+					console.log("setting tokens in splash");
 					dispatch(
 						setTokens({
 							tokens: {

@@ -32,13 +32,17 @@ base.interceptors.request.use(
 		if (config.isPublic) return config;
 
 		const { accessToken, refreshToken } = await getUserTokenfromStorage();
-		console.log("🔑 Access token found:", accessToken);
+		console.log("🔑 Access token found:", accessToken, "refresh");
 
 		if (accessToken) {
+			console.log("setting tokens in top interceptor");
+
 			store.dispatch(
 				setTokens({
-					accessToken: accessToken,
-					refreshToken: refreshToken,
+					tokens: {
+						accessToken: accessToken,
+						refreshToken: refreshToken,
+					},
 				})
 			);
 			config.headers.Authorization = `Bearer ${accessToken}`;
@@ -76,6 +80,8 @@ base.interceptors.response.use(
 				});
 				const newAccessToken = res?.data?.accessToken;
 				const newRefreshToken = res?.data?.refreshToken;
+				console.log("setting tokens in bottom interceptor");
+
 				store.dispatch(
 					setTokens({
 						tokens: {
@@ -98,6 +104,8 @@ base.interceptors.response.use(
 			} catch (refreshError) {
 				console.error("Token refresh failed:", refreshError);
 				// optional: redirect to login
+				console.log("removing tokens in bottom ");
+
 				store.dispatch(
 					setTokens({
 						tokens: {
