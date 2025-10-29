@@ -63,7 +63,7 @@ const Ticket = () => {
 										style={StyleSheet.absoluteFillObject}
 										facing="back"
 										barcodeScannerSettings={{
-											barcodeTypes: ["CODE128A"], // Add the types you want
+											barcodeTypes: ["qr"], // Add the types you want
 										}}
 										onBarcodeScanned={
 											scanned ? undefined : handleBarcodeScanned
