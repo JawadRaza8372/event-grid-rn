@@ -102,7 +102,7 @@ base.interceptors.response.use(
 
 				return base(originalRequest); // retry original request
 			} catch (refreshError) {
-				console.error("Token refresh failed:", refreshError);
+				console.log("Token refresh failed:", refreshError);
 				// optional: redirect to login
 				console.log("removing tokens in bottom ");
 
