@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
@@ -12,19 +13,20 @@ import {
 	getTicketFromBarCodeApi,
 	markTicketAsUsedApi,
 } from "../../services/endpoints";
-// import base from "../../services/base"; // uncomment if using axios instance
-
 const Ticket = () => {
 	const [permission, requestPermission] = useCameraPermissions();
 	const [scanned, setScanned] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [ticketInfo, setTicketInfo] = useState(null);
 	const colors = useThemeColors();
-
+	const isFocused = useIsFocused();
 	useEffect(() => {
 		if (!permission) requestPermission();
 	}, [permission]);
-
+	const handleRescan = () => {
+		setScanned(false);
+		setTicketInfo(null);
+	};
 	const fetchTicketInfo = async (eventId) => {
 		setIsLoading(true);
 		try {
@@ -32,6 +34,7 @@ const Ticket = () => {
 			const responce = await getTicketFromBarCodeApi(eventId);
 			setTicketInfo(responce?.ticket);
 		} catch (error) {
+			handleRescan();
 			Toast.show({
 				type: "error",
 				text1: error ?? "Invalid or Expired Ticket",
@@ -40,6 +43,7 @@ const Ticket = () => {
 			setIsLoading(false);
 		}
 	};
+
 	const markTicketAsUsedFun = async () => {
 		if (!ticketInfo?.event?.id || !ticketInfo?.id) {
 			Toast.show({
@@ -51,6 +55,7 @@ const Ticket = () => {
 		try {
 			setIsLoading(true);
 			await markTicketAsUsedApi(ticketInfo?.event?.id, ticketInfo?.id);
+			handleRescan();
 			Toast.show({
 				type: "success",
 				text1: "Ticket Marked as used successfully.",
@@ -64,25 +69,18 @@ const Ticket = () => {
 			setIsLoading(false);
 		}
 	};
-
+	console.log("isFocused", isFocused);
 	const handleBarcodeScanned = useCallback(({ data, type }) => {
 		if (type !== "qr") {
 			Toast.show({
 				type: "error",
-				text1: "Invalid Format",
-				text2: "Please scan a valid QR code.",
+				text1: "Invalid Format.Please scan a valid QR code.",
 			});
 			return;
 		}
-		if (scanned) return;
 		setScanned(true);
 		fetchTicketInfo(data);
 	}, []);
-
-	const handleRescan = () => {
-		setScanned(false);
-		setTicketInfo(null);
-	};
 
 	const styles = StyleSheet.create({
 		scannerView: {
@@ -196,12 +194,15 @@ const Ticket = () => {
 					</>
 				) : (
 					<View style={styles.scannerView}>
-						<CameraView
-							style={StyleSheet.absoluteFillObject}
-							facing="back"
-							barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
-							onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
-						/>
+						{isFocused ? (
+							<CameraView
+								style={StyleSheet.absoluteFillObject}
+								facing="back"
+								key={scanned ? "paused" : "active"}
+								barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+								onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
+							/>
+						) : null}
 					</View>
 				)}
 				<View style={styles.bottomPadding} />
