@@ -169,11 +169,6 @@ const EditProfileOrganizer = () => {
 			);
 			if (result) {
 				console.log("edit profile success:", result);
-				setformData({
-					name: "",
-					email: "",
-					phoneNumber: "",
-				});
 				setlocalImage("");
 				Toast.show({
 					type: "success",
