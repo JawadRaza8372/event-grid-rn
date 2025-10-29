@@ -127,6 +127,62 @@ export function decodeUserId(accessToken) {
 		return null;
 	}
 }
+export const getNotificationDescription = (title) => {
+	let description = "";
+
+	switch (title) {
+		case "Event Created":
+			description =
+				"Your event has been successfully created and saved as a draft. You can edit or publish it anytime.";
+			break;
+
+		case "Event Published":
+			description =
+				"Your event is now live and visible to attendees. People can start booking tickets.";
+			break;
+
+		case "Event Deleted":
+			description =
+				"Your event has been permanently deleted and is no longer visible to users.";
+			break;
+
+		case "Draft Event Deleted":
+			description =
+				"Your draft event has been removed successfully and will not appear in your drafts anymore.";
+			break;
+
+		case "Event Completed":
+			description =
+				"Your event has ended and is now marked as completed. All valid tickets are now expired.";
+			break;
+
+		case "Event Booked":
+			description =
+				"Someone just booked tickets for your event. Check your event dashboard for details.";
+			break;
+
+		case "Profile Updated":
+			description = "Your profile information has been successfully updated.";
+			break;
+
+		case "Ticket Marked as used":
+			description =
+				"Your ticket has been scanned and marked as used for entry. Enjoy the event!";
+			break;
+
+		case "Ticket Marked as invalid":
+			description =
+				"Your ticket is now invalid — this could be due to event completion or cancellation.";
+			break;
+
+		default:
+			description = "You have a new notification.";
+			break;
+	}
+
+	return description;
+};
+
 export function formatTimestampWithMoment(timestamp) {
 	const now = moment();
 	const date = moment(timestamp);

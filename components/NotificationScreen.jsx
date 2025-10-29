@@ -1,9 +1,11 @@
 import { FlatList, StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 import { useThemeColors } from "../hooks/useThemeColors";
 import CenteredTitleTopBar from "./CenteredTitleTopBar";
 import NotificationComp from "./NotificationComp";
 
 const NotificationScreen = () => {
+	const { userNotifications } = useSelector((state) => state?.user);
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		formContainer: {
@@ -43,28 +45,23 @@ const NotificationScreen = () => {
 			backgroundColor: colors.blackColor,
 		},
 	});
-	const notificationArray = [
-		{
-			title: "Event Booked",
-			description: "Your event has been Booked!",
-			date: "1 hour ago",
-		},
-	];
 	return (
 		<View style={styles.formContainer}>
 			<View style={styles.topCircle} />
 			<View style={styles.bottomCircle} />
 			<CenteredTitleTopBar title={"Notifications"} />
 			<FlatList
-				data={notificationArray}
-				keyExtractor={(item, index) => index.toString()}
-				renderItem={({ item }) => (
-					<NotificationComp
-						date={item?.date}
-						description={item?.description}
-						title={item?.title}
-					/>
-				)}
+				data={userNotifications}
+				keyExtractor={(item, index) => item?.id}
+				renderItem={({ item }) => {
+					console.log(item);
+					return (
+						<NotificationComp
+							date={item?.createdAt}
+							title={item?.title}
+						/>
+					);
+				}}
 				ItemSeparatorComponent={() => <View style={styles.sepratorView} />}
 				ListFooterComponent={<View style={styles?.bottomPadding} />}
 			/>

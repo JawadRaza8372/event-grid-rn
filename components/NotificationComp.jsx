@@ -1,7 +1,11 @@
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import notificationImage from "../assets/images/notificationUser.png";
 import { useThemeColors } from "../hooks/useThemeColors";
-const NotificationComp = ({ title, description, date }) => {
+import {
+	formatTimestampWithMoment,
+	getNotificationDescription,
+} from "../services/endpoints";
+const NotificationComp = ({ title, date }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -55,7 +59,7 @@ const NotificationComp = ({ title, description, date }) => {
 			gap: 7,
 		},
 	});
-
+	const description = getNotificationDescription(title);
 	return (
 		<View style={styles.mainContainer}>
 			<View style={styles.imageContainer}>
@@ -67,7 +71,9 @@ const NotificationComp = ({ title, description, date }) => {
 			<View style={styles.textContainer}>
 				<Text style={styles.titleTxt}>{title ?? ""}</Text>
 				<Text style={styles.descriptionTxt}>{description ?? ""}</Text>
-				<Text style={styles.dateTxt}>{date ?? ""}</Text>
+				<Text style={styles.dateTxt}>
+					{date ? formatTimestampWithMoment(date) : ""}
+				</Text>
 			</View>
 		</View>
 	);
