@@ -34,13 +34,18 @@ const MyTickets = () => {
 			alignSelf: "center",
 		},
 	});
-	console.log("ticket history", ticketHistory?.[0]);
+	const filterValidTickets = ticketHistory?.filter(
+		(dat) => dat?.status === "valid"
+	);
 	return (
 		<View style={styles.mainContainer}>
-			<CenteredTitleTopBar title={"My Tickets"} />
+			<CenteredTitleTopBar
+				title={"My Tickets"}
+				showBackBtn={true}
+			/>
 			<FlatList
 				showsVerticalScrollIndicator={false}
-				data={ticketHistory}
+				data={filterValidTickets}
 				keyExtractor={(item, index) => index.toString()}
 				renderItem={({ item }) => {
 					return (
@@ -63,7 +68,7 @@ const MyTickets = () => {
 					);
 				}}
 				ItemSeparatorComponent={() => <View style={styles.sepratorView} />}
-				ListEmptyComponent={<EmptyComponent title={`No Tickets`} />}
+				ListEmptyComponent={<EmptyComponent title={`No My Tickets`} />}
 				ListFooterComponent={<View style={styles.bottomPadding} />}
 			/>
 			<LoadingView loading={isLoading} />

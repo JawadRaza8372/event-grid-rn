@@ -1,11 +1,5 @@
 import { useRouter } from "expo-router";
-import {
-	Dimensions,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "../assets/icons";
 import { useThemeColors } from "../hooks/useThemeColors";
 
@@ -19,15 +13,19 @@ const CenteredTitleTopBar = ({ title, showBackBtn }) => {
 			fontSize: 18,
 			fontWeight: "600",
 			lineHeight: 20,
+			height: "auto",
+			flex: 1,
+			textAlign: "center",
 		},
 		topBarContainer: {
-			width: Dimensions.get("screen").width - 40,
+			width: "100%",
 			alignSelf: "center",
 			height: 45,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "space-between",
 			flexDirection: "row",
+			paddingHorizontal: 16,
 		},
 		backBtn: {
 			height: 44,
