@@ -26,6 +26,7 @@ const Naviagtion = () => {
 			<Stack.Screen name="(tabs)" />
 			<Stack.Screen name="(tabs-organizer)" />
 			<Stack.Screen name="location" />
+			<Stack.Screen name="login-success" />
 			<Stack.Screen name="payments" />
 			<Stack.Screen name="review-summary" />
 			<Stack.Screen name="event-details" />

@@ -37,7 +37,7 @@ const CustomButton = ({
 			gap: 12,
 			borderWidth: showBrdr ? 1 : 0,
 			borderColor: brdrColor ?? colors.blackColor,
-			opacity: isDisabled ? 0.6 : 1,
+			opacity: isDisabled ? 0.5 : 1,
 		},
 		btnTxt: {
 			fontSize: txtSize ?? 15,
