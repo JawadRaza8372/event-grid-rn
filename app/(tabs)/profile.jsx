@@ -66,7 +66,7 @@ const Profile = () => {
 					height={25}
 				/>
 			),
-			onClickFun: () => null,
+			onClickFun: () => router.push({ pathname: "/my-tickets" }),
 		},
 		{
 			title: "Ticket History",
@@ -76,20 +76,13 @@ const Profile = () => {
 					height={25}
 				/>
 			),
-			onClickFun: () => null,
+			onClickFun: () => router.push({ pathname: "/ticket-history" }),
 		},
 		{
 			title: "Edit profile",
 			icon: <Icons.Edit size={25} />,
 			onClickFun: () => {
-				if (user?.role === "organizer") {
-					router.push({ pathname: "/edit-profile-organizer" });
-				} else if (user?.role === "user") {
-					router.push({ pathname: "/edit-profile" });
-				} else {
-					Toast.show({ type: "error", text1: "Unknow user type." });
-					return;
-				}
+				router.push({ pathname: "/edit-profile" });
 			},
 		},
 

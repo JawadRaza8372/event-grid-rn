@@ -81,7 +81,7 @@ const MyEventComp = ({
 			justifyContent: "center",
 			flexDirection: "column",
 			marginRight: 5,
-			...(showComponentCondition ? { flex: 1 } : { height: 85 }),
+			...(showComponentCondition ? { flex: 1 } : { height: 85, flex: 1 }),
 		},
 		sideBySideView: {
 			height: "auto",

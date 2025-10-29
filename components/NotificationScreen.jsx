@@ -1,5 +1,6 @@
-import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useThemeColors } from "../hooks/useThemeColors";
+import CenteredTitleTopBar from "./CenteredTitleTopBar";
 import NotificationComp from "./NotificationComp";
 
 const NotificationScreen = () => {
@@ -14,33 +15,7 @@ const NotificationScreen = () => {
 			gap: 25,
 			position: "relative",
 		},
-		screenHeaderTitle: {
-			color: colors.blackColor,
-			fontSize: 18,
-			fontWeight: "600",
-			lineHeight: 20,
-		},
-		topBarContainer: {
-			width: Dimensions.get("screen").width - 40,
-			alignSelf: "center",
-			height: 45,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "space-between",
-			flexDirection: "row",
-		},
-		backBtn: {
-			height: 44,
-			width: 44,
-			borderRadius: 14,
-			borderWidth: 1,
-			borderColor: colors.inActiveColor,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			flexDirection: "row",
-		},
-		sideBtn: { height: 44, width: 44, borderRadius: 44 },
+
 		bottomPadding: {
 			width: "100%",
 			height: 120,
@@ -79,11 +54,7 @@ const NotificationScreen = () => {
 		<View style={styles.formContainer}>
 			<View style={styles.topCircle} />
 			<View style={styles.bottomCircle} />
-			<View style={styles.topBarContainer}>
-				<View style={styles.sideBtn} />
-				<Text style={styles.screenHeaderTitle}>Notifications</Text>
-				<View style={styles.sideBtn} />
-			</View>
+			<CenteredTitleTopBar title={"Notifications"} />
 			<FlatList
 				data={notificationArray}
 				keyExtractor={(item, index) => index.toString()}

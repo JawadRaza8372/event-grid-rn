@@ -82,14 +82,7 @@ const AppWrapper = () => {
 						return null;
 					}),
 				]);
-				console.log(
-					"home event==============>",
-					homeEvent,
-					"fav events==============>",
-					favEvent,
-					"tickethistory==============>",
-					ticketHistory
-				);
+
 				dispatch(
 					setHomeEvents({
 						home: homeEvent?.allPublishedEvents,
