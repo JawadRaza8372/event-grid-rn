@@ -1,9 +1,11 @@
 import axios from "axios";
+import store from "./store/index";
 import {
 	getUserTokenfromStorage,
 	removeUserTokenfromStorage,
-	saveUserTokenToStorage,
+	setTokens,
 } from "./store/userSlice";
+
 const productionLink = "https://event-grid.91.108.126.5.sslip.io/";
 const developmentLink = "http://192.168.1.5:4000/";
 const isProduction = true;
@@ -29,10 +31,16 @@ base.interceptors.request.use(
 	async (config) => {
 		if (config.isPublic) return config;
 
-		const { accessToken } = await getUserTokenfromStorage();
+		const { accessToken, refreshToken } = await getUserTokenfromStorage();
 		console.log("🔑 Access token found:", accessToken);
 
 		if (accessToken) {
+			store.dispatch(
+				setTokens({
+					accessToken: accessToken,
+					refreshToken: refreshToken,
+				})
+			);
 			config.headers.Authorization = `Bearer ${accessToken}`;
 			console.log("🔑 Access token attcheched");
 		}
@@ -68,7 +76,14 @@ base.interceptors.response.use(
 				});
 				const newAccessToken = res?.data?.accessToken;
 				const newRefreshToken = res?.data?.refreshToken;
-				await saveUserTokenToStorage(newAccessToken, newRefreshToken);
+				store.dispatch(
+					setTokens({
+						tokens: {
+							accessToken: newAccessToken,
+							refreshToken: newRefreshToken,
+						},
+					})
+				);
 				console.log("===============>saved new tokens<=================");
 				// attach new token for retry
 				base.defaults.headers.common[
@@ -83,6 +98,14 @@ base.interceptors.response.use(
 			} catch (refreshError) {
 				console.error("Token refresh failed:", refreshError);
 				// optional: redirect to login
+				store.dispatch(
+					setTokens({
+						tokens: {
+							accessToken: "",
+							refreshToken: "",
+						},
+					})
+				);
 				removeUserTokenfromStorage();
 			}
 		}

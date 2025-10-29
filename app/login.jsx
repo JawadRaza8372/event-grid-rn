@@ -22,7 +22,7 @@ import {
 	isValidPasswordFun,
 	loginApi,
 } from "../services/endpoints";
-import { saveUserTokenToStorage, setUser } from "../services/store/userSlice";
+import { setTokens, setUser } from "../services/store/userSlice";
 const Login = () => {
 	const router = useRouter();
 	const dispatch = useDispatch();
@@ -143,7 +143,14 @@ const Login = () => {
 				console.log("Login success:", result?.user);
 				const { tokens, ...rest } = result?.user;
 				dispatch(setUser({ user: rest }));
-				await saveUserTokenToStorage(tokens?.accessToken, tokens?.refreshToken);
+				dispatch(
+					setTokens({
+						tokens: {
+							accessToken: tokens?.accessToken,
+							refreshToken: tokens?.refreshToken,
+						},
+					})
+				);
 			}
 			setisLoading(false);
 		} catch (error) {

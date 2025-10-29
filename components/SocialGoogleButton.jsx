@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import googleIcon from "../assets/images/google-icon.png";
 import { useThemeColors } from "../hooks/useThemeColors";
 import { mainUrl } from "../services/apiUrl";
-import { saveUserTokenToStorage, setUser } from "../services/store/userSlice";
+import { setTokens, setUser } from "../services/store/userSlice";
 import CustomButton from "./CustomButton";
 const SocialGoogleButton = () => {
 	const colors = useThemeColors();
@@ -37,7 +37,14 @@ const SocialGoogleButton = () => {
 				console.log("google Login success:", userObj);
 				const { tokens, ...rest } = userObj;
 				dispatch(setUser({ user: rest }));
-				await saveUserTokenToStorage(tokens?.accessToken, tokens?.refreshToken);
+				dispatch(
+					setTokens({
+						tokens: {
+							accessToken: tokens?.accessToken,
+							refreshToken: tokens?.refreshToken,
+						},
+					})
+				);
 				router.replace({
 					pathname: rest?.role === "user" ? "/(tabs)" : "/(tabs-organizer)",
 				});

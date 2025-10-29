@@ -16,7 +16,7 @@ import { useThemeColors } from "../hooks/useThemeColors";
 import { getUserProfileApi } from "../services/endpoints";
 import {
 	getUserTokenfromStorage,
-	saveUserTokenToStorage,
+	setTokens,
 	setUser,
 } from "../services/store/userSlice";
 const Splash = () => {
@@ -33,10 +33,15 @@ const Splash = () => {
 
 					const { tokens, ...rest } = result?.user;
 					dispatch(setUser({ user: rest }));
-					await saveUserTokenToStorage(
-						tokens?.accessToken,
-						tokens?.refreshToken
+					dispatch(
+						setTokens({
+							tokens: {
+								accessToken: tokens?.accessToken,
+								refreshToken: tokens?.refreshToken,
+							},
+						})
 					);
+
 					router.replace({
 						pathname: rest?.role === "user" ? "/(tabs)" : "/(tabs-organizer)",
 					});

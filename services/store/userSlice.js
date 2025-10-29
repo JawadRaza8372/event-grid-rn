@@ -4,6 +4,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	user: {},
 	resetPasswordToken: null,
+	tokens: {
+		accessToken: "",
+		refreshToken: "",
+	},
 	billPayments: [],
 	homeEvents: [],
 	favEvents: [],
@@ -62,6 +66,10 @@ export const userSlice = createSlice({
 		setUserNotifications: (state, action) => {
 			state.userNotifications = action.payload.userNotifications;
 		},
+		setTokens: async (state, action) => {
+			state.tokens = action.payload.tokens;
+			await saveUserTokenToStorage(tokens?.accessToken, tokens?.refreshToken);
+		},
 	},
 });
 
@@ -85,6 +93,7 @@ export const getUserTokenfromStorage = async () => {
 };
 
 export const {
+	setTokens,
 	setUser,
 	resetUser,
 	setSelectedLang,
