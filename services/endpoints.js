@@ -142,7 +142,9 @@ export const getNotificationDescription = (title) => {
 			description =
 				"Your event has been successfully created and saved as a draft. You can edit or publish it anytime.";
 			break;
-
+		case "Event Updated":
+			description = "Your event has been successfully updated.";
+			break;
 		case "Event Published":
 			description =
 				"Your event is now live and visible to attendees. People can start booking tickets.";
