@@ -334,7 +334,7 @@ export const changePasswordApi = async (password) => {
 		);
 	}
 };
-export const deleteUserNotificationApi = async () => {
+export const deleteUserNotificationApi = async (notificationId) => {
 	try {
 		const result = await base.delete(
 			`auth/delete-user-notification/${notificationId}`,

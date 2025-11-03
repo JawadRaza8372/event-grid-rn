@@ -1,12 +1,23 @@
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import {
+	Dimensions,
+	Image,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
+import { Icons } from "../assets/icons";
 import notificationImage from "../assets/images/notificationUser.png";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
 	formatTimestampWithMoment,
 	getNotificationDescription,
 } from "../services/endpoints";
-const NotificationComp = ({ title, date }) => {
+
+const NotificationComp = ({ title, date, onDelete }) => {
 	const colors = useThemeColors();
+
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: Dimensions.get("screen").width - 40,
@@ -20,6 +31,7 @@ const NotificationComp = ({ title, date }) => {
 			gap: 15,
 			backgroundColor: colors.notificationBg,
 			borderRadius: 14,
+			marginVertical: 5,
 		},
 		imageContainer: {
 			width: 40,
@@ -58,24 +70,62 @@ const NotificationComp = ({ title, date }) => {
 			flexDirection: "column",
 			gap: 7,
 		},
+		deleteBox: {
+			justifyContent: "center",
+			alignItems: "center",
+			width: 55,
+			marginRight: 20,
+		},
+		deleteIconBox: {
+			width: 45,
+			height: 45,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			borderWidth: 1,
+			borderColor: colors.redColor,
+			borderRadius: 8,
+		},
+		deleteText: {
+			color: "white",
+			fontWeight: "600",
+		},
 	});
+
 	const description = getNotificationDescription(title);
-	return (
-		<View style={styles.mainContainer}>
-			<View style={styles.imageContainer}>
-				<Image
-					style={styles.imageStyle}
-					source={notificationImage}
+
+	const renderRightActions = () => (
+		<TouchableOpacity
+			style={styles.deleteBox}
+			activeOpacity={0.8}
+			onPress={onDelete}>
+			<View style={styles.deleteIconBox}>
+				<Icons.DeleteRed
+					width={25}
+					height={25}
 				/>
 			</View>
-			<View style={styles.textContainer}>
-				<Text style={styles.titleTxt}>{title ?? ""}</Text>
-				<Text style={styles.descriptionTxt}>{description ?? ""}</Text>
-				<Text style={styles.dateTxt}>
-					{date ? formatTimestampWithMoment(date) : ""}
-				</Text>
+		</TouchableOpacity>
+	);
+
+	return (
+		<Swipeable renderRightActions={renderRightActions}>
+			<View style={styles.mainContainer}>
+				<View style={styles.imageContainer}>
+					<Image
+						style={styles.imageStyle}
+						source={notificationImage}
+					/>
+				</View>
+				<View style={styles.textContainer}>
+					<Text style={styles.titleTxt}>{title ?? ""}</Text>
+					<Text style={styles.descriptionTxt}>{description ?? ""}</Text>
+					<Text style={styles.dateTxt}>
+						{date ? formatTimestampWithMoment(date) : ""}
+					</Text>
+				</View>
 			</View>
-		</View>
+		</Swipeable>
 	);
 };
 
