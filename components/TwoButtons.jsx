@@ -10,6 +10,8 @@ const TwoButtons = ({
 	firstBg,
 	secBg,
 	txtSize,
+	onThirdFun,
+	thirdTxt,
 }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
@@ -22,7 +24,7 @@ const TwoButtons = ({
 			flexDirection: "row",
 		},
 		noBtn: {
-			width: "49%",
+			width: onfirstFun && onSecondFun && onThirdFun ? "32%" : "49%",
 			height: "100%",
 			borderRadius: 8,
 			display: "flex",
@@ -36,7 +38,7 @@ const TwoButtons = ({
 			color: colors.mainBgColor,
 		},
 		yesBtn: {
-			width: "49%",
+			width: onfirstFun && onSecondFun && onThirdFun ? "32%" : "49%",
 			height: "100%",
 			borderRadius: 8,
 			display: "flex",
@@ -62,6 +64,13 @@ const TwoButtons = ({
 				style={styles.yesBtn}>
 				<Text style={styles.yesTxt}>{secTxt ?? ""}</Text>
 			</TouchableOpacity>
+			{thirdTxt && onThirdFun ? (
+				<TouchableOpacity
+					onPress={onThirdFun}
+					style={styles.yesBtn}>
+					<Text style={styles.yesTxt}>{thirdTxt ?? ""}</Text>
+				</TouchableOpacity>
+			) : null}
 		</View>
 	);
 };

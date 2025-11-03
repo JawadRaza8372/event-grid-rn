@@ -152,6 +152,7 @@ const OrganizerHomeScreen = () => {
 					ItemSeparatorComponent={() => <View style={styles.sepratorView} />}
 					renderItem={({ item }) => (
 						<MyEventComp
+							bannerImage={item?.bannerImage}
 							address={item?.address}
 							date={item?.date}
 							soldTickets={item?.stats?.ticketsSold}

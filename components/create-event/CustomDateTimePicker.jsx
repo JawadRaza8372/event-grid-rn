@@ -1,19 +1,13 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { useState } from "react";
-import {
-	Modal,
-	Platform,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "../../assets/icons";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
-const CustomDatePicker = ({ value, onChangeValue, title, width }) => {
+const CustomDateTimePicker = ({ value, onChangeValue, title, width }) => {
 	const [show, setShow] = useState(false);
+	const [tempDate, setTempDate] = useState(value ?? new Date());
 	const colors = useThemeColors();
 
 	const styles = StyleSheet.create({
@@ -73,17 +67,9 @@ const CustomDatePicker = ({ value, onChangeValue, title, width }) => {
 		},
 	});
 
-	const handleChange = (event, selectedDate) => {
-		if (Platform.OS === "android") {
-			setShow(false); // Android closes automatically
-			if (event.type !== "dismissed" && selectedDate) {
-				onChangeValue(selectedDate);
-			}
-		} else {
-			if (selectedDate) {
-				onChangeValue(selectedDate);
-			}
-		}
+	const handleConfirm = () => {
+		setShow(false);
+		onChangeValue(tempDate);
 	};
 
 	return (
@@ -100,41 +86,48 @@ const CustomDatePicker = ({ value, onChangeValue, title, width }) => {
 						/>
 					</View>
 					<Text style={styles.inputMainStyle}>
-						{value ? moment(value).format("DD:MM:YYYY") : "--:--:--"}
+						{value
+							? moment(value).format("DD:MM:YYYY hh:mm a")
+							: "--:--:-- --:-- --"}
 					</Text>
 				</TouchableOpacity>
 			</View>
 
-			{/* Android: DateTimePicker itself opens a modal */}
-			{show && Platform.OS === "android" && (
-				<DateTimePicker
-					value={value ?? new Date()}
-					mode="date"
-					is24Hour={false}
-					display="default"
-					onChange={handleChange}
-				/>
-			)}
-
-			{/* iOS: Custom modal with picker */}
-			{Platform.OS === "ios" && (
+			{/* Cross-platform custom modal */}
+			{show && (
 				<Modal
-					visible={show}
+					visible
 					transparent
 					animationType="slide">
 					<View style={styles.modalContainer}>
 						<View style={styles.pickerBox}>
+							{/* Date picker */}
 							<DateTimePicker
-								value={value ?? new Date()}
+								value={tempDate}
 								mode="date"
 								display="spinner"
-								onChange={handleChange}
+								onChange={(e, d) => d && setTempDate(d)}
 								style={{ backgroundColor: "#fff" }}
 							/>
+							{/* Time picker */}
+							<DateTimePicker
+								value={tempDate}
+								mode="time"
+								display="spinner"
+								is24Hour={false}
+								onChange={(e, d) => d && setTempDate(d)}
+								style={{ backgroundColor: "#fff", marginTop: 10 }}
+							/>
+							{/* Buttons */}
 							<View style={styles.modalActions}>
 								<Text
 									style={styles.actionText}
 									onPress={() => setShow(false)}>
+									Cancel
+								</Text>
+								<Text
+									style={styles.actionText}
+									onPress={handleConfirm}>
 									Done
 								</Text>
 							</View>
@@ -146,4 +139,4 @@ const CustomDatePicker = ({ value, onChangeValue, title, width }) => {
 	);
 };
 
-export default CustomDatePicker;
+export default CustomDateTimePicker;

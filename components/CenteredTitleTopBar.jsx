@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "../assets/icons";
 import { useThemeColors } from "../hooks/useThemeColors";
 
-const CenteredTitleTopBar = ({ title, showBackBtn }) => {
+const CenteredTitleTopBar = ({ title, showBackBtn, paddingHorizontal }) => {
 	const colors = useThemeColors();
 	const router = useRouter();
 
@@ -25,7 +25,7 @@ const CenteredTitleTopBar = ({ title, showBackBtn }) => {
 			alignItems: "center",
 			justifyContent: "space-between",
 			flexDirection: "row",
-			paddingHorizontal: 16,
+			paddingHorizontal: paddingHorizontal ?? 16,
 		},
 		backBtn: {
 			height: 44,

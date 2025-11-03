@@ -67,7 +67,6 @@ export const userSlice = createSlice({
 			state.userNotifications = action.payload.userNotifications;
 		},
 		setTokens: (state, action) => {
-			console.log("here is payload", action.payload.tokens);
 			state.tokens = action.payload.tokens;
 			saveUserTokenToStorage(
 				action.payload.tokens?.accessToken,

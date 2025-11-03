@@ -3,10 +3,10 @@ import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
+import CenteredTitleTopBar from "../components/CenteredTitleTopBar";
 import EmptyComponent from "../components/EmptyComponent";
 import LoadingView from "../components/LoadingView";
 import MyEventComp from "../components/MyEventComp";
-import SideTopBar from "../components/SideTopBar";
 import TabContainer from "../components/TabContainer";
 import YesNoModal from "../components/YesNoModal";
 import { useThemeColors } from "../hooks/useThemeColors";
@@ -144,9 +144,10 @@ const OrganizerEvents = () => {
 		organizerEvents?.filter((dat) => dat?.status === selectedEventType) ?? [];
 	return (
 		<View style={styles.mainContainer}>
-			<SideTopBar
-				isTailIcon={true}
+			<CenteredTitleTopBar
+				paddingHorizontal={5}
 				title={"My Events"}
+				showBackBtn={true}
 			/>
 			<TabContainer
 				borderColor={colors.dateBorder}
@@ -164,6 +165,7 @@ const OrganizerEvents = () => {
 					renderItem={({ item }) => {
 						return (
 							<MyEventComp
+								bannerImage={item?.bannerImage}
 								address={item?.address}
 								date={item?.date}
 								soldTickets={item?.stats?.ticketsSold}
@@ -173,6 +175,14 @@ const OrganizerEvents = () => {
 								showSmallButtons={selectedEventType === "Draft" ? true : false}
 								onDeleteFun={() => deleteDraftEventFun(item?.id)}
 								onPublishFun={() => darftToPublishEventFun(item?.id)}
+								onUpdateFun={() =>
+									router.push({
+										pathname: "/update-event",
+										params: {
+											eventId: item?.id,
+										},
+									})
+								}
 							/>
 						);
 					}}

@@ -7,10 +7,8 @@ import {
 	View,
 } from "react-native";
 import { Icons } from "../../assets/icons";
-import { ticketTierName } from "../../constants/rawData";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import CustomInput from "../create-event/CustomInput";
-import CustomValueSelection from "../CustomValueSelection";
 
 const TicketSelector = ({ formData, setformData }) => {
 	const colors = useThemeColors();
@@ -129,11 +127,11 @@ const TicketSelector = ({ formData, setformData }) => {
 					/>
 				</TouchableOpacity>
 			</View>
-			<CustomValueSelection
+
+			<CustomInput
 				title={"Ticket Name"}
-				data={ticketTierName}
 				value={ticketTier.name}
-				setValue={(value) => setticketTier({ ...ticketTier, name: value })}
+				onChangeValue={(value) => setticketTier({ ...ticketTier, name: value })}
 				placeHolder="Select Ticket Name"
 			/>
 			<View style={styles.sideBySide}>
@@ -188,7 +186,7 @@ const TicketSelector = ({ formData, setformData }) => {
 							<TouchableOpacity
 								style={styles.deleteBtn}
 								onPress={() => handleDeleteTicket(index)}>
-								<Icons.Delete
+								<Icons.DeleteRed
 									width={20}
 									height={20}
 								/>

@@ -30,7 +30,6 @@ const Ticket = () => {
 	const fetchTicketInfo = async (eventId) => {
 		setIsLoading(true);
 		try {
-			console.log("Fetching ticket info for:", eventId);
 			const responce = await getTicketFromBarCodeApi(eventId);
 			setTicketInfo(responce?.ticket);
 		} catch (error) {
@@ -69,12 +68,11 @@ const Ticket = () => {
 			setIsLoading(false);
 		}
 	};
-	console.log("isFocused", isFocused);
 	const handleBarcodeScanned = useCallback(({ data, type }) => {
 		if (type !== "qr") {
 			Toast.show({
 				type: "error",
-				text1: "Invalid Format.Please scan a valid QR code.",
+				text1: "Invalid Format. Please scan a valid QR code.",
 			});
 			return;
 		}

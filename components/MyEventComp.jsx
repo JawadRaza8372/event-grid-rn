@@ -14,6 +14,8 @@ const MyEventComp = ({
 	showSmallButtons,
 	onDeleteFun,
 	onPublishFun,
+	onUpdateFun,
+	bannerImage,
 }) => {
 	const colors = useThemeColors();
 	const showComponentCondition =
@@ -138,6 +140,13 @@ const MyEventComp = ({
 			justifyContent: "center",
 			gap: 5,
 		},
+		btnColumns: {
+			width: "100%",
+			height: "auto",
+			display: "flex",
+			flexDirection: "column",
+			gap: 5,
+		},
 	});
 	const percentage =
 		totalTickets && soldTickets ? (soldTickets / totalTickets) * 100 : 0;
@@ -146,7 +155,7 @@ const MyEventComp = ({
 			<View style={styles.imageContainer}>
 				<Image
 					style={styles.imageStyle}
-					source={eventImage}
+					source={bannerImage ? { uri: bannerImage } : eventImage}
 				/>
 			</View>
 			<View style={styles.childContainer}>
@@ -175,7 +184,7 @@ const MyEventComp = ({
 					</Text>
 				</View>
 				{showSmallButtons && onDeleteFun && onPublishFun ? (
-					<View style={styles.sideBySideView}>
+					<View style={styles.btnColumns}>
 						<TwoButtons
 							txtSize={10}
 							height={32}
@@ -184,6 +193,8 @@ const MyEventComp = ({
 							secTxt={"Publish"}
 							onfirstFun={onDeleteFun}
 							onSecondFun={onPublishFun}
+							onThirdFun={onUpdateFun ? onUpdateFun : null}
+							thirdTxt={"Update"}
 						/>
 					</View>
 				) : showComponentCondition ? (

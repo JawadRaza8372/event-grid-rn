@@ -1,36 +1,38 @@
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
-import { categoriesArry } from "../../constants/rawData";
-import { useThemeColors } from "../../hooks/useThemeColors";
+import AuthLayout from "../components/AuthLayout";
+import BannerUpload from "../components/BannerUpload";
+import TicketSelector from "../components/center-tab/TicketSelector";
+import BottomButtons from "../components/create-event/BottomButtons";
+import CategorySelector from "../components/create-event/CategorySelector";
+import CustomDatePicker from "../components/create-event/CustomDatePicker";
+import CustomDescription from "../components/create-event/CustomDescription";
+import CustomInput from "../components/create-event/CustomInput";
+import CustomLocationInput from "../components/create-event/CustomLocationInput";
+import CustomTimePicker from "../components/create-event/CustomTimePicker";
+import TicketOverview from "../components/create-event/TicketOverview";
+import GalleryUpload from "../components/GalleryUpload";
+import LoadingView from "../components/LoadingView";
+import SideTopBar from "../components/SideTopBar";
+import { categoriesArry } from "../constants/rawData";
+import { useThemeColors } from "../hooks/useThemeColors";
 import {
-	createNewEventApi,
+	combineDateAndTime,
+	getEventByIdApi,
 	getTicketSummary,
+	updateEventApi,
 	uploadImageApi,
 	validateEventData,
-} from "../../services/endpoints";
-import AuthLayout from "../AuthLayout";
-import BannerUpload from "../BannerUpload";
-import BottomButtons from "../create-event/BottomButtons";
-import CategorySelector from "../create-event/CategorySelector";
-import CustomDatePicker from "../create-event/CustomDatePicker";
-import CustomDescription from "../create-event/CustomDescription";
-import CustomInput from "../create-event/CustomInput";
-import CustomLocationInput from "../create-event/CustomLocationInput";
-import CustomTimePicker from "../create-event/CustomTimePicker";
-import TicketOverview from "../create-event/TicketOverview";
-import GalleryUpload from "../GalleryUpload";
-import LoadingView from "../LoadingView";
-import SideTopBar from "../SideTopBar";
-import YesNoModal from "../YesNoModal";
-import TicketSelector from "./TicketSelector";
-const CreateEvent = () => {
+} from "../services/endpoints";
+const UpdateEvent = () => {
+	const { eventId } = useLocalSearchParams();
+	console.log("check my event Id", eventId);
 	const totalSteps = 2;
 	const [currentStep, setcurrentStep] = useState(0);
 	const [isLoading, setisLoading] = useState(false);
 	const [isScroll, setisScroll] = useState(false);
-	const [showSaveOptions, setshowSaveOptions] = useState(false);
-	const switchSaveOptions = () => setshowSaveOptions(!showSaveOptions);
 	const [formData, setformData] = useState({
 		bannerImage: "",
 		galleryImage: [],
@@ -49,13 +51,49 @@ const CreateEvent = () => {
 		description: "",
 		ticketTiers: [],
 	});
+	const fetchEventWithIdFun = async () => {
+		try {
+			setisLoading(true);
+			const result = await getEventByIdApi(eventId);
+			setformData({
+				bannerImage: result?.bannerImage,
+				galleryImage: result?.galleryImages,
+				title: result?.title,
+				category: result?.category,
+				location: {
+					address: result?.location?.address,
+					name: result?.location?.name,
+					coordinates: {
+						lat: result?.location?.coordinates?.lat,
+						lng: result?.location?.coordinates?.lng,
+					},
+				},
+				fromTime: new Date(result?.startTime),
+				toTime: new Date(result?.endTime),
+				description: result?.description,
+				ticketTiers: result?.ticketTiers,
+			});
+			setisLoading(false);
+		} catch (error) {
+			setisLoading(false);
+			console.log("getEventById error", error);
+		}
+	};
+	useEffect(() => {
+		if (eventId) {
+			fetchEventWithIdFun();
+		}
+	}, [eventId]);
+
 	const resetEventFun = () => {
 		setformData({
+			bannerImage: "",
+			galleryImage: [],
 			title: "",
 			category: "",
 			location: {
-				address: "",
 				name: "",
+				address: "",
 				coordinates: {
 					lat: 0,
 					lng: 0,
@@ -90,17 +128,7 @@ const CreateEvent = () => {
 			Toast.show({ type: "error", text1: "Please enter valid location" });
 			return;
 		}
-		if (formData.bannerImage?.length <= 0) {
-			Toast.show({ type: "error", text1: "Please select banner Image" });
-			return;
-		}
-		if (formData.galleryImage?.length <= 0) {
-			Toast.show({
-				type: "error",
-				text1: "Please select atleast one event gallery Image",
-			});
-			return;
-		}
+
 		if (!validation.valid) {
 			Toast.show({
 				type: "error",
@@ -124,7 +152,7 @@ const CreateEvent = () => {
 		setcurrentStep(currentStep - 1);
 	};
 	const result = getTicketSummary(formData);
-	const onSaveBtnClick = () => {
+	const onSaveBtnClick = async () => {
 		if (formData.ticketTiers.length <= 0) {
 			Toast.show({
 				type: "error",
@@ -132,9 +160,24 @@ const CreateEvent = () => {
 			});
 			return;
 		}
-		switchSaveOptions();
+		try {
+			setisLoading(true);
+			await mainSubmitFun();
+			setisLoading(false);
+			Toast.show({
+				type: "success",
+				text1: "Event Updated.",
+			});
+		} catch (error) {
+			setisLoading(false);
+			console.log("show update error", error);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Event Update failed",
+			});
+		}
 	};
-	const mainSubmitFun = async (status) => {
+	const mainSubmitFun = async () => {
 		let uploadedBannerUrl = formData.bannerImage;
 		let uploadedGalleryUrls = formData.galleryImage;
 
@@ -156,10 +199,10 @@ const CreateEvent = () => {
 
 			uploadedGalleryUrls = await Promise.all(uploadPromises);
 		}
-		await createNewEventApi(
+		await updateEventApi(
+			eventId,
 			formData.title,
 			formData.category,
-			status,
 			formData.location,
 			formData.fromTime,
 			formData.toTime,
@@ -169,61 +212,7 @@ const CreateEvent = () => {
 			uploadedGalleryUrls
 		);
 		setcurrentStep(0);
-		setformData({
-			bannerImage: "",
-			galleryImage: [],
-			title: "",
-			category: "",
-			location: {
-				address: "",
-				name: "",
-				coordinates: {
-					lat: 0,
-					lng: 0,
-				},
-			},
-			fromTime: new Date(),
-			toTime: new Date(),
-			description: "",
-			ticketTiers: [],
-		});
 		setisScroll(true);
-		setshowSaveOptions(false);
-	};
-	const submitEventFunAsDraft = async () => {
-		try {
-			setisLoading(true);
-			await mainSubmitFun("Draft");
-			setisLoading(false);
-			Toast.show({
-				type: "success",
-				text1: "Event saved as draft successfully",
-			});
-		} catch (error) {
-			setisLoading(false);
-			console.log("show draft error", error);
-			Toast.show({
-				type: "error",
-				text1: error ?? "Draft Event failed",
-			});
-		}
-	};
-
-	const submitEventFunAsPublished = async () => {
-		try {
-			setisLoading(true);
-			await mainSubmitFun("Published");
-			setisLoading(false);
-			Toast.show({ type: "success", text1: "Event Published successfully" });
-		} catch (error) {
-			setisLoading(false);
-			console.log("show publish error", error);
-
-			Toast.show({
-				type: "error",
-				text1: error ?? "Publish Event failed",
-			});
-		}
 	};
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
@@ -303,8 +292,35 @@ const CreateEvent = () => {
 			gap: 5,
 			paddingVertical: 20,
 		},
+		mainContainer: {
+			width: "100%",
+			height: "100%",
+			backgroundColor: colors.mainBgColor,
+		},
 	});
+	useEffect(() => {
+		if (formData.date && formData.fromTime) {
+			const formattedStartTime = combineDateAndTime(
+				formData.date,
+				formData.fromTime
+			);
+			if (formattedStartTime.getTime() !== formData.fromTime.getTime()) {
+				setformData((prev) => ({ ...prev, fromTime: formattedStartTime }));
+			}
+		}
+	}, [formData.date, formData.fromTime]);
 
+	useEffect(() => {
+		if (formData.date && formData.toTime) {
+			const formattedEndTime = combineDateAndTime(
+				formData.date,
+				formData.toTime
+			);
+			if (formattedEndTime.getTime() !== formData.toTime.getTime()) {
+				setformData((prev) => ({ ...prev, toTime: formattedEndTime }));
+			}
+		}
+	}, [formData.date, formData.toTime]);
 	useEffect(() => {
 		if (isScroll) {
 			setisScroll(false);
@@ -317,8 +333,8 @@ const CreateEvent = () => {
 			<>
 				<View style={styles.topContainer}>
 					<SideTopBar
-						hideBackBtn={true}
-						title={"Create Event"}
+						hideBackBtn={false}
+						title={"Update Event"}
 					/>
 					<Text style={styles.stepsIndicator}>
 						Step {currentStep + 1} of {totalSteps}
@@ -485,22 +501,10 @@ const CreateEvent = () => {
 					showfirstPair={currentStep === 0}
 				/>
 				<View style={styles.bottomPadding} />
-				<YesNoModal
-					title={"Event Status"}
-					description={
-						"Select whether to publish your event now\nor save it as a draft."
-					}
-					showModal={showSaveOptions}
-					hideModal={switchSaveOptions}
-					onYesFun={submitEventFunAsPublished}
-					onNoFun={submitEventFunAsDraft}
-					yesTxt={"Publish Now"}
-					noTxt={"Draft"}
-				/>
 				<LoadingView loading={isLoading} />
 			</>
 		</AuthLayout>
 	);
 };
 
-export default CreateEvent;
+export default UpdateEvent;

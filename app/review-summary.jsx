@@ -141,6 +141,7 @@ const ReviewSummary = () => {
 					isTailIcon={true}
 				/>
 				<MyEventComp
+					bannerImage={item?.bannerImage}
 					address={address}
 					date={startDate}
 					title={title}

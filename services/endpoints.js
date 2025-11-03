@@ -60,18 +60,25 @@ export const getTicketSummary = (formData) => {
 };
 
 export const validateEventData = (formData) => {
-	const { date, fromTime, toTime } = formData;
-	// Check if date is in the past (ignoring time)
-	const selectedDate = new Date(date);
-	selectedDate.setHours(0, 0, 0, 0);
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-	if (selectedDate < today) {
-		return { valid: false, message: "Date cannot be in the past." };
+	const { fromTime, toTime } = formData;
+
+	// Ensure values exist
+	if (!fromTime || !toTime) {
+		return { valid: false, message: "Please select start and end time." };
 	}
 
-	// Check time difference (toTime must be after fromTime)
-	if (new Date(toTime) <= new Date(fromTime)) {
+	// Convert to full DateTime (handles cases where pickers are separate)
+	const start = new Date(fromTime);
+	const end = new Date(toTime);
+
+	// Check if start date is in the past
+	const now = new Date();
+	if (start < now) {
+		return { valid: false, message: "Event start time cannot be in the past." };
+	}
+
+	// Ensure end is after start
+	if (end <= start) {
 		return { valid: false, message: "End time must be after start time." };
 	}
 
@@ -327,6 +334,23 @@ export const changePasswordApi = async (password) => {
 		);
 	}
 };
+export const deleteUserNotificationApi = async () => {
+	try {
+		const result = await base.delete(
+			`auth/delete-user-notification/${notificationId}`,
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
 export const getUserNotificationApi = async () => {
 	try {
 		const result = await base.get("auth/user-notification", {
@@ -558,13 +582,13 @@ export const createNewEventApi = async (
 	category,
 	status,
 	location,
-	date,
 	startTime,
 	endTime,
 	description,
-	ticketTiers
+	ticketTiers,
+	bannerImage,
+	galleryImages
 ) => {
-	const formattedDate = new Date(date).toISOString(); // full date
 	const formattedStartTime = new Date(startTime).toISOString(); // proper time
 	const formattedEndTime = new Date(endTime).toISOString();
 	const formattedTicketTiers = ticketTiers?.map((dat) => {
@@ -583,17 +607,81 @@ export const createNewEventApi = async (
 				category,
 				status,
 				location,
-				date: formattedDate,
 				startTime: formattedStartTime,
 				endTime: formattedEndTime,
 				description,
 				ticketTiers: formattedTicketTiers,
+				bannerImage,
+				galleryImages,
 			},
 			{
 				isPublic: false,
 			}
 		);
 		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
+export const updateEventApi = async (
+	eventId,
+	title,
+	category,
+	location,
+	startTime,
+	endTime,
+	description,
+	ticketTiers,
+	bannerImage,
+	galleryImages
+) => {
+	const formattedStartTime = new Date(startTime).toISOString(); // proper time
+	const formattedEndTime = new Date(endTime).toISOString();
+	const formattedTicketTiers = ticketTiers?.map((dat) => {
+		const { capacity, price, ...rest } = dat;
+		return {
+			...rest,
+			capacity: typeof capacity === "string" ? parseInt(capacity) : capacity,
+			price: typeof price === "string" ? parseFloat(price) : price,
+		};
+	});
+	try {
+		const result = await base.put(
+			`event/update/${eventId}`,
+			{
+				title,
+				category,
+				location,
+				startTime: formattedStartTime,
+				endTime: formattedEndTime,
+				description,
+				ticketTiers: formattedTicketTiers,
+				bannerImage,
+				galleryImages,
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
+export const getEventByIdApi = async (eventId) => {
+	try {
+		const result = await base.get(`event/${eventId}`, {
+			isPublic: false,
+		});
+		return result?.data?.event;
 	} catch (error) {
 		throw parseDatabaseErrorMessage(
 			error?.response?.data?.message

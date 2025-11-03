@@ -28,6 +28,7 @@ const defaultColors = {
 	createEventInputBg: "#E3E3E3",
 	botmTab: "#fdfdfd",
 	modalBg: "rgba(0,0,0,0.8)",
+	modalBg4: "rgba(0,0,0,0.2)",
 	scannerBg: "rgba(0,0,0,0.15)",
 	botmTabShadow: "#83AAD11F",
 	dateTxt: "#595959",

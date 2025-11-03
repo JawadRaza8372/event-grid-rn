@@ -7,6 +7,7 @@ import Call from "./Call.svg";
 import Check from "./Check.svg";
 import CoinsDollar from "./coins-dollar.svg";
 import CreditCard from "./credit-card.svg";
+import DeleteRed from "./delete-red.svg";
 import Delete from "./delete.svg";
 import Edit from "./Edit";
 import Email from "./Email.svg";
@@ -52,6 +53,7 @@ export const Icons = {
 	CoinsDollar,
 	CreditCard,
 	Delete,
+	DeleteRed,
 	Edit,
 	Email,
 	Gift,

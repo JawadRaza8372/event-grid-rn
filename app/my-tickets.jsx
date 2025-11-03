@@ -60,6 +60,7 @@ const MyTickets = () => {
 								})
 							}>
 							<MyEventComp
+								bannerImage={item?.bannerImage}
 								address={item?.event?.location?.address}
 								date={item?.event?.date}
 								title={item?.event?.title}
