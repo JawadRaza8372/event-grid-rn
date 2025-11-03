@@ -173,6 +173,9 @@ const OrganizerEvents = () => {
 								totalTickets={item?.stats?.totalTickets}
 								totalAmount={item?.stats?.revenue}
 								showSmallButtons={selectedEventType === "Draft" ? true : false}
+								showOnlyUpdateBtn={
+									selectedEventType === "Published" ? true : false
+								}
 								onDeleteFun={() => deleteDraftEventFun(item?.id)}
 								onPublishFun={() => darftToPublishEventFun(item?.id)}
 								onUpdateFun={() =>

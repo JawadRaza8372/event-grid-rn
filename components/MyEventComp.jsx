@@ -1,4 +1,11 @@
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import {
+	Dimensions,
+	Image,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import { Icons } from "../assets/icons";
 import eventImage from "../assets/images/eventDetails.png";
 import { useThemeColors } from "../hooks/useThemeColors";
@@ -16,6 +23,7 @@ const MyEventComp = ({
 	onPublishFun,
 	onUpdateFun,
 	bannerImage,
+	showOnlyUpdateBtn,
 }) => {
 	const colors = useThemeColors();
 	const showComponentCondition =
@@ -147,6 +155,20 @@ const MyEventComp = ({
 			flexDirection: "column",
 			gap: 5,
 		},
+		yesBtn: {
+			width: "100%",
+			height: 32,
+			borderRadius: 8,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			backgroundColor: colors.blackColor,
+		},
+		yesTxt: {
+			fontSize: 10,
+			fontWeight: "600",
+			color: colors.mainBgColor,
+		},
 	});
 	const percentage =
 		totalTickets && soldTickets ? (soldTickets / totalTickets) * 100 : 0;
@@ -197,6 +219,12 @@ const MyEventComp = ({
 							thirdTxt={"Update"}
 						/>
 					</View>
+				) : showOnlyUpdateBtn && onUpdateFun ? (
+					<TouchableOpacity
+						onPress={onUpdateFun}
+						style={styles.yesBtn}>
+						<Text style={styles.yesTxt}>{"Update"}</Text>
+					</TouchableOpacity>
 				) : showComponentCondition ? (
 					<View style={styles?.ticketSoldMainContainer}>
 						<View style={styles.sideBySideView}>
