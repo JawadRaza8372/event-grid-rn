@@ -68,7 +68,7 @@ const CreateEvent = () => {
 		});
 		setisScroll(true);
 		setisLoading(false);
-		Toast.show({ type: "error", text1: "Reset Successfull." });
+		Toast.show({ type: "success", text1: "Reset Successfull." });
 	};
 	const nextBtnFun = () => {
 		const validation = validateEventData(formData);

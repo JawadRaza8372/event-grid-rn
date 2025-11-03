@@ -19,7 +19,6 @@ import SideTopBar from "../components/SideTopBar";
 import { categoriesArry } from "../constants/rawData";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
-	combineDateAndTime,
 	getEventByIdApi,
 	getTicketSummary,
 	updateEventApi,
@@ -85,28 +84,11 @@ const UpdateEvent = () => {
 		}
 	}, [eventId]);
 
-	const resetEventFun = () => {
-		setformData({
-			bannerImage: "",
-			galleryImage: [],
-			title: "",
-			category: "",
-			location: {
-				name: "",
-				address: "",
-				coordinates: {
-					lat: 0,
-					lng: 0,
-				},
-			},
-			fromTime: new Date(),
-			toTime: new Date(),
-			description: "",
-			ticketTiers: [],
-		});
+	const resetEventFun = async () => {
+		await fetchEventWithIdFun();
 		setisScroll(true);
 		setisLoading(false);
-		Toast.show({ type: "error", text1: "Reset Successfull." });
+		Toast.show({ type: "success", text1: "Reset Successfull." });
 	};
 	const nextBtnFun = () => {
 		const validation = validateEventData(formData);
@@ -225,7 +207,7 @@ const UpdateEvent = () => {
 			fontSize: 13,
 			fontWeight: "400",
 			color: colors.dateTxt,
-			marginLeft: 3,
+			marginLeft: 45,
 			marginTop: -7,
 		},
 		dataContainer: {
@@ -298,29 +280,6 @@ const UpdateEvent = () => {
 			backgroundColor: colors.mainBgColor,
 		},
 	});
-	useEffect(() => {
-		if (formData.date && formData.fromTime) {
-			const formattedStartTime = combineDateAndTime(
-				formData.date,
-				formData.fromTime
-			);
-			if (formattedStartTime.getTime() !== formData.fromTime.getTime()) {
-				setformData((prev) => ({ ...prev, fromTime: formattedStartTime }));
-			}
-		}
-	}, [formData.date, formData.fromTime]);
-
-	useEffect(() => {
-		if (formData.date && formData.toTime) {
-			const formattedEndTime = combineDateAndTime(
-				formData.date,
-				formData.toTime
-			);
-			if (formattedEndTime.getTime() !== formData.toTime.getTime()) {
-				setformData((prev) => ({ ...prev, toTime: formattedEndTime }));
-			}
-		}
-	}, [formData.date, formData.toTime]);
 	useEffect(() => {
 		if (isScroll) {
 			setisScroll(false);
