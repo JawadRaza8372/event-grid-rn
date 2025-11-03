@@ -7,6 +7,7 @@ import AuthLayout from "../../components/AuthLayout";
 import CenteredTitleTopBar from "../../components/CenteredTitleTopBar";
 import CustomButton from "../../components/CustomButton";
 import LoadingView from "../../components/LoadingView";
+import MyEventComp from "../../components/MyEventComp";
 import ShowTicket from "../../components/ShowTicket";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import {
@@ -42,7 +43,7 @@ const Ticket = () => {
 			setIsLoading(false);
 		}
 	};
-
+	console.log(ticketInfo);
 	const markTicketAsUsedFun = async () => {
 		if (!ticketInfo?.event?.id || !ticketInfo?.id) {
 			Toast.show({
@@ -143,6 +144,12 @@ const Ticket = () => {
 
 				{ticketInfo ? (
 					<>
+						<MyEventComp
+							bannerImage={ticketInfo?.event?.bannerImage}
+							address={ticketInfo?.event?.location?.address}
+							title={ticketInfo?.event?.title}
+							date={ticketInfo?.event?.startEndDate}
+						/>
 						<ShowTicket
 							email={ticketInfo?.owner?.email}
 							id={ticketInfo?.id}
