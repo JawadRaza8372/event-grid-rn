@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import CenteredTitleTopBar from "../components/CenteredTitleTopBar";
 import EmptyComponent from "../components/EmptyComponent";
 import LoadingView from "../components/LoadingView";
-import MyEventComp from "../components/MyEventComp";
+import TicketComp from "../components/TicketComp";
 import { useThemeColors } from "../hooks/useThemeColors";
 
 const TicketHistory = () => {
@@ -59,11 +59,12 @@ const TicketHistory = () => {
 									},
 								})
 							}>
-							<MyEventComp
-								bannerImage={item?.bannerImage}
+							<TicketComp
+								bannerImage={item?.event?.bannerImage}
 								address={item?.event?.location?.address}
-								date={item?.event?.date}
+								date={item?.event?.startEndDate}
 								title={item?.event?.title}
+								type={item?.ticketTierName}
 							/>
 						</TouchableOpacity>
 					);
