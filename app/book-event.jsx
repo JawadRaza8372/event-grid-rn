@@ -50,6 +50,7 @@ const BookEvent = () => {
 			width: Dimensions.get("screen").width - 40,
 			alignSelf: "center",
 			flex: 1,
+			marginTop: 20,
 		},
 		activeTab: {
 			width: "50%",
@@ -130,6 +131,7 @@ const BookEvent = () => {
 			/>
 			<View style={styles.childContainer}>
 				<CustomValueSelection
+					labelSize={14}
 					title={"Select Ticket Type"}
 					value={selectedOption}
 					setValue={(value) => setselectedOption(value)}

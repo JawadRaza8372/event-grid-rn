@@ -8,6 +8,7 @@ const CustomValueSelection = ({
 	setValue,
 	placeHolder,
 	inputWidth,
+	labelSize,
 }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
@@ -36,7 +37,7 @@ const CustomValueSelection = ({
 		},
 		inputLabel: {
 			width: "100%",
-			fontSize: 11,
+			fontSize: labelSize ?? 11,
 			fontWeight: "500",
 			color: colors.createInputLabelColor,
 			lineHeight: 20,
