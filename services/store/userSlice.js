@@ -37,8 +37,24 @@ export const userSlice = createSlice({
 		},
 		resetUser: (state, action) => {
 			state.user = {};
+			state.userNotifications = [];
+			state.ticketHistory = [];
+			state.homeEvents = [];
+			state.favEvents = [];
+			state.topEvents = [];
+			state.trendingEvents = [];
 		},
-
+		resetOrganizer: (state, action) => {
+			state.user = {};
+			state.organizerStats = {
+				totalEvents: 0,
+				totalRevenue: 0,
+				totalTicketsSold: 0,
+				totalViews: 0,
+			};
+			state.organizerEvents = [];
+			state.userNotifications = [];
+		},
 		setResetPasswordToken: (state, action) => {
 			state.resetPasswordToken = action.payload.resetPasswordToken;
 		},
@@ -102,6 +118,7 @@ export const {
 	setTokens,
 	setUser,
 	resetUser,
+	resetOrganizer,
 	setSelectedLang,
 	setResetPasswordToken,
 	setBillPayments,

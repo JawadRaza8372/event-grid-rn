@@ -199,7 +199,7 @@ const OrganizerEvents = () => {
 			<LoadingView loading={isLoading} />
 			<YesNoModal
 				title={"Delete Account"}
-				description={"Are you sure you want to delete\nyour account?"}
+				description={"Are you sure you want to delete your account?"}
 				showModal={openDeleteModal}
 				hideModal={switchOpenDeleteModal}
 				onYesFun={deleteAccountFun}
@@ -207,7 +207,7 @@ const OrganizerEvents = () => {
 			/>
 			<YesNoModal
 				title={"Logout Account"}
-				description={"Are you sure you want to logout\nyour account?"}
+				description={"Are you sure you want to logout your account?"}
 				showModal={openLogoutModal}
 				onNoFun={switchOpenLogoutModal}
 				hideModal={switchOpenLogoutModal}

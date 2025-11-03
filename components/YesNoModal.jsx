@@ -77,9 +77,10 @@ const YesNoModal = ({
 			fontWeight: "500",
 			color: colors.deleteDesc,
 			textAlign: "center",
+			width: "90%",
 		},
 		sideBySideView: {
-			width: "100%",
+			width: "90%",
 			height: 65,
 			display: "flex",
 			alignItems: "center",

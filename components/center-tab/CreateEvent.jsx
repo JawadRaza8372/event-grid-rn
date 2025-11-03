@@ -488,7 +488,7 @@ const CreateEvent = () => {
 				<YesNoModal
 					title={"Event Status"}
 					description={
-						"Select whether to publish your event now\nor save it as a draft."
+						"Select whether to publish your event now or save it as a draft."
 					}
 					showModal={showSaveOptions}
 					hideModal={switchSaveOptions}

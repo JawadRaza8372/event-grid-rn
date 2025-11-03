@@ -258,7 +258,7 @@ const Register = () => {
 					</TouchableOpacity>
 					<SuccessModal
 						title={"Organizer Approved!"}
-						description={"Admin has successfully approved you\nas an Organizer"}
+						description={"Admin has successfully approved you as an Organizer"}
 						showModal={openOrganizeModal}
 						hideModal={switchOpenOrganizeModal}
 					/>

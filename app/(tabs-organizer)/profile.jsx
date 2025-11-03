@@ -14,7 +14,7 @@ import { setAuthToken } from "../../services/apiUrl";
 import { deleteAccountApi } from "../../services/endpoints";
 import {
 	removeUserTokenfromStorage,
-	resetUser,
+	resetOrganizer,
 } from "../../services/store/userSlice";
 const Profile = () => {
 	const { user } = useSelector((state) => state?.user);
@@ -98,7 +98,7 @@ const Profile = () => {
 	];
 	const logoutAccountFun = async () => {
 		await removeUserTokenfromStorage();
-		dispatch(resetUser());
+		dispatch(resetOrganizer());
 		setAuthToken(null);
 		switchOpenLogoutModal();
 	};
@@ -106,7 +106,7 @@ const Profile = () => {
 		try {
 			await deleteAccountApi();
 			await removeUserTokenfromStorage();
-			dispatch(resetUser());
+			dispatch(resetOrganizer());
 			setAuthToken(null);
 			switchOpenDeleteModal();
 		} catch (error) {
@@ -154,7 +154,7 @@ const Profile = () => {
 				/>
 				<YesNoModal
 					title={"Delete Account"}
-					description={"Are you sure you want to delete\nyour account?"}
+					description={"Are you sure you want to delete your account?"}
 					showModal={openDeleteModal}
 					hideModal={switchOpenDeleteModal}
 					onYesFun={deleteAccountFun}
@@ -162,7 +162,7 @@ const Profile = () => {
 				/>
 				<YesNoModal
 					title={"Logout Account"}
-					description={"Are you sure you want to logout\nyour account?"}
+					description={"Are you sure you want to logout your account?"}
 					showModal={openLogoutModal}
 					onNoFun={switchOpenLogoutModal}
 					hideModal={switchOpenLogoutModal}

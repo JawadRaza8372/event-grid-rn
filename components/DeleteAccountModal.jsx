@@ -62,12 +62,14 @@ const DeleteAccountModal = ({ showModal, hideModal, onYesFun }) => {
 			fontWeight: "700",
 			textAlign: "center",
 			color: colors.modalBg,
+			width: "90%",
 		},
 		descriptionTxt: {
 			fontSize: 16,
 			fontWeight: "500",
 			color: colors.deleteDesc,
 			textAlign: "center",
+			width: "90%",
 		},
 		sideBySideView: {
 			width: "100%",
@@ -123,7 +125,7 @@ const DeleteAccountModal = ({ showModal, hideModal, onYesFun }) => {
 					<View style={styles.textContainer}>
 						<Text style={styles.titleTxt}>Delete Account</Text>
 						<Text style={styles.descriptionTxt}>
-							Are you sure you want to delete{"\n"}your account?
+							Are you sure you want to delete your account?
 						</Text>
 					</View>
 					<View style={styles.sideBySideView}>
