@@ -12,7 +12,10 @@ import { useSelector } from "react-redux";
 import { Icons } from "../../assets/icons";
 import eventImage from "../../assets/images/eventDetails.png";
 import { useThemeColors } from "../../hooks/useThemeColors";
-import { addFavoriteEventApi } from "../../services/endpoints";
+import {
+	addFavoriteEventApi,
+	removeFavoriteEventApi,
+} from "../../services/endpoints";
 
 const TrendingEvent = ({
 	id,
