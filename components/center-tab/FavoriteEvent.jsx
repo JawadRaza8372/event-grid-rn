@@ -21,11 +21,11 @@ const FavoriteEvent = () => {
 					data={favEvents}
 					renderItem={({ item }) => (
 						<TrendingEventCardView
-							genralPrice={item?.generaladmissionPrice}
+							ticketTiers={item?.ticketTiers}
+							bannerImage={item?.bannerImage}
 							location={item?.location?.address}
 							date={item?.startEndDate}
 							name={item?.title}
-							vipPrice={item?.vipPrice}
 							id={item?.id}
 							isFullWidth={true}
 							onPressFun={() =>

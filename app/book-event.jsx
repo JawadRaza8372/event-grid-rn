@@ -9,23 +9,36 @@ import {
 } from "react-native";
 import { Icons } from "../assets/icons";
 import CustomButton from "../components/CustomButton";
+import CustomValueSelection from "../components/CustomValueSelection";
 import SideTopBar from "../components/SideTopBar";
 import { useThemeColors } from "../hooks/useThemeColors";
 const BookEvent = () => {
-	const { gaPrice, vipPrice, eventId, title, startDate, address } =
-		useLocalSearchParams();
-
+	const {
+		galleryImages,
+		ticketTiers,
+		eventId,
+		title,
+		startDate,
+		address,
+		bannerImage,
+	} = useLocalSearchParams();
+	const formattedTicketTiers = JSON.parse(ticketTiers);
 	const colors = useThemeColors();
-	const [selectedOption, setselectedOption] = useState(
-		gaPrice ? "General Admission" : vipPrice ? "VIP" : ""
-	);
+	const [selectedOption, setselectedOption] = useState("");
 	const [totalTickets, settotalTickets] = useState(1);
+
+	const ticketOptions = formattedTicketTiers?.map((dat) => {
+		return { label: dat?.name, value: dat?.name };
+	});
+	const findIndexofOption = formattedTicketTiers?.findIndex(
+		(dat) => dat?.name === selectedOption
+	);
+	console.log("here is index of ", findIndexofOption);
 	const price =
-		selectedOption === "General Admission"
-			? gaPrice * totalTickets
-			: selectedOption === "VIP"
-			? vipPrice * totalTickets
+		selectedOption !== "" && findIndexofOption >= 0
+			? formattedTicketTiers[findIndexofOption]?.price * totalTickets
 			: null;
+
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",
@@ -116,66 +129,44 @@ const BookEvent = () => {
 				isTailIcon={true}
 			/>
 			<View style={styles.childContainer}>
-				<View style={styles.tabContainer}>
-					<TouchableOpacity
-						disabled={!gaPrice}
-						onPress={() => setselectedOption("General Admission")}
-						style={
-							selectedOption === "General Admission"
-								? styles.activeTab
-								: styles.inActiveTab
-						}>
-						<Text
-							style={
-								selectedOption === "General Admission"
-									? styles.activeTxt
-									: styles.inActiveTxt
-							}>
-							General Admission
-						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						disabled={!vipPrice}
-						onPress={() => setselectedOption("VIP")}
-						style={
-							selectedOption === "VIP" ? styles.activeTab : styles.inActiveTab
-						}>
-						<Text
-							style={
-								selectedOption === "VIP" ? styles.activeTxt : styles.inActiveTxt
-							}>
-							VIP
-						</Text>
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.headingTxt}>Choose number of Tickets</Text>
-				<View style={styles.buttonsContainer}>
-					<TouchableOpacity
-						onPress={() =>
-							totalTickets > 1 && settotalTickets(totalTickets - 1)
-						}
-						disabled={totalTickets === 1}
-						style={[
-							styles.btnCont,
-							totalTickets === 1 && { opacity: 0.4 }, // visual feedback for disabled state
-						]}>
-						<Icons.MinusIcon />
-					</TouchableOpacity>
-					<Text style={styles.btnTxt}>{totalTickets}</Text>
-					<TouchableOpacity
-						onPress={() =>
-							totalTickets < 5 && settotalTickets(totalTickets + 1)
-						}
-						disabled={totalTickets === 5}
-						style={[
-							styles.btnCont,
-							totalTickets === 5 && { opacity: 0.4 }, // visual feedback for disabled state
-						]}>
-						<Icons.PlusIcon />
-					</TouchableOpacity>
-				</View>
+				<CustomValueSelection
+					title={"Select Ticket Type"}
+					value={selectedOption}
+					setValue={(value) => setselectedOption(value)}
+					data={ticketOptions}
+				/>
+				{selectedOption !== "" ? (
+					<Text style={styles.headingTxt}>Choose number of Tickets</Text>
+				) : null}
+				{selectedOption !== "" ? (
+					<View style={styles.buttonsContainer}>
+						<TouchableOpacity
+							onPress={() =>
+								totalTickets > 1 && settotalTickets(totalTickets - 1)
+							}
+							disabled={totalTickets === 1}
+							style={[
+								styles.btnCont,
+								totalTickets === 1 && { opacity: 0.4 }, // visual feedback for disabled state
+							]}>
+							<Icons.MinusIcon />
+						</TouchableOpacity>
+						<Text style={styles.btnTxt}>{totalTickets}</Text>
+						<TouchableOpacity
+							onPress={() =>
+								totalTickets < 5 && settotalTickets(totalTickets + 1)
+							}
+							disabled={totalTickets === 5}
+							style={[
+								styles.btnCont,
+								totalTickets === 5 && { opacity: 0.4 }, // visual feedback for disabled state
+							]}>
+							<Icons.PlusIcon />
+						</TouchableOpacity>
+					</View>
+				) : null}
 			</View>
-			{gaPrice || vipPrice || price ? (
+			{price ? (
 				<CustomButton
 					btnTitle={`Continue - $${price}`}
 					onPressFun={() =>
@@ -186,6 +177,7 @@ const BookEvent = () => {
 								title,
 								startDate,
 								address,
+								bannerImage,
 								sum: price,
 								tickets: totalTickets,
 								type: selectedOption,

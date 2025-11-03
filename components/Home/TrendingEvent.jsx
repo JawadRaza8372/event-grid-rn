@@ -18,16 +18,35 @@ const TrendingEvent = ({
 	id,
 	name,
 	location,
-	genralPrice,
-	vipPrice,
 	date,
 	onPressFun,
+	ticketTiers,
+	bannerImage,
 	isFullWidth,
 }) => {
 	const { favEvents } = useSelector((state) => state?.user);
 	const findEventInFavorites = favEvents?.find((dat) => dat?.id === id);
 	const colors = useThemeColors();
 	const [isFavorite, setisFavorite] = useState(false);
+	const formattedTiers = (ticketTiers || []).slice(0, 2).map((tier) => {
+		let shortName = "";
+		if (tier.name) {
+			const words = tier.name.trim().split(" ");
+			if (words.length > 1) {
+				// multiple words → take first letter of each
+				shortName = words.map((w) => w[0]?.toUpperCase()).join("");
+			} else {
+				// single word
+				if (tier.name === tier.name.toUpperCase()) {
+					// all uppercase (like "VIP")
+					shortName = tier.name.slice(0, 3);
+				} else {
+					shortName = tier.name.slice(0, 3).toUpperCase();
+				}
+			}
+		}
+		return { price: tier.price, shortName };
+	});
 	useEffect(() => {
 		setisFavorite(findEventInFavorites ? true : false);
 	}, [findEventInFavorites, favEvents]);
@@ -39,7 +58,7 @@ const TrendingEvent = ({
 				setisFavorite(true);
 			} else {
 				await removeFavoriteEventApi(id);
-				setisFavorite(true);
+				setisFavorite(false);
 			}
 		} catch (error) {
 			console.log("event fav error: ", error);
@@ -72,6 +91,7 @@ const TrendingEvent = ({
 		imageContainer: {
 			height: 155,
 			width: "100%",
+			backgroundColor: colors.createEventInputBg,
 		},
 		childContainer: {
 			width: "100%",
@@ -195,7 +215,7 @@ const TrendingEvent = ({
 			style={styles.mainContainer}>
 			<View style={styles.imageContainer}>
 				<Image
-					source={eventImage}
+					source={bannerImage ? { uri: bannerImage } : eventImage}
 					style={styles.imageStyle}
 				/>
 				<TouchableOpacity
@@ -233,7 +253,22 @@ const TrendingEvent = ({
 				</View>
 				<View style={styles.secondChild}>
 					<Text style={styles.addressTxtLineHeight}>{"Starting at"}</Text>
-					{genralPrice ? (
+					{formattedTiers.length > 0 ? (
+						formattedTiers.map((tier, i) => (
+							<View
+								key={i}
+								style={styles.inLineContent}>
+								<Text style={styles.generalTxt}>
+									${tier.price}/{tier.shortName}
+								</Text>
+							</View>
+						))
+					) : (
+						<View style={styles.inLineContent}>
+							<Text style={styles.addressTxt}></Text>
+						</View>
+					)}
+					{/* {genralPrice ? (
 						<View style={styles.inLineContent}>
 							<Text style={styles.generalTxt}>{genralPrice ?? 0}/GA</Text>
 						</View>
@@ -250,7 +285,7 @@ const TrendingEvent = ({
 						<View style={styles.inLineContent}>
 							<Text style={styles.addressTxt}></Text>
 						</View>
-					)}
+					)} */}
 				</View>
 			</View>
 		</RenderComp>

@@ -5,7 +5,14 @@ import { Icons } from "../../assets/icons";
 import eventImage from "../../assets/images/eventDetails.png";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
-const TopEventCard = ({ eventName, date, address, eventId, onPressFun }) => {
+const TopEventCard = ({
+	bannerImage,
+	eventName,
+	date,
+	address,
+	eventId,
+	onPressFun,
+}) => {
 	const { favEvents } = useSelector((state) => state?.user);
 	const findEventInFavorites = favEvents?.find((dat) => dat?.id === eventId);
 
@@ -98,7 +105,7 @@ const TopEventCard = ({ eventName, date, address, eventId, onPressFun }) => {
 			style={styles.mainContainer}>
 			<View style={styles.imageContainer}>
 				<Image
-					source={eventImage}
+					source={bannerImage ? { uri: bannerImage } : eventImage}
 					style={styles.imageView}
 				/>
 			</View>

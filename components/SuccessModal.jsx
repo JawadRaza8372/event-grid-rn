@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
 	Dimensions,
 	Image,
@@ -49,12 +50,15 @@ const SuccessModal = ({ showModal, hideModal, title, description }) => {
 			textAlign: "center",
 			marginTop: 15,
 			marginBottom: 9,
+			width: "85%",
 		},
 		modalSubTitleTxt: {
 			fontSize: 10,
 			fontWeight: "500",
 			color: colors.successSubTxtColor,
 			lineHeight: 14,
+			width: "85%",
+			textAlign: "center",
 		},
 		modalImage: {
 			width: "100%",
@@ -62,6 +66,14 @@ const SuccessModal = ({ showModal, hideModal, title, description }) => {
 			height: 150,
 		},
 	});
+	useEffect(() => {
+		if (showModal) {
+			setTimeout(() => {
+				hideModal();
+			}, 2500);
+		}
+	}, [showModal]);
+
 	return (
 		<Modal
 			transparent={true}

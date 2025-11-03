@@ -67,6 +67,7 @@ const HomeScreen = () => {
 								data={topEvents}
 								renderItem={({ item }) => (
 									<TopEventCard
+										bannerImage={item?.bannerImage}
 										eventId={item?.id}
 										address={item?.location?.address}
 										date={item?.startEndDate}
@@ -107,11 +108,11 @@ const HomeScreen = () => {
 								data={trendingEvents}
 								renderItem={({ item }) => (
 									<TrendingEventCardView
-										genralPrice={item?.generaladmissionPrice}
+										ticketTiers={item?.ticketTiers}
+										bannerImage={item?.bannerImage}
 										location={item?.location?.address}
 										date={item?.startEndDate}
 										name={item?.title}
-										vipPrice={item?.vipPrice}
 										id={item?.id}
 										onPressFun={() =>
 											router.push({

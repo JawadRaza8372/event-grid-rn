@@ -209,7 +209,6 @@ const AppWrapper = () => {
 			if (userId === currentUserId && user?.role === "organizer") {
 				getOrganizerStatsApi()
 					.then((dat) => {
-						console.log("datat", dat);
 						dispatch(
 							setOrganizerStats({
 								organizerStats: {

@@ -19,9 +19,16 @@ const ReviewSummary = () => {
 
 	const { user } = useSelector((state) => state?.user);
 	const router = useRouter();
-	console.log(user);
-	const { eventId, title, startDate, address, sum, tickets, type } =
-		useLocalSearchParams();
+	const {
+		eventId,
+		title,
+		startDate,
+		address,
+		sum,
+		tickets,
+		type,
+		bannerImage,
+	} = useLocalSearchParams();
 	const colors = useThemeColors();
 	const [openModal, setopenModal] = useState(false);
 	const switchOpenModal = () => {
@@ -141,7 +148,7 @@ const ReviewSummary = () => {
 					isTailIcon={true}
 				/>
 				<MyEventComp
-					bannerImage={item?.bannerImage}
+					bannerImage={bannerImage}
 					address={address}
 					date={startDate}
 					title={title}
@@ -222,9 +229,7 @@ const ReviewSummary = () => {
 					router.push({ pathname: "/(tabs)" });
 				}}
 				title={"Congratulations!!"}
-				description={
-					"You have successfully placed an\norder for National Music Festival."
-				}
+				description={`You have successfully bought tickets for ${title}.`}
 			/>
 		</AuthLayout>
 	);

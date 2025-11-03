@@ -1,20 +1,12 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-	Dimensions,
-	Image,
-	ScrollView,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useSelector } from "react-redux";
 import { Icons } from "../assets/icons";
-import eventImage from "../assets/images/eventDetails.png";
 import CustomButton from "../components/CustomButton";
 import EventDetailOverView from "../components/EventDetailOverView";
+import EventTopImageScoll from "../components/EventTopImageScoll";
 import MapContainer from "../components/MapContainer";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
@@ -60,33 +52,7 @@ const EventDetails = () => {
 			height: "100%",
 			resizeMode: "cover",
 		},
-		backBtn: {
-			width: 50,
-			height: 60,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "flex-start",
-			flexDirection: "row",
-		},
-		favoriteBtn: {
-			width: 50,
-			height: 60,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "flex-end",
-			flexDirection: "row",
-		},
-		topHeaderView: {
-			position: "absolute",
-			top: 0,
-			zIndex: 2,
-			display: "flex",
-			width: Dimensions.get("screen").width - 42,
-			alignSelf: "center",
-			alignItems: "center",
-			justifyContent: "space-between",
-			flexDirection: "row",
-		},
+
 		bottmIndicator: {
 			bottom: 0,
 			left: 0,
@@ -203,38 +169,11 @@ const EventDetails = () => {
 	return (
 		<View style={styles.mainContainer}>
 			<ScrollView showsVerticalScrollIndicator={false}>
-				<View style={styles.imageContainer}>
-					<View style={styles.topHeaderView}>
-						<TouchableOpacity
-							onPress={() => router.back()}
-							style={styles.backBtn}>
-							<Icons.TaleArrowLeftWhite />
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={favoriteBtnClickFun}
-							style={styles.favoriteBtn}>
-							{isFavoriteEvent ? (
-								<Icons.HeartFillWhite
-									width={25}
-									height={25}
-								/>
-							) : (
-								<Icons.HeartEmptyWhite
-									width={25}
-									height={25}
-								/>
-							)}
-						</TouchableOpacity>
-					</View>
-
-					<View style={styles.imageContainerView}>
-						<Image
-							style={styles.imageStyle}
-							source={eventImage}
-						/>
-					</View>
-				</View>
-
+				<EventTopImageScoll
+					isFavoriteEvent={isFavoriteEvent}
+					favoriteBtnClickFun={favoriteBtnClickFun}
+					imageLinks={eventData?.galleryImages}
+				/>
 				<View style={styles.childContainer}>
 					<Text style={styles.eventNameTxt}>{eventData?.title ?? ""}</Text>
 					<View style={styles.categoryView}>
@@ -271,12 +210,12 @@ const EventDetails = () => {
 							router.push({
 								pathname: "/book-event",
 								params: {
-									gaPrice: eventData?.generaladmissionPrice,
-									vipPrice: eventData?.vipPrice,
+									ticketTiers: JSON.stringify(eventData?.ticketTiers),
 									eventId: eventData?.id ?? "",
 									title: eventData?.title,
 									startDate: eventData?.startEndDate,
 									address: eventData?.location?.address,
+									bannerImage: eventData?.bannerImage,
 								},
 							})
 						}

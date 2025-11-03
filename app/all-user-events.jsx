@@ -74,12 +74,12 @@ const AllUserEvents = () => {
 				data={filteredEventsData}
 				renderItem={({ item }) => (
 					<TrendingEventCardView
+						ticketTiers={item?.ticketTiers}
+						bannerImage={item?.bannerImage}
 						isFullWidth={true}
-						genralPrice={item?.generaladmissionPrice}
 						location={item?.location?.address}
 						date={item?.startEndDate}
 						name={item?.title}
-						vipPrice={item?.vipPrice}
 						id={item?.id}
 						onPressFun={() =>
 							router.push({
