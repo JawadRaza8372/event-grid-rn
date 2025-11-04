@@ -1,7 +1,11 @@
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
+import { allCategoriesArry } from "../../constants/rawData";
 import EmptyComponent from "../EmptyComponent";
+import CategoryView from "./CategoryView";
+import SearchInput from "./SearchInput";
 import SeeAllView from "./SeeAllView";
 import TopEventCard from "./TopEventCard";
 import TrendingEventCardView from "./TrendingEvent";
@@ -10,6 +14,20 @@ const HomeScreen = () => {
 	const { topEvents, trendingEvents, homeEvents } = useSelector(
 		(state) => state?.user
 	);
+	const [selectedCategory, setselectedCategory] = useState("All");
+	const [searchTearm, setsearchTearm] = useState("");
+	const filteredTopEventsData =
+		topEvents?.filter(
+			(dat) =>
+				`${dat?.title}`.toLowerCase().includes(searchTearm.toLowerCase()) &&
+				(selectedCategory === "All" || dat?.category === selectedCategory)
+		) ?? [];
+	const filteredTrendingEventsData =
+		trendingEvents?.filter(
+			(dat) =>
+				`${dat?.title}`.toLowerCase().includes(searchTearm.toLowerCase()) &&
+				(selectedCategory === "All" || dat?.category === selectedCategory)
+		) ?? [];
 	const router = useRouter();
 	const styles = StyleSheet.create({
 		TopEventCardView: {
@@ -47,9 +65,22 @@ const HomeScreen = () => {
 	return (
 		<>
 			<WelcomeTopComponent />
-			{trendingEvents.length > 0 || topEvents?.length > 0 ? (
+			<SearchInput
+				value={searchTearm}
+				onChangeValue={(text) => setsearchTearm(text)}
+			/>
+			<CategoryView
+				viewWidth={Dimensions.get("screen").width - 60}
+				title={"Category"}
+				value={selectedCategory}
+				onChangeValue={(value) => setselectedCategory(value)}
+				options={allCategoriesArry}
+				mt={0}
+			/>
+			{filteredTopEventsData.length > 0 ||
+			filteredTrendingEventsData?.length > 0 ? (
 				<>
-					{topEvents.length > 0 ? (
+					{filteredTopEventsData.length > 0 ? (
 						<SeeAllView
 							title={"Top Events"}
 							onPressFun={
@@ -59,12 +90,12 @@ const HomeScreen = () => {
 							}
 						/>
 					) : null}
-					{topEvents.length > 0 ? (
+					{filteredTopEventsData.length > 0 ? (
 						<View style={styles.TopEventCardView}>
 							<FlatList
 								showsHorizontalScrollIndicator={false}
 								horizontal={true}
-								data={topEvents}
+								data={filteredTopEventsData}
 								renderItem={({ item }) => (
 									<TopEventCard
 										bannerImage={item?.bannerImage}
@@ -87,9 +118,9 @@ const HomeScreen = () => {
 							/>
 						</View>
 					) : null}
-					{trendingEvents.length > 0 ? (
+					{filteredTrendingEventsData.length > 0 ? (
 						<SeeAllView
-							title={"Trending Events"}
+							title={"Events nearby / Explore"}
 							onPressFun={
 								homeEvents?.length > 0
 									? () => router.push({ pathname: "/all-user-events" })
@@ -97,7 +128,7 @@ const HomeScreen = () => {
 							}
 						/>
 					) : null}
-					{trendingEvents.length > 0 ? (
+					{filteredTrendingEventsData.length > 0 ? (
 						<View style={styles.trendingEventCardView}>
 							<FlatList
 								horizontal={true}
@@ -105,7 +136,7 @@ const HomeScreen = () => {
 								ListHeaderComponent={
 									<View style={styles.trendingEventSeprator} />
 								}
-								data={trendingEvents}
+								data={filteredTrendingEventsData}
 								renderItem={({ item }) => (
 									<TrendingEventCardView
 										ticketTiers={item?.ticketTiers}
