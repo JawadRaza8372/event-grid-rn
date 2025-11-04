@@ -11,6 +11,7 @@ import { promoCodeType } from "../../constants/rawData";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import CustomValueSelection from "../CustomValueSelection";
 import CustomInput from "../create-event/CustomInput";
+import PromoSelectorItem from "./PromoSelectorItem";
 
 const PromoCodeSelector = ({ formData, setformData }) => {
 	const colors = useThemeColors();
@@ -160,34 +161,11 @@ const PromoCodeSelector = ({ formData, setformData }) => {
 					ItemSeparatorComponent={<View style={styles.sepratorComp} />}
 					keyExtractor={(_, index) => index.toString()}
 					renderItem={({ item, index }) => (
-						<View style={styles.ticketCard}>
-							<View style={styles.ticketTextCont}>
-								<View style={styles.sideBySide}>
-									<Text style={styles.ticketText}>
-										<Text
-											style={{
-												fontWeight: "700",
-											}}>
-											Discount Type:
-										</Text>
-										{item.type}
-									</Text>
-									<Text style={styles.ticketText}>
-										<Text style={{ fontWeight: "700" }}>Discount Value:</Text>{" "}
-										{item.value}
-									</Text>
-								</View>
-							</View>
-
-							<TouchableOpacity
-								style={styles.deleteBtn}
-								onPress={() => handleDeletePromoCode(index)}>
-								<Icons.DeleteRed
-									width={20}
-									height={20}
-								/>
-							</TouchableOpacity>
-						</View>
+						<PromoSelectorItem
+							type={item.type}
+							value={item.value}
+							deletePromoCode={() => handleDeletePromoCode(index)}
+						/>
 					)}
 				/>
 			)}

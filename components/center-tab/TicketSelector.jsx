@@ -9,6 +9,7 @@ import {
 import { Icons } from "../../assets/icons";
 import { useThemeColors } from "../../hooks/useThemeColors";
 import CustomInput from "../create-event/CustomInput";
+import TicketSelectorItem from "./TicketSelectorItem";
 
 const TicketSelector = ({ formData, setformData }) => {
 	const colors = useThemeColors();
@@ -178,30 +179,12 @@ const TicketSelector = ({ formData, setformData }) => {
 					ItemSeparatorComponent={<View style={styles.sepratorComp} />}
 					keyExtractor={(_, index) => index.toString()}
 					renderItem={({ item, index }) => (
-						<View style={styles.ticketCard}>
-							<View style={styles.ticketTextCont}>
-								<Text style={styles.ticketTitleTxt}>{item.name}</Text>
-								<View style={styles.sideBySide}>
-									<Text style={styles.ticketText}>
-										<Text style={{ fontWeight: "700" }}>Price:</Text> $
-										{item.price}
-									</Text>
-									<Text style={styles.ticketText}>
-										<Text style={{ fontWeight: "700" }}>Capacity:</Text>{" "}
-										{item.capacity}
-									</Text>
-								</View>
-							</View>
-
-							<TouchableOpacity
-								style={styles.deleteBtn}
-								onPress={() => handleDeleteTicket(index)}>
-								<Icons.DeleteRed
-									width={20}
-									height={20}
-								/>
-							</TouchableOpacity>
-						</View>
+						<TicketSelectorItem
+							capacity={item.capacity}
+							deleteTicketTier={() => handleDeleteTicket(index)}
+							name={item.name}
+							price={item.price}
+						/>
 					)}
 				/>
 			)}

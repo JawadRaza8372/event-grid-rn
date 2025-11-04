@@ -1,7 +1,10 @@
+import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { useThemeColors } from "../hooks/useThemeColors";
+import CustomButton from "./CustomButton";
 
-const EmptyComponent = ({ title }) => {
+const EmptyComponent = ({ title, showBack }) => {
+	const router = useRouter();
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -11,6 +14,7 @@ const EmptyComponent = ({ title }) => {
 			alignItems: "center",
 			justifyContent: "center",
 			flexDirection: "column",
+			gap: 10,
 		},
 		emptyText: {
 			fontSize: 14,
@@ -22,6 +26,14 @@ const EmptyComponent = ({ title }) => {
 	return (
 		<View style={styles.mainContainer}>
 			<Text style={styles.emptyText}>{title ?? "No data found"}</Text>
+			{showBack ? (
+				<CustomButton
+					btnWidth={"60%"}
+					btnTitle={"Go Back"}
+					onPressFun={() => router.back()}
+					txtSize={12}
+				/>
+			) : null}
 		</View>
 	);
 };

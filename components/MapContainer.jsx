@@ -1,10 +1,10 @@
 import { router } from "expo-router";
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import eventLocationPin from "../assets/images/locationIcon.png";
 import { useThemeColors } from "../hooks/useThemeColors";
 
-const MapContainer = ({ coordinates, location }) => {
+const MapContainer = ({ coordinates, location, isNotBtn }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -21,19 +21,22 @@ const MapContainer = ({ coordinates, location }) => {
 			height: "100%",
 		},
 	});
-	console.log(coordinates);
-
+	const RenderComponent = !isNotBtn ? TouchableOpacity : View;
+	const renderProps = !isNotBtn
+		? {
+				onPress: () =>
+					router.push({
+						pathname: "/location",
+						params: {
+							coordinates: JSON.stringify(coordinates),
+							location,
+						},
+					}),
+		  }
+		: {};
 	return (
-		<TouchableOpacity
-			onPress={() =>
-				router.push({
-					pathname: "/location",
-					params: {
-						coordinates: JSON.stringify(coordinates),
-						location,
-					},
-				})
-			}
+		<RenderComponent
+			{...renderProps}
 			style={styles.mainContainer}>
 			<MapView
 				provider={PROVIDER_GOOGLE}
@@ -58,7 +61,7 @@ const MapContainer = ({ coordinates, location }) => {
 					/>
 				</Marker>
 			</MapView>
-		</TouchableOpacity>
+		</RenderComponent>
 	);
 };
 

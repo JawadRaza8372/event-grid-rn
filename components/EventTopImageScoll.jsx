@@ -123,23 +123,27 @@ const EventTopImageScoll = ({
 						<Icons.TaleArrowLeftWhite />
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={favoriteBtnClickFun}
-					style={styles.favoriteBtn}>
-					<View style={styles.backBtnStyle}>
-						{isFavoriteEvent ? (
-							<Icons.HeartFillWhite
-								width={25}
-								height={25}
-							/>
-						) : (
-							<Icons.HeartEmptyWhite
-								width={25}
-								height={25}
-							/>
-						)}
-					</View>
-				</TouchableOpacity>
+				{favoriteBtnClickFun ? (
+					<TouchableOpacity
+						onPress={favoriteBtnClickFun}
+						style={styles.favoriteBtn}>
+						<View style={styles.backBtnStyle}>
+							{isFavoriteEvent ? (
+								<Icons.HeartFillWhite
+									width={25}
+									height={25}
+								/>
+							) : (
+								<Icons.HeartEmptyWhite
+									width={25}
+									height={25}
+								/>
+							)}
+						</View>
+					</TouchableOpacity>
+				) : (
+					<View style={styles.favoriteBtn} />
+				)}
 			</View>
 			<View style={styles.bottmIndicator}>
 				{imageLinks?.map((_, index) => (
@@ -156,6 +160,7 @@ const EventTopImageScoll = ({
 			<FlatList
 				onViewableItemsChanged={onViewableItemsChanged}
 				viewabilityConfig={viewabilityConfig}
+				showsHorizontalScrollIndicator={false}
 				pagingEnabled={true}
 				horizontal={true}
 				data={imageLinks}

@@ -2,39 +2,32 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import Toast from "react-native-toast-message";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CenteredTitleTopBar from "../components/CenteredTitleTopBar";
 import EmptyComponent from "../components/EmptyComponent";
 import LoadingView from "../components/LoadingView";
-import MyEventComp from "../components/MyEventComp";
+import OrganizerEventComp from "../components/OrganizerEventComp";
 import TabContainer from "../components/TabContainer";
 import YesNoModal from "../components/YesNoModal";
 import { useThemeColors } from "../hooks/useThemeColors";
-import { setAuthToken } from "../services/apiUrl";
 import {
-	deleteAccountApi,
 	deleteDraftEventApi,
 	publishDraftEventApi,
 } from "../services/endpoints";
-import {
-	removeUserTokenfromStorage,
-	resetUser,
-} from "../services/store/userSlice";
 const OrganizerEvents = () => {
-	const { user, organizerEvents } = useSelector((state) => state?.user);
+	const { organizerEvents } = useSelector((state) => state?.user);
 	const router = useRouter();
-	const dispatch = useDispatch();
 	const colors = useThemeColors();
 	const [isLoading, setisLoading] = useState(false);
 	const [selectedEventType, setSelectedEventType] = useState("Published");
-	const [openDeleteModal, setopenDeleteModal] = useState(false);
-	const [openLogoutModal, setopenLogoutModal] = useState(false);
+	const [openDeleteModal, setopenDeleteModal] = useState(null);
+	const [openPublishModal, setopenPublishModal] = useState(null);
 
-	const switchOpenDeleteModal = () => {
-		setopenDeleteModal(!openDeleteModal);
+	const removeOpenDeleteModal = () => {
+		setopenDeleteModal(null);
 	};
-	const switchOpenLogoutModal = () => {
-		setopenLogoutModal(!openLogoutModal);
+	const removeOpenPublishModal = () => {
+		openPublishModal(null);
 	};
 	const styles = StyleSheet.create({
 		userContainer: {
@@ -74,22 +67,19 @@ const OrganizerEvents = () => {
 			flex: 1,
 		},
 	});
-
-	const logoutAccountFun = async () => {
-		await removeUserTokenfromStorage();
-		dispatch(resetUser());
-		setAuthToken(null);
-		switchOpenLogoutModal();
-		setTimeout(() => {
-			router.replace({ pathname: "/login" });
-		}, 100);
-	};
-	const darftToPublishEventFun = async (eventId) => {
+	const darftToPublishEventFun = async () => {
 		try {
+			if (openPublishModal == null) {
+				Toast.show({
+					type: "error",
+					text1: "Invalid Event selected.",
+				});
+				return;
+			}
 			setisLoading(true);
-			await publishDraftEventApi(eventId);
+			await publishDraftEventApi(openPublishModal);
 			setisLoading(false);
-
+			removeOpenPublishModal();
 			Toast.show({
 				type: "success",
 				text1: "Event Published successfully.",
@@ -103,11 +93,19 @@ const OrganizerEvents = () => {
 			});
 		}
 	};
-	const deleteDraftEventFun = async (eventId) => {
+	const deleteDraftEventFun = async () => {
 		try {
+			if (openDeleteModal == null) {
+				Toast.show({
+					type: "error",
+					text1: "Invalid Event selected.",
+				});
+				return;
+			}
 			setisLoading(true);
-			await deleteDraftEventApi(eventId);
+			await deleteDraftEventApi(openDeleteModal);
 			setisLoading(false);
+			removeOpenDeleteModal();
 
 			Toast.show({
 				type: "success",
@@ -122,24 +120,7 @@ const OrganizerEvents = () => {
 			});
 		}
 	};
-	const deleteAccountFun = async () => {
-		try {
-			await deleteAccountApi();
-			await removeUserTokenfromStorage();
-			dispatch(resetUser());
-			setAuthToken(null);
-			switchOpenDeleteModal();
-			setTimeout(() => {
-				router.replace({ pathname: "/login" });
-			}, 100);
-		} catch (error) {
-			console.log("Delete Account failed: ", error);
-			Toast.show({
-				type: "error",
-				text1: error ?? "Delete account failed.",
-			});
-		}
-	};
+
 	const filterEventOnEventType =
 		organizerEvents?.filter((dat) => dat?.status === selectedEventType) ?? [];
 	return (
@@ -164,11 +145,13 @@ const OrganizerEvents = () => {
 					keyExtractor={(item) => item?.id}
 					renderItem={({ item }) => {
 						return (
-							<MyEventComp
+							<OrganizerEventComp
+								id={item?.id}
+								isClickAble={selectedEventType !== "Draft" ? true : false}
 								bannerImage={item?.bannerImage}
 								address={item?.address}
 								date={item?.date}
-								soldTickets={item?.stats?.ticketsSold}
+								ticketsSold={item?.stats?.ticketsSold}
 								title={item?.title}
 								totalTickets={item?.stats?.totalTickets}
 								totalAmount={item?.stats?.revenue}
@@ -176,8 +159,8 @@ const OrganizerEvents = () => {
 								showOnlyUpdateBtn={
 									selectedEventType === "Published" ? true : false
 								}
-								onDeleteFun={() => deleteDraftEventFun(item?.id)}
-								onPublishFun={() => darftToPublishEventFun(item?.id)}
+								onDeleteFun={() => setopenDeleteModal(item?.id)}
+								onPublishFun={() => setopenPublishModal(item?.id)}
 								onUpdateFun={() =>
 									router.push({
 										pathname: "/update-event",
@@ -198,20 +181,24 @@ const OrganizerEvents = () => {
 			</View>
 			<LoadingView loading={isLoading} />
 			<YesNoModal
-				title={"Delete Account"}
-				description={"Are you sure you want to delete your account?"}
+				title={"Delete Draft Event"}
+				description={"Are you sure you want to delete this draft event?"}
 				showModal={openDeleteModal}
-				hideModal={switchOpenDeleteModal}
-				onYesFun={deleteAccountFun}
-				onNoFun={switchOpenDeleteModal}
+				hideModal={removeOpenDeleteModal}
+				onYesFun={deleteDraftEventFun}
+				onNoFun={removeOpenDeleteModal}
+				yesTxt={"Delete"}
+				noTxt={"Cancel"}
 			/>
 			<YesNoModal
-				title={"Logout Account"}
-				description={"Are you sure you want to logout your account?"}
-				showModal={openLogoutModal}
-				onNoFun={switchOpenLogoutModal}
-				hideModal={switchOpenLogoutModal}
-				onYesFun={logoutAccountFun}
+				title={"Publish Event"}
+				description={"Are you sure you want to publish this event?"}
+				showModal={openPublishModal}
+				yesTxt={"Publish"}
+				noTxt={"Cancel"}
+				onNoFun={removeOpenPublishModal}
+				hideModal={removeOpenPublishModal}
+				onYesFun={darftToPublishEventFun}
 			/>
 		</View>
 	);
