@@ -27,7 +27,7 @@ const OrganizerEvents = () => {
 		setopenDeleteModal(null);
 	};
 	const removeOpenPublishModal = () => {
-		openPublishModal(null);
+		setopenPublishModal(null);
 	};
 	const styles = StyleSheet.create({
 		userContainer: {
@@ -183,7 +183,7 @@ const OrganizerEvents = () => {
 			<YesNoModal
 				title={"Delete Draft Event"}
 				description={"Are you sure you want to delete this draft event?"}
-				showModal={openDeleteModal}
+				showModal={openDeleteModal ? true : false}
 				hideModal={removeOpenDeleteModal}
 				onYesFun={deleteDraftEventFun}
 				onNoFun={removeOpenDeleteModal}
@@ -193,7 +193,7 @@ const OrganizerEvents = () => {
 			<YesNoModal
 				title={"Publish Event"}
 				description={"Are you sure you want to publish this event?"}
-				showModal={openPublishModal}
+				showModal={openPublishModal ? true : false}
 				yesTxt={"Publish"}
 				noTxt={"Cancel"}
 				onNoFun={removeOpenPublishModal}
