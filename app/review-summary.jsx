@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useSelector } from "react-redux";
 import AuthLayout from "../components/AuthLayout";
+import CustomInput from "../components/create-event/CustomInput.jsx";
 import CustomButtonWithLoading from "../components/CustomButtonWithLoading.jsx";
 import MyEventComp from "../components/MyEventComp.jsx";
 import SideTopBar from "../components/SideTopBar";
@@ -16,7 +17,7 @@ import {
 } from "../services/endpoints.js";
 const ReviewSummary = () => {
 	const { initPaymentSheet, presentPaymentSheet, confirmPayment } = useStripe();
-
+	const [promoCodeValue, setpromoCodeValue] = useState("");
 	const { user } = useSelector((state) => state?.user);
 	const router = useRouter();
 	const {
@@ -88,7 +89,12 @@ const ReviewSummary = () => {
 	const startPayment = async () => {
 		try {
 			// 1️⃣ Get Payment Intent from your backend
-			const result = await createPaymentIntentApi(eventId, type, tickets);
+			const result = await createPaymentIntentApi(
+				eventId,
+				type,
+				tickets,
+				promoCodeValue
+			);
 			const clientSecret = result?.paymentIntent?.client_secret;
 			const currentPaymentId = result?.paymentIntent?.id;
 			// 2️⃣ Initialize Payment Sheet
@@ -215,11 +221,20 @@ const ReviewSummary = () => {
 						</Text>
 					</View>
 				</View>
-				<CustomButtonWithLoading
-					btnWidth={"100%"}
-					btnTitle={"Continue"}
-					onPressFun={startPayment}
+				<CustomInput
+					title={"Promo Code (optional)"}
+					placeHolder={"Enter Promo Code to get discount"}
+					value={promoCodeValue}
+					onChangeValue={(value) => setpromoCodeValue(`${value}`.toUpperCase())}
+					maxLength={7}
 				/>
+				{promoCodeValue.length === 0 || promoCodeValue.length === 7 ? (
+					<CustomButtonWithLoading
+						btnWidth={"100%"}
+						btnTitle={"Continue"}
+						onPressFun={startPayment}
+					/>
+				) : null}
 				<View style={styles.bottomPadding} />
 			</View>
 			<SuccessModal

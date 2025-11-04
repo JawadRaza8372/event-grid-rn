@@ -23,6 +23,7 @@ import GalleryUpload from "../GalleryUpload";
 import LoadingView from "../LoadingView";
 import SideTopBar from "../SideTopBar";
 import YesNoModal from "../YesNoModal";
+import PromoCodeSelector from "./PromoCodeSelector";
 import TicketSelector from "./TicketSelector";
 const CreateEvent = () => {
 	const totalSteps = 2;
@@ -48,6 +49,7 @@ const CreateEvent = () => {
 		toTime: new Date(),
 		description: "",
 		ticketTiers: [],
+		promoCodes: [],
 	});
 	const resetEventFun = () => {
 		setformData({
@@ -65,6 +67,7 @@ const CreateEvent = () => {
 			toTime: new Date(),
 			description: "",
 			ticketTiers: [],
+			promoCodes: [],
 		});
 		setisScroll(true);
 		setisLoading(false);
@@ -166,7 +169,8 @@ const CreateEvent = () => {
 			formData.description,
 			formData.ticketTiers,
 			uploadedBannerUrl,
-			uploadedGalleryUrls
+			uploadedGalleryUrls,
+			formData.promoCodes
 		);
 		setcurrentStep(0);
 		setformData({
@@ -186,6 +190,7 @@ const CreateEvent = () => {
 			toTime: new Date(),
 			description: "",
 			ticketTiers: [],
+			promoCodes: [],
 		});
 		setisScroll(true);
 		setshowSaveOptions(false);
@@ -433,6 +438,10 @@ const CreateEvent = () => {
 							/>
 						</View>
 						<TicketSelector
+							formData={formData}
+							setformData={setformData}
+						/>
+						<PromoCodeSelector
 							formData={formData}
 							setformData={setformData}
 						/>

@@ -468,7 +468,8 @@ export const getUserFavoriteApi = async () => {
 export const createPaymentIntentApi = async (
 	eventId,
 	ticketTierName,
-	quantity
+	quantity,
+	promoCode
 ) => {
 	try {
 		const result = await base.post(
@@ -477,6 +478,7 @@ export const createPaymentIntentApi = async (
 				eventId,
 				ticketTierName,
 				quantity: parseInt(quantity),
+				couponCode: promoCode,
 			},
 			{
 				isPublic: false,
@@ -589,7 +591,8 @@ export const createNewEventApi = async (
 	description,
 	ticketTiers,
 	bannerImage,
-	galleryImages
+	galleryImages,
+	promoCodes
 ) => {
 	const formattedStartTime = new Date(startTime).toISOString(); // proper time
 	const formattedEndTime = new Date(endTime).toISOString();
@@ -601,6 +604,18 @@ export const createNewEventApi = async (
 			price: typeof price === "string" ? parseFloat(price) : price,
 		};
 	});
+	const formattedPromoCodes =
+		promoCodes?.length > 0
+			? promoCodes?.map((dat) => {
+					const { type, value, ...rest } = dat;
+					return {
+						...rest,
+						discountType: type,
+						discountValue:
+							typeof value === "string" ? parseFloat(value) : value,
+					};
+			  })
+			: [];
 	try {
 		const result = await base.post(
 			`event/create`,
@@ -615,6 +630,7 @@ export const createNewEventApi = async (
 				ticketTiers: formattedTicketTiers,
 				bannerImage,
 				galleryImages,
+				promoCodes: formattedPromoCodes,
 			},
 			{
 				isPublic: false,
@@ -639,7 +655,8 @@ export const updateEventApi = async (
 	description,
 	ticketTiers,
 	bannerImage,
-	galleryImages
+	galleryImages,
+	promoCodes
 ) => {
 	const formattedStartTime = new Date(startTime).toISOString(); // proper time
 	const formattedEndTime = new Date(endTime).toISOString();
@@ -651,6 +668,18 @@ export const updateEventApi = async (
 			price: typeof price === "string" ? parseFloat(price) : price,
 		};
 	});
+	const formattedPromoCodes =
+		promoCodes?.length > 0
+			? promoCodes?.map((dat) => {
+					const { type, value, ...rest } = dat;
+					return {
+						...rest,
+						discountType: type,
+						discountValue:
+							typeof value === "string" ? parseFloat(value) : value,
+					};
+			  })
+			: [];
 	try {
 		const result = await base.put(
 			`event/update/${eventId}`,
@@ -664,6 +693,7 @@ export const updateEventApi = async (
 				ticketTiers: formattedTicketTiers,
 				bannerImage,
 				galleryImages,
+				promoCodes: formattedPromoCodes,
 			},
 			{
 				isPublic: false,

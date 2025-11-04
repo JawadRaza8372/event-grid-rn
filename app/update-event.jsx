@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 import AuthLayout from "../components/AuthLayout";
 import BannerUpload from "../components/BannerUpload";
+import PromoCodeSelector from "../components/center-tab/PromoCodeSelector";
 import TicketSelector from "../components/center-tab/TicketSelector";
 import BottomButtons from "../components/create-event/BottomButtons";
 import CategorySelector from "../components/create-event/CategorySelector";
@@ -27,7 +28,6 @@ import {
 } from "../services/endpoints";
 const UpdateEvent = () => {
 	const { eventId } = useLocalSearchParams();
-	console.log("check my event Id", eventId);
 	const totalSteps = 2;
 	const [currentStep, setcurrentStep] = useState(0);
 	const [isLoading, setisLoading] = useState(false);
@@ -49,11 +49,13 @@ const UpdateEvent = () => {
 		toTime: new Date(),
 		description: "",
 		ticketTiers: [],
+		promoCodes: [],
 	});
 	const fetchEventWithIdFun = async () => {
 		try {
 			setisLoading(true);
 			const result = await getEventByIdApi(eventId);
+			console.log("cghec", result?.promoCodes);
 			setformData({
 				bannerImage: result?.bannerImage,
 				galleryImage: result?.galleryImages,
@@ -71,6 +73,13 @@ const UpdateEvent = () => {
 				toTime: new Date(result?.endTime),
 				description: result?.description,
 				ticketTiers: result?.ticketTiers,
+				promoCodes:
+					result?.promoCodes?.map((dat) => {
+						const discountType = dat?.discountType;
+						const discountValue = dat?.discountValue;
+						const code = dat?.code;
+						return { code, type: discountType, value: discountValue };
+					}) || [],
 			});
 			setisLoading(false);
 		} catch (error) {
@@ -191,7 +200,8 @@ const UpdateEvent = () => {
 			formData.description,
 			formData.ticketTiers,
 			uploadedBannerUrl,
-			uploadedGalleryUrls
+			uploadedGalleryUrls,
+			formData.promoCodes
 		);
 		setcurrentStep(0);
 		setisScroll(true);
@@ -408,6 +418,10 @@ const UpdateEvent = () => {
 							/>
 						</View>
 						<TicketSelector
+							formData={formData}
+							setformData={setformData}
+						/>
+						<PromoCodeSelector
 							formData={formData}
 							setformData={setformData}
 						/>

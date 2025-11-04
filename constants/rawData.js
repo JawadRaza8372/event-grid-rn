@@ -36,3 +36,7 @@ export const ticketTierName = [
 	{ label: "General Admission", value: "General Admission" },
 	{ label: "VIP", value: "VIP" },
 ];
+export const promoCodeType = [
+	{ label: "Flat Discount", value: "flat" },
+	{ label: "Percent Discount", value: "percentage" },
+];

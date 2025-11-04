@@ -8,6 +8,7 @@ const CustomInput = ({
 	onChangeValue,
 	placeHolder,
 	isNumber,
+	maxLength,
 }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
@@ -48,6 +49,7 @@ const CustomInput = ({
 				placeholderTextColor={colors.createInputLabelColor}
 				placeholder={placeHolder ?? ""}
 				value={value}
+				maxLength={maxLength ?? undefined}
 				onChangeText={onChangeValue}
 				style={styles.inputMainStyle}
 				keyboardType={isNumber ? "number-pad" : "default"}
