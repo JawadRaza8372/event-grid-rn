@@ -44,9 +44,6 @@ const SearchInput = ({ value, onChangeValue }) => {
 				value={value}
 				onChangeText={(text) => onChangeValue(text)}
 			/>
-			<View style={styles.iconContainer}>
-				<Icons.Filter />
-			</View>
 		</View>
 	);
 };
