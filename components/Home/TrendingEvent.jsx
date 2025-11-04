@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
 	Dimensions,
 	Image,
+	Share,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
@@ -71,6 +72,35 @@ const TrendingEvent = ({
 			});
 		}
 	};
+	const handleShare = async () => {
+		if (!id) {
+			Toast.show({ type: "error", text1: "Event ID is missing." });
+			return;
+		}
+
+		// You can customize this however you like
+		const message = `
+🎉 *${name}*  
+
+📍 Location: ${location || "TBA"}  
+📅 Date: ${date || "TBA"}  
+
+—
+
+🔥 Don’t miss out!  
+Install the *EventGrid* app to view this event, get tickets, and explore more trending events near you.
+
+📲 Download from Play store and App store
+
+Once installed, open the app and search for “${name}” to find this event instantly.
+  `.trim();
+
+		await Share.share({
+			title: `Check out ${name} on EventGrid!`,
+			message,
+		});
+	};
+
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: isFullWidth ? "95%" : Dimensions.get("screen").width * 0.82,
@@ -237,7 +267,7 @@ const TrendingEvent = ({
 					)}
 				</TouchableOpacity>
 				<TouchableOpacity
-					onPress={() => console.log("hy")}
+					onPress={handleShare}
 					style={styles.shareBtn}>
 					<Icons.ShareDark
 						width={20}
