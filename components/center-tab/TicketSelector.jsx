@@ -136,20 +136,30 @@ const TicketSelector = ({ formData, setformData }) => {
 			/>
 			<View style={styles.sideBySide}>
 				<CustomInput
+					isNumber={true}
 					inputWidth={"49%"}
 					title={"Price ($)"}
 					value={ticketTier.price}
 					onChangeValue={(value) =>
-						setticketTier({ ...ticketTier, price: value })
+						setticketTier({
+							...ticketTier,
+							price: `${value}`
+								.replace(/[^0-9.]/g, "")
+								.replace(/^(\d*\.\d*).*$/, "$1"),
+						})
 					}
 					placeHolder={"80"}
 				/>
 				<CustomInput
+					isNumber={true}
 					inputWidth={"49%"}
 					title={"Capacity"}
 					value={ticketTier.capacity}
 					onChangeValue={(value) =>
-						setticketTier({ ...ticketTier, capacity: value })
+						setticketTier({
+							...ticketTier,
+							capacity: `${value}`.replace(/[^0-9]/g, ""),
+						})
 					}
 					placeHolder={"100"}
 				/>

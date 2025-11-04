@@ -184,7 +184,9 @@ const EditProfile = () => {
 					title={"Email Address"}
 					placeHolderText={"jhondoe@gmail.com"}
 					value={formData.email}
-					onChangeValue={(text) => setformData({ ...formData, email: text })}
+					onChangeValue={(text) =>
+						setformData({ ...formData, email: `${text}`.toLowerCase() })
+					}
 				/>
 				<CustomInput
 					isNumber={true}

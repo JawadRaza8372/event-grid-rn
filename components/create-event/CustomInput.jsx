@@ -7,6 +7,7 @@ const CustomInput = ({
 	value,
 	onChangeValue,
 	placeHolder,
+	isNumber,
 }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
@@ -49,6 +50,7 @@ const CustomInput = ({
 				value={value}
 				onChangeText={onChangeValue}
 				style={styles.inputMainStyle}
+				keyboardType={isNumber ? "number-pad" : "default"}
 			/>
 		</View>
 	);

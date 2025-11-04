@@ -13,15 +13,8 @@ import CustomValueSelection from "../components/CustomValueSelection";
 import SideTopBar from "../components/SideTopBar";
 import { useThemeColors } from "../hooks/useThemeColors";
 const BookEvent = () => {
-	const {
-		galleryImages,
-		ticketTiers,
-		eventId,
-		title,
-		startDate,
-		address,
-		bannerImage,
-	} = useLocalSearchParams();
+	const { ticketTiers, eventId, title, startDate, address, bannerImage } =
+		useLocalSearchParams();
 	const formattedTicketTiers = JSON.parse(ticketTiers);
 	const colors = useThemeColors();
 	const [selectedOption, setselectedOption] = useState("");

@@ -104,7 +104,9 @@ const ForgotPassword = () => {
 				<InputWithIcons
 					placeHolderText={""}
 					value={formData.email}
-					onChangeValue={(text) => setformData({ ...formData, email: text })}
+					onChangeValue={(text) =>
+						setformData({ ...formData, email: `${text}`.toLowerCase() })
+					}
 					LeftIcon={<Icons.Email />}
 				/>
 

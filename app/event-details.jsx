@@ -11,11 +11,11 @@ import MapContainer from "../components/MapContainer";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
 	addFavoriteEventApi,
+	addViewToEventApi,
 	removeFavoriteEventApi,
 } from "../services/endpoints";
 const EventDetails = () => {
-	const { favEvents } = useSelector((state) => state?.user);
-	console.log("favorite events", favEvents);
+	const { favEvents, user } = useSelector((state) => state?.user);
 	const unformattedEventData = useLocalSearchParams()?.eventData;
 	const eventData = JSON.parse(unformattedEventData);
 	const colors = useThemeColors();
@@ -26,6 +26,18 @@ const EventDetails = () => {
 	useEffect(() => {
 		setisFavoriteEvent(findEventInFavorites ? true : false);
 	}, [findEventInFavorites, favEvents]);
+	const addViewForEventFun = async () => {
+		try {
+			await addViewToEventApi(eventData?.id);
+		} catch (error) {
+			console.log("eror adding view on post", error);
+		}
+	};
+	useEffect(() => {
+		if (user && user?.email) {
+			addViewForEventFun();
+		}
+	}, []);
 
 	const styles = StyleSheet.create({
 		mainContainer: {
