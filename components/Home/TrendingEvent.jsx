@@ -152,6 +152,7 @@ Once installed, open the app and search for “${name}” to find this event ins
 			fontSize: 9,
 			fontWeight: "600",
 			color: colors.profileItemsTxtColor,
+			flexShrink: 1,
 		},
 		addressTxtLineHeight: {
 			fontSize: 9,
@@ -281,7 +282,12 @@ Once installed, open the app and search for “${name}” to find this event ins
 					<Text style={styles.addressTxt}>{date ?? 0}</Text>
 					<View style={styles.inLineContent}>
 						<Icons.SendIcon />
-						<Text style={styles.addressTxt}>{location ?? ""}</Text>
+						<Text
+							numberOfLines={2}
+							ellipsizeMode="tail"
+							style={styles.addressTxt}>
+							{location ?? ""}
+						</Text>
 					</View>
 				</View>
 				<View style={styles.secondChild}>
@@ -301,24 +307,6 @@ Once installed, open the app and search for “${name}” to find this event ins
 							<Text style={styles.addressTxt}></Text>
 						</View>
 					)}
-					{/* {genralPrice ? (
-						<View style={styles.inLineContent}>
-							<Text style={styles.generalTxt}>{genralPrice ?? 0}/GA</Text>
-						</View>
-					) : (
-						<View style={styles.inLineContent}>
-							<Text style={styles.addressTxt}></Text>
-						</View>
-					)}
-					{vipPrice ? (
-						<View style={styles.inLineContent}>
-							<Text style={styles.vipTxt}>{vipPrice ?? 0}/VIP</Text>
-						</View>
-					) : (
-						<View style={styles.inLineContent}>
-							<Text style={styles.addressTxt}></Text>
-						</View>
-					)} */}
 				</View>
 			</View>
 		</RenderComp>
