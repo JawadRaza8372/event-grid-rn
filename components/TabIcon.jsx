@@ -1,26 +1,26 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Dimensions, StyleSheet, View } from "react-native";
 
-const TabIcon = ({ focused, Icon, totalItems }) => {
+const TabIcon = ({ focused, Icon, totalItems, tabHeight }) => {
 	const colors = useThemeColors();
-
+	console.log("check tab heigh", tabHeight);
 	const styles = StyleSheet.create({
 		defaultTab: {
 			justifyContent: "flex-start",
 			alignItems: "center",
 			width: Dimensions.get("screen").width / totalItems,
-			height: 70,
+			height: tabHeight ?? 60,
 			gap: 5,
 			zIndex: 3,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
 			backgroundColor: colors.botmTab,
+			marginBottom: -10,
 		},
 		normalView: {
 			height: 56,
 			width: 56,
-			borderRadius: 40,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
@@ -29,6 +29,8 @@ const TabIcon = ({ focused, Icon, totalItems }) => {
 		activeView: {
 			backgroundColor: colors.blackColor,
 			shadowColor: colors.blackColor,
+			borderRadius: tabHeight ? tabHeight - 10 : 40,
+
 			shadowOffset: {
 				width: 0,
 				height: 2,

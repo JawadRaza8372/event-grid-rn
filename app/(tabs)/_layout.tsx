@@ -1,93 +1,15 @@
 // app/(tabs)/_layout.jsx
-import { useThemeColors } from "@/hooks/useThemeColors";
-import { Tabs } from "expo-router";
-import { StyleSheet } from "react-native";
 import FavoriteIcon from "../../assets/bottomIcons/FavoriteIcon";
 import HomeIcon from "../../assets/bottomIcons/HomeIcon";
 import NotificationIcon from "../../assets/bottomIcons/NotificationIcon";
 import ProfileIcon from "../../assets/bottomIcons/ProfileIcon";
-import TabIcon from "../../components/TabIcon";
+import TabElements from "../../components/TabElements";
 export default function TabLayout() {
-	const colors = useThemeColors();
-	const totalItems = 4;
-	const styles = StyleSheet.create({
-		tabBarStyle: {
-			backgroundColor: colors.botmTab,
-			height: 60,
-			// display: "flex",
-			// alignItems: "center",
-			// justifyContent: "center",
-			// flexDirection: "row",
-			shadowColor: colors.botmTabShadow,
-			shadowOffset: {
-				width: 0,
-				height: 4,
-			},
-			shadowOpacity: 0.32,
-			shadowRadius: 5.46,
-			elevation: 9,
-		},
-	});
-	return (
-		<Tabs
-			screenOptions={{
-				headerShown: false,
-				tabBarShowLabel: false,
-				tabBarStyle: styles.tabBarStyle,
-				tabBarHideOnKeyboard: true,
-			}}>
-			<Tabs.Screen
-				name={"index"}
-				options={{
-					title: "index",
-					tabBarIcon: ({ focused }) => (
-						<TabIcon
-							totalItems={totalItems}
-							focused={focused}
-							Icon={HomeIcon}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name={"fav-event"}
-				options={{
-					title: "fav-event",
-					tabBarIcon: ({ focused }) => (
-						<TabIcon
-							totalItems={totalItems}
-							focused={focused}
-							Icon={FavoriteIcon}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name={"notification"}
-				options={{
-					title: "notification",
-					tabBarIcon: ({ focused }) => (
-						<TabIcon
-							totalItems={totalItems}
-							focused={focused}
-							Icon={NotificationIcon}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name={"profile"}
-				options={{
-					title: "profile",
-					tabBarIcon: ({ focused }) => (
-						<TabIcon
-							totalItems={totalItems}
-							focused={focused}
-							Icon={ProfileIcon}
-						/>
-					),
-				}}
-			/>
-		</Tabs>
-	);
+	const currentUserRoutes = [
+		{ name: "index", title: "index", icon: HomeIcon },
+		{ name: "fav-event", title: "fav-event", icon: FavoriteIcon },
+		{ name: "notification", title: "notification", icon: NotificationIcon },
+		{ name: "profile", title: "profile", icon: ProfileIcon },
+	];
+	return <TabElements routes={currentUserRoutes} />;
 }

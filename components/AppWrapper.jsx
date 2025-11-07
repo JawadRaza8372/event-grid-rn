@@ -267,7 +267,7 @@ const AppWrapper = () => {
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView
-				edges={["top", "bottom"]}
+				edges={["top"]}
 				style={{ flex: 1, backgroundColor: colors.mainBgColor }}>
 				<StatusBar
 					backgroundColor={colors.mainBgColor}
