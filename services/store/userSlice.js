@@ -22,6 +22,7 @@ const initialState = {
 	},
 	organizerEvents: [],
 	userNotifications: [],
+	organizerInvites: [],
 };
 
 export const userSlice = createSlice({
@@ -54,6 +55,7 @@ export const userSlice = createSlice({
 			};
 			state.organizerEvents = [];
 			state.userNotifications = [];
+			state.organizerInvites = [];
 		},
 		setResetPasswordToken: (state, action) => {
 			state.resetPasswordToken = action.payload.resetPasswordToken;
@@ -61,6 +63,9 @@ export const userSlice = createSlice({
 
 		setBillPayments: (state, action) => {
 			state.billPayments = action.payload.billPayments;
+		},
+		setOrganizerInvites: (state, action) => {
+			state.organizerInvites = action.payload.organizerInvites;
 		},
 		setFavEvents: (state, action) => {
 			state.favEvents = action.payload.favEvents;
@@ -128,6 +133,7 @@ export const {
 	setOrganizerStats,
 	setTicketHistory,
 	setUserNotifications,
+	setOrganizerInvites,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -170,7 +170,7 @@ const Ticket = () => {
 								btnWidth={"49%"}
 								isDisabled={!ticketInfo?.isCurrrentUserCreator}
 								btnTitle="Mark as Used"
-								bgColor={colors.redColor}
+								bgColor={colors.greenTxt}
 								onPressFun={markTicketAsUsedFun}
 							/>
 						</View>

@@ -54,8 +54,8 @@ const UpdateEvent = () => {
 	const fetchEventWithIdFun = async () => {
 		try {
 			setisLoading(true);
-			const result = await getEventByIdApi(eventId);
-			console.log("cghec", result?.promoCodes);
+			const allResult = await getEventByIdApi(eventId);
+			const result = allResult?.event;
 			setformData({
 				bannerImage: result?.bannerImage,
 				galleryImage: result?.galleryImages,
@@ -217,7 +217,7 @@ const UpdateEvent = () => {
 			fontSize: 13,
 			fontWeight: "400",
 			color: colors.dateTxt,
-			marginLeft: 45,
+			marginLeft: 55,
 			marginTop: -7,
 		},
 		dataContainer: {

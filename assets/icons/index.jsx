@@ -19,6 +19,7 @@ import HeartEmptyWhite from "./heart-empty-white.svg";
 import HeartEmpty from "./heart-empty.svg";
 import HeartFillWhite from "./heart-filled-white.svg";
 import HeartFill from "./heart-filled.svg";
+import Invite from "./invitation.svg";
 import PinFat from "./location-fat.svg";
 import Logout from "./logout.svg";
 import MinusIcon from "./minus-icon.svg";
@@ -39,6 +40,7 @@ import ShareDark from "./u_share-alt-dark.svg";
 import Share from "./u_share-alt.svg";
 
 export const Icons = {
+	Invite,
 	ShareDark,
 	Calendar,
 	Filter,

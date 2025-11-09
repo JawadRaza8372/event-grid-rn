@@ -2,6 +2,7 @@ import {
 	setFavEvents,
 	setHomeEvents,
 	setOrganizerEvents,
+	setOrganizerInvites,
 	setOrganizerStats,
 	setTicketHistory,
 	setTokens,
@@ -17,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
 	decodeUserId,
+	getEventStaffInvitationsApi,
 	getOrganizerStatsApi,
 	getUserFavoriteApi,
 	getUserHomeEventApi,
@@ -30,6 +32,7 @@ import {
 	initiateSocket,
 	notificationUpdated,
 	organizerEventsUpdated,
+	organizerInvitesUpdated,
 	userFavoriteEventsUpdated,
 	userProfileUpdated,
 	userTicketsUpdated,
@@ -63,17 +66,21 @@ const AppWrapper = () => {
 	const fetchAllData = useCallback(async () => {
 		try {
 			if (user?.role === "organizer") {
-				console.log("isorganizer");
-				const [organizerStats, userNotification] = await Promise.all([
-					getOrganizerStatsApi().catch((err) => {
-						console.error("Error in getOrganizerStats:", err);
-						return null;
-					}),
-					getUserNotificationApi().catch((err) => {
-						console.error("Error in getUserTicketHistoryApi:", err);
-						return null;
-					}),
-				]);
+				const [organizerStats, userNotification, organizerInvites] =
+					await Promise.all([
+						getOrganizerStatsApi().catch((err) => {
+							console.error("Error in getOrganizerStats:", err);
+							return null;
+						}),
+						getUserNotificationApi().catch((err) => {
+							console.error("Error in getUserTicketHistoryApi:", err);
+							return null;
+						}),
+						getEventStaffInvitationsApi().catch((err) => {
+							console.error("Error in getEventStaffInvitationsApi:", err);
+							return null;
+						}),
+					]);
 				dispatch(
 					setOrganizerStats({
 						organizerStats: {
@@ -92,6 +99,7 @@ const AppWrapper = () => {
 						userNotifications: userNotification?.notifications,
 					})
 				);
+				dispatch(setOrganizerInvites({ organizerInvites: organizerInvites }));
 			} else {
 				const [homeEvent, favEvent, ticketHistory, userNotification] =
 					await Promise.all([
@@ -202,6 +210,25 @@ const AppWrapper = () => {
 					})
 					.catch((err) => {
 						console.error("Error in getUserHomeEventApi in sockets:", err);
+					});
+			}
+		});
+		organizerInvitesUpdated(async (userId) => {
+			if (userId === currentUserId && user?.role === "organizer") {
+				getEventStaffInvitationsApi()
+					.then((dat) => {
+						dispatch(
+							setOrganizerInvites({
+								organizerInvites: dat,
+							})
+						);
+					})
+					.catch((err) => {
+						console.error(
+							"Error in getEventStaffInvitationsApi IN SOCKETS:",
+							err
+						);
+						return null;
 					});
 			}
 		});

@@ -183,7 +183,10 @@ export const getNotificationDescription = (title) => {
 			description =
 				"Your ticket is now invalid — this could be due to event completion or cancellation.";
 			break;
-
+		case "Staff Invitation Expired":
+			description =
+				"The invitation to join the event as staff has expired. Please contact the organizer if you believe this is an error.";
+			break;
 		default:
 			description = "You have a new notification.";
 			break;
@@ -191,7 +194,6 @@ export const getNotificationDescription = (title) => {
 
 	return description;
 };
-
 export function formatTimestampWithMoment(timestamp) {
 	const now = moment();
 	const date = moment(timestamp);
@@ -405,6 +407,46 @@ export const publishDraftEventApi = async (eventId) => {
 		);
 	}
 };
+export const acceptStaffInviteEventApi = async (eventId) => {
+	try {
+		const result = await base.put(
+			`event/respond-invitation/${eventId}`,
+			{
+				response: "accepted",
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
+export const rejectStaffInviteEventApi = async (eventId) => {
+	try {
+		const result = await base.put(
+			`event/respond-invitation/${eventId}`,
+			{
+				response: "rejected",
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
 export const deleteDraftEventApi = async (eventId) => {
 	try {
 		const result = await base.delete(`event/delete-draft/${eventId}`, {
@@ -499,6 +541,27 @@ export const createPaymentIntentApi = async (
 		);
 	}
 };
+export const inviteStaffToEventApi = async (eventId, email) => {
+	try {
+		const result = await base.post(
+			`event/invite-staff/:${eventId}`,
+			{
+				eventId,
+				email: email,
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
 export const getUserHomeEventApi = async () => {
 	//highlights
 	try {
@@ -546,6 +609,27 @@ export const markTicketAsUsedApi = async (eventId, ticketId) => {
 	try {
 		const result = await base.put(
 			`ticket/mark-ticket-used`,
+			{
+				eventId,
+				ticketId,
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
+export const markTicketAsInvalidApi = async (eventId, ticketId) => {
+	try {
+		const result = await base.put(
+			`ticket/mark-ticket-invalid`,
 			{
 				eventId,
 				ticketId,
@@ -713,7 +797,21 @@ export const getEventByIdApi = async (eventId) => {
 		const result = await base.get(`event/${eventId}`, {
 			isPublic: false,
 		});
-		return result?.data?.event;
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
+export const getEventStaffInvitationsApi = async () => {
+	try {
+		const result = await base.get(`event/invitations`, {
+			isPublic: false,
+		});
+		return result?.data?.invitations;
 	} catch (error) {
 		throw parseDatabaseErrorMessage(
 			error?.response?.data?.message

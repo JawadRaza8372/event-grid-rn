@@ -61,14 +61,14 @@ const TabElements = ({ routes }) => {
 				tabBarStyle: styles.tabBarStyle,
 				tabBarHideOnKeyboard: true,
 			}}>
-			{routes?.map((dat) => (
+			{routes?.map((dat, index) => (
 				<Tabs.Screen
 					name={dat?.name}
 					options={{
 						title: dat?.title ?? dat?.name,
 						tabBarButton: (props) => (
 							<CustomTabButton
-								key={dat?.name}
+								key={index + dat?.name}
 								icon={dat?.icon}
 								tabHeight={tabHeight}
 								totalItems={totalItems}

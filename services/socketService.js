@@ -45,6 +45,14 @@ export const userFavoriteEventsUpdated = (callback) => {
 		});
 	}
 };
+export const organizerInvitesUpdated = (callback) => {
+	if (socket) {
+		socket.on("organizerInvitesUpdated", (message) => {
+			callback(message);
+			console.log("organizer invites updated", message);
+		});
+	}
+};
 export const organizerEventsUpdated = (callback) => {
 	if (socket) {
 		socket.on("organizerEventsUpdated", (message) => {

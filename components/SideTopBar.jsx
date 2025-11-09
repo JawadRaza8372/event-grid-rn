@@ -24,7 +24,7 @@ const SideTopBar = ({ title, isTailIcon, hideBackBtn }) => {
 		},
 		backBtn: {
 			height: 44,
-			width: 44,
+			width: 54,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",

@@ -8,28 +8,48 @@ import {
 	Text,
 	View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import { Icons } from "../assets/icons";
 import PromoSelectorItem from "../components/center-tab/PromoSelectorItem";
 import TicketSelectorItem from "../components/center-tab/TicketSelectorItem";
 import EmptyComponent from "../components/EmptyComponent";
+import EventAttendeComp from "../components/EventAttendeComp";
 import EventDetailOverView from "../components/EventDetailOverView";
 import EventTopImageScoll from "../components/EventTopImageScoll";
 import LoadingView from "../components/LoadingView";
 import MapContainer from "../components/MapContainer";
+import TabContainer from "../components/TabContainer";
+import YesNoModal from "../components/YesNoModal";
 import { useThemeColors } from "../hooks/useThemeColors";
-import { getEventByIdApi } from "../services/endpoints";
+import {
+	getEventByIdApi,
+	markTicketAsInvalidApi,
+	markTicketAsUsedApi,
+} from "../services/endpoints";
 const EventDetails = () => {
 	const eventId = useLocalSearchParams()?.eventId;
 	const [eventData, seteventData] = useState(null);
 	const [isLoading, setisLoading] = useState(false);
+	const [eventAnalytics, seteventAnalytics] = useState(null);
+	const [eventAttendees, seteventAttendees] = useState(null);
+	const [selectedInfoType, setSelectedInfoType] = useState("General");
 	const colors = useThemeColors();
-
+	const [openDeleteModal, setopenDeleteModal] = useState(null);
+	const [openUsedModal, setopenUsedModal] = useState(null);
+	const removeOpenDeleteModal = () => {
+		setopenDeleteModal(null);
+	};
+	const removeOpenUsedModal = () => {
+		setopenUsedModal(null);
+	};
 	const fetchEventWithIdFun = async () => {
 		try {
 			setisLoading(true);
 			const result = await getEventByIdApi(eventId);
-			console.log("cghec", result);
-			seteventData(result);
+			console.log("here is result", result);
+			seteventData(result?.event);
+			seteventAnalytics(result?.analytics);
+			seteventAttendees(result?.attendees);
 			setisLoading(false);
 		} catch (error) {
 			setisLoading(false);
@@ -41,7 +61,63 @@ const EventDetails = () => {
 			fetchEventWithIdFun();
 		}
 	}, [eventId]);
+	const markSelectedTicketAsUsed = async () => {
+		try {
+			if (openUsedModal === null) {
+				Toast.show({
+					type: "error",
+					text1: "Invalid Ticket selected.",
+				});
+				return;
+			}
+			setisLoading(true);
+			await markTicketAsUsedApi(eventId, openUsedModal);
+			await fetchEventWithIdFun();
+			setisLoading(false);
+			removeOpenUsedModal();
 
+			Toast.show({
+				type: "success",
+				text1: "Ticket marked used successfully.",
+			});
+		} catch (error) {
+			console.log("marking ticket used error: ", error);
+			setisLoading(false);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Marking ticket used failed.",
+			});
+		}
+	};
+	const markSelectedTicketAsInvalid = async () => {
+		try {
+			if (openDeleteModal === null) {
+				Toast.show({
+					type: "error",
+					text1: "Invalid Ticket selected.",
+				});
+				return;
+			}
+			setisLoading(true);
+			await markTicketAsInvalidApi(eventId, openDeleteModal);
+			await fetchEventWithIdFun();
+			setisLoading(false);
+			removeOpenDeleteModal();
+
+			Toast.show({
+				type: "success",
+				text1: "Ticket marked invalid successfully.",
+			});
+		} catch (error) {
+			console.log("marking ticket invalid error: ", error);
+			setisLoading(false);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Marking ticket invalid failed.",
+			});
+		}
+	};
+	console.log(eventAnalytics);
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",
@@ -168,6 +244,10 @@ const EventDetails = () => {
 			height: 1,
 			marginVertical: 5,
 		},
+		tabContainerView: {
+			width: "100%",
+			marginVertical: 20,
+		},
 	});
 
 	return (
@@ -182,67 +262,114 @@ const EventDetails = () => {
 								{eventData?.category ?? ""}
 							</Text>
 						</View>
-						<View style={styles.borderedView} />
-						<EventDetailOverView
-							date={eventData?.date}
-							location={eventData?.location?.name}
-							locationDesc={eventData?.location?.address}
-							priceRange={eventData?.ticketOverview?.priceRange}
-							time={eventData?.time}
-						/>
-						<View style={styles.borderedView} />
-						<Text style={styles.headingTxt}>Ticket Tiers</Text>
-						<FlatList
-							ListHeaderComponent={<View style={styles.sepratorView} />}
-							data={eventData?.ticketTiers}
-							ItemSeparatorComponent={() => (
-								<View style={styles.sepratorView} />
-							)}
-							ListEmptyComponent={<EmptyComponent title={"No Ticket Tiers"} />}
-							keyExtractor={(item, index) => item?._id}
-							renderItem={({ item }) => (
-								<TicketSelectorItem
-									capacity={item.capacity}
-									name={item.name}
-									price={item.price}
-								/>
-							)}
-						/>
-						<View style={styles.borderedView} />
-						<Text style={styles.headingTxt}>Promo Codes</Text>
-						<FlatList
-							ListHeaderComponent={<View style={styles.sepratorView} />}
-							ItemSeparatorComponent={() => (
-								<View style={styles.sepratorView} />
-							)}
-							ListEmptyComponent={<EmptyComponent title={"No Promo Codes"} />}
-							data={eventData?.promoCodes}
-							keyExtractor={(item, index) => index.toString()}
-							renderItem={({ item }) => (
-								<PromoSelectorItem
-									type={item?.discountType}
-									value={item?.discountValue}
-									code={item?.code}
-								/>
-							)}
-						/>
-						<View style={styles.borderedView} />
-						<Text style={styles.headingTxt}>About Event</Text>
-						<Text style={styles.eventDescriptionTxt}>
-							{eventData?.description ?? ""}
-						</Text>
-						<Text style={styles.headingTxt}>Location</Text>
-						<View style={styles.locationView}>
-							<Icons.PinFat />
-							<Text style={styles.locationText}>
-								{eventData?.location?.address}
-							</Text>
+						<View style={styles.tabContainerView}>
+							<TabContainer
+								borderColor={colors.dateBorder}
+								inActiveBg={colors.bellBorder}
+								inActiveTxtColor={colors.blackColor}
+								value={selectedInfoType}
+								onchange={(text) => setSelectedInfoType(text)}
+								options={["General", "Analytics", "Attendees"]}
+							/>
 						</View>
-						<MapContainer
-							isNotBtn={true}
-							location={eventData?.location?.address}
-							coordinates={eventData?.location?.coordinates}
-						/>
+						{selectedInfoType === "General" ? (
+							<>
+								<View style={styles.borderedView} />
+								<EventDetailOverView
+									date={eventData?.date}
+									location={eventData?.location?.name}
+									locationDesc={eventData?.location?.address}
+									priceRange={eventData?.ticketOverview?.priceRange}
+									time={eventData?.time}
+								/>
+								<View style={styles.borderedView} />
+								<Text style={styles.headingTxt}>Ticket Tiers</Text>
+								<FlatList
+									ListHeaderComponent={<View style={styles.sepratorView} />}
+									data={eventData?.ticketTiers}
+									ItemSeparatorComponent={() => (
+										<View style={styles.sepratorView} />
+									)}
+									ListEmptyComponent={
+										<EmptyComponent title={"No Ticket Tiers"} />
+									}
+									keyExtractor={(item, index) => item?._id}
+									renderItem={({ item }) => (
+										<TicketSelectorItem
+											capacity={item.capacity}
+											name={item.name}
+											price={item.price}
+										/>
+									)}
+								/>
+								<View style={styles.borderedView} />
+								<Text style={styles.headingTxt}>Promo Codes</Text>
+								<FlatList
+									ListHeaderComponent={<View style={styles.sepratorView} />}
+									ItemSeparatorComponent={() => (
+										<View style={styles.sepratorView} />
+									)}
+									ListEmptyComponent={
+										<EmptyComponent title={"No Promo Codes"} />
+									}
+									data={eventData?.promoCodes}
+									keyExtractor={(item, index) => index.toString()}
+									renderItem={({ item }) => (
+										<PromoSelectorItem
+											type={item?.discountType}
+											value={item?.discountValue}
+											code={item?.code}
+										/>
+									)}
+								/>
+								<View style={styles.borderedView} />
+								<Text style={styles.headingTxt}>About Event</Text>
+								<Text style={styles.eventDescriptionTxt}>
+									{eventData?.description ?? ""}
+								</Text>
+								<Text style={styles.headingTxt}>Location</Text>
+								<View style={styles.locationView}>
+									<Icons.PinFat />
+									<Text style={styles.locationText}>
+										{eventData?.location?.address}
+									</Text>
+								</View>
+								<MapContainer
+									isNotBtn={true}
+									location={eventData?.location?.address}
+									coordinates={eventData?.location?.coordinates}
+								/>
+							</>
+						) : selectedInfoType === "Analytics" ? (
+							<></>
+						) : selectedInfoType === "Attendees" ? (
+							<>
+								<FlatList
+									data={eventAttendees}
+									ItemSeparatorComponent={() => (
+										<View style={styles.sepratorView} />
+									)}
+									keyExtractor={(item, index) => item?.ticketId}
+									renderItem={({ item, index }) => (
+										<EventAttendeComp
+											markTicketAsInvalidFun={() =>
+												setopenDeleteModal(item?.ticketId)
+											}
+											markTicketAsUsedFun={() =>
+												setopenUsedModal(item?.ticketId)
+											}
+											key={item?.ticketId}
+											status={item?.status}
+											email={item?.owner?.email}
+											name={item?.owner?.name}
+											profileImage={item?.owner?.profileImage}
+											quantity={item?.quantity}
+											ticketType={item?.ticketTier}
+										/>
+									)}
+								/>
+							</>
+						) : null}
 
 						<View style={styles.botomPadding} />
 					</View>
@@ -253,7 +380,26 @@ const EventDetails = () => {
 					title={"No Event Data"}
 				/>
 			) : null}
+
 			<LoadingView loading={isLoading} />
+			<YesNoModal
+				title={"Mark Ticket invalid"}
+				description={
+					"Are you sure you want to mark this ticket as invalid? After that it cannot be used for entry."
+				}
+				showModal={openDeleteModal ? true : false}
+				hideModal={removeOpenDeleteModal}
+				onYesFun={markSelectedTicketAsInvalid}
+				onNoFun={removeOpenDeleteModal}
+			/>
+			<YesNoModal
+				title={"Mark Ticket used"}
+				description={"Are you sure you want to mark this ticket as used?"}
+				showModal={openUsedModal ? true : false}
+				hideModal={removeOpenUsedModal}
+				onYesFun={markSelectedTicketAsUsed}
+				onNoFun={removeOpenUsedModal}
+			/>
 		</View>
 	);
 };

@@ -70,6 +70,16 @@ const Profile = () => {
 			onClickFun: () => router.push({ pathname: "/organizer-events" }),
 		},
 		{
+			title: "My Invites as Staff",
+			icon: (
+				<Icons.Invite
+					width={22}
+					height={22}
+				/>
+			),
+			onClickFun: () => router.push({ pathname: "/staff-invites" }),
+		},
+		{
 			title: "Edit profile",
 			icon: <Icons.Edit size={25} />,
 			onClickFun: () => router.push({ pathname: "/edit-profile-organizer" }),
