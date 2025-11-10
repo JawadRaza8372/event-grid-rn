@@ -118,7 +118,7 @@ const Login = () => {
 			justifyContent: "center",
 			flexDirection: "row",
 			gap: 3,
-			marginTop: Dimensions.get("screen").height / 4.7,
+			marginTop: Dimensions.get("screen").height / 5,
 		},
 	});
 	const customLoginFun = async () => {

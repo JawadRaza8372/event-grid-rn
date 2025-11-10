@@ -539,7 +539,6 @@ const EventDetails = () => {
 											email={item?.email}
 											name={item?.username}
 											profileImage={item?.profileImage}
-											onDeleteFun={() => console.log("hy")}
 										/>
 									)}
 								/>

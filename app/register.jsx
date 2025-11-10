@@ -125,7 +125,7 @@ const Register = () => {
 			justifyContent: "center",
 			flexDirection: "row",
 			gap: 3,
-			marginTop: Dimensions.get("screen").height / 13,
+			marginTop: Dimensions.get("screen").height / 22,
 		},
 		seprator: {
 			width: "100%",

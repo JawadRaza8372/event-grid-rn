@@ -1,15 +1,8 @@
-import {
-	Dimensions,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from "react-native";
-import { Icons } from "../assets/icons";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { useThemeColors } from "../hooks/useThemeColors";
 import UserAvatar from "./UserAvatar";
 
-const EventStaffComp = ({ name, email, profileImage, status, onDeleteFun }) => {
+const EventStaffComp = ({ name, email, profileImage, status }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -141,18 +134,6 @@ const EventStaffComp = ({ name, email, profileImage, status, onDeleteFun }) => {
 						Status: <Text style={styles.boldText}>{status}</Text>
 					</Text>
 				</View>
-				{status === "pending" ? (
-					<TouchableOpacity
-						style={styles.deleteBox}
-						onPress={onDeleteFun}>
-						<View style={styles.deleteIconBox}>
-							<Icons.DeleteRed
-								width={20}
-								height={20}
-							/>
-						</View>
-					</TouchableOpacity>
-				) : null}
 			</View>
 		</View>
 	);
