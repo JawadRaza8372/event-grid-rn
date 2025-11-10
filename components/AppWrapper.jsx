@@ -45,6 +45,7 @@ const AppWrapper = () => {
 	const { user, tokens } = useSelector((state) => state?.user);
 	const currentUserId = decodeUserId(tokens?.accessToken);
 	const colors = useThemeColors();
+	console.log("curren user id", currentUserId, "role", user?.role);
 	useEffect(() => {
 		const lockOrientation = async () => {
 			try {
@@ -197,7 +198,7 @@ const AppWrapper = () => {
 			}
 		});
 		homeEventsUpdated(async () => {
-			if (userId === currentUserId && user?.role === "user") {
+			if (user?.role === "user") {
 				await getUserHomeEventApi()
 					.then((dat) => {
 						dispatch(

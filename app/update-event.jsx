@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
@@ -17,6 +17,7 @@ import TicketOverview from "../components/create-event/TicketOverview";
 import GalleryUpload from "../components/GalleryUpload";
 import LoadingView from "../components/LoadingView";
 import SideTopBar from "../components/SideTopBar";
+import SuccessModal from "../components/SuccessModal";
 import { categoriesArry } from "../constants/rawData";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
@@ -29,9 +30,11 @@ import {
 const UpdateEvent = () => {
 	const { eventId } = useLocalSearchParams();
 	const totalSteps = 2;
+	const router = useRouter();
 	const [currentStep, setcurrentStep] = useState(0);
 	const [isLoading, setisLoading] = useState(false);
 	const [isScroll, setisScroll] = useState(false);
+	const [openSuccessModal, setopenSuccessModal] = useState(false);
 	const [formData, setformData] = useState({
 		bannerImage: "",
 		galleryImage: [],
@@ -51,6 +54,10 @@ const UpdateEvent = () => {
 		ticketTiers: [],
 		promoCodes: [],
 	});
+	const switchOpenModal = () => {
+		setopenSuccessModal(!openSuccessModal);
+	};
+
 	const fetchEventWithIdFun = async () => {
 		try {
 			setisLoading(true);
@@ -155,10 +162,7 @@ const UpdateEvent = () => {
 			setisLoading(true);
 			await mainSubmitFun();
 			setisLoading(false);
-			Toast.show({
-				type: "success",
-				text1: "Event Updated.",
-			});
+			switchOpenModal();
 		} catch (error) {
 			setisLoading(false);
 			console.log("show update error", error);
@@ -475,6 +479,15 @@ const UpdateEvent = () => {
 				/>
 				<View style={styles.bottomPadding} />
 				<LoadingView loading={isLoading} />
+				<SuccessModal
+					showModal={openSuccessModal}
+					hideModal={() => {
+						switchOpenModal();
+						router.push({ pathname: "/(tabs-organizer)" });
+					}}
+					title={"Congratulations!!"}
+					description={`Event has been updated.`}
+				/>
 			</>
 		</AuthLayout>
 	);

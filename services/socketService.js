@@ -5,7 +5,6 @@ import { mainUrl } from "./apiUrl";
 const SOCKET_URL = `${mainUrl}`;
 let socket;
 let reconnectAttempts = 0;
-let activeRooms = [];
 export const initiateSocket = () => {
 	if (!socket) {
 		socket = io(SOCKET_URL, {
@@ -18,7 +17,6 @@ export const initiateSocket = () => {
 
 		socket.on("connect", () => {
 			console.log("Connected to socket server");
-			reconnectRooms();
 		});
 		socket.on("connect_error", (err) => {
 			reconnectAttempts++;
@@ -88,6 +86,5 @@ export const notificationUpdated = (callback) => {
 export const disconnectSocket = () => {
 	if (socket) {
 		socket.disconnect();
-		activeRooms = [];
 	}
 };
