@@ -15,7 +15,6 @@ const TabIcon = ({ focused, Icon, totalItems, tabHeight }) => {
 			alignItems: "center",
 			justifyContent: "center",
 			backgroundColor: colors.botmTab,
-			marginBottom: -10,
 		},
 		normalView: {
 			height: 56,
