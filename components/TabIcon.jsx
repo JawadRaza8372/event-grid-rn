@@ -3,7 +3,6 @@ import { Dimensions, StyleSheet, View } from "react-native";
 
 const TabIcon = ({ focused, Icon, totalItems, tabHeight }) => {
 	const colors = useThemeColors();
-	console.log("check tab heigh", tabHeight);
 	const styles = StyleSheet.create({
 		defaultTab: {
 			justifyContent: "flex-start",

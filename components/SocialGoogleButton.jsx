@@ -34,7 +34,6 @@ const SocialGoogleButton = () => {
 
 				// 3. Parse user object
 				const userObj = JSON.parse(queryParams?.user);
-				console.log("google Login success:", userObj);
 				const { tokens, ...rest } = userObj;
 				dispatch(setUser({ user: rest }));
 				console.log("setting tokens in social login");

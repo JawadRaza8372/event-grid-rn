@@ -37,7 +37,7 @@ const TabContainer = ({
 			backgroundColor: colors.mainBgColor,
 		},
 		optionText: {
-			fontSize: 14,
+			fontSize: 12,
 			fontWeight: "500",
 			color: inActiveTxtColor ?? colors.recoverySubTxtColor,
 		},

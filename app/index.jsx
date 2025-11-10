@@ -29,8 +29,6 @@ const Splash = () => {
 		if (accessToken && refreshToken) {
 			await getUserProfileApi()
 				.then(async (result) => {
-					console.log("user success:", result?.user);
-
 					const { tokens, ...rest } = result?.user;
 					dispatch(setUser({ user: rest }));
 					console.log("setting tokens in splash");

@@ -542,13 +542,11 @@ export const createPaymentIntentApi = async (
 	}
 };
 export const inviteStaffToEventApi = async (eventId, email) => {
+	console.log("enterd data", eventId, email);
 	try {
 		const result = await base.post(
-			`event/invite-staff/:${eventId}`,
-			{
-				eventId,
-				email: email,
-			},
+			`event/invite-staff/${eventId}`,
+			{ email: email },
 			{
 				isPublic: false,
 			}

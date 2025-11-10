@@ -8,7 +8,7 @@ import {
 
 const productionLink = "https://event-grid.91.108.126.5.sslip.io/";
 const developmentLink = "http://192.168.1.5:4000/";
-const isProduction = true;
+const isProduction = false;
 const mainUrl = isProduction ? productionLink : developmentLink;
 
 // ⚙️ Axios instance
@@ -32,7 +32,7 @@ base.interceptors.request.use(
 		if (config.isPublic) return config;
 
 		const { accessToken, refreshToken } = await getUserTokenfromStorage();
-		console.log("🔑 Access token found:", accessToken, "refresh");
+		console.log("🔑 Access token found:");
 
 		if (accessToken) {
 			console.log("setting tokens in top interceptor");

@@ -166,7 +166,7 @@ const AppWrapper = () => {
 	useEffect(() => {
 		notificationUpdated(async (userId) => {
 			if (userId === currentUserId) {
-				getUserNotificationApi()
+				await getUserNotificationApi()
 					.then((dat) => {
 						dispatch(
 							setUserNotifications({
@@ -181,8 +181,8 @@ const AppWrapper = () => {
 			}
 		});
 		userTicketsUpdated(async (userId) => {
-			if ((userId === currentUserId && user?.role) === "user") {
-				getUserTicketHistoryApi()
+			if (userId === currentUserId && user?.role === "user") {
+				await getUserTicketHistoryApi()
 					.then((dat) => {
 						dispatch(
 							setTicketHistory({
@@ -197,7 +197,7 @@ const AppWrapper = () => {
 			}
 		});
 		homeEventsUpdated(async () => {
-			if (userId === currentUserId) {
+			if (userId === currentUserId && user?.role === "user") {
 				await getUserHomeEventApi()
 					.then((dat) => {
 						dispatch(
@@ -215,8 +215,9 @@ const AppWrapper = () => {
 		});
 		organizerInvitesUpdated(async (userId) => {
 			if (userId === currentUserId && user?.role === "organizer") {
-				getEventStaffInvitationsApi()
+				await getEventStaffInvitationsApi()
 					.then((dat) => {
+						console.log("checking invites", dat);
 						dispatch(
 							setOrganizerInvites({
 								organizerInvites: dat,
@@ -233,8 +234,11 @@ const AppWrapper = () => {
 			}
 		});
 		organizerEventsUpdated(async (userId) => {
+			console.log(
+				"organixer events from backend updated=====================>"
+			);
 			if (userId === currentUserId && user?.role === "organizer") {
-				getOrganizerStatsApi()
+				await getOrganizerStatsApi()
 					.then((dat) => {
 						dispatch(
 							setOrganizerStats({
@@ -260,7 +264,7 @@ const AppWrapper = () => {
 		});
 		userFavoriteEventsUpdated(async (userId) => {
 			if (userId === currentUserId && user?.role === "user") {
-				getUserFavoriteApi()
+				await getUserFavoriteApi()
 					.then((dat) => {
 						dispatch(setFavEvents({ favEvents: dat?.myFavoriteEvents }));
 					})

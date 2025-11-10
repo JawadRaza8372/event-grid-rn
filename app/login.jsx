@@ -140,7 +140,6 @@ const Login = () => {
 			setisLoading(true);
 			const result = await loginApi(formData.email, formData.password);
 			if (result) {
-				console.log("Login success:", result?.user);
 				const { tokens, ...rest } = result?.user;
 				dispatch(setUser({ user: rest }));
 				console.log("setting tokens in login");

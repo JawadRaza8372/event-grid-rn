@@ -3,7 +3,6 @@ import { Icons } from "../assets/icons";
 import { useThemeColors } from "../hooks/useThemeColors";
 
 const ProfileOption = ({ onPressFun, icon, title }) => {
-	console.log(onPressFun ? "here it " : "");
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		btn: {

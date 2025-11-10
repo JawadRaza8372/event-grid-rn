@@ -43,7 +43,6 @@ const Ticket = () => {
 			setIsLoading(false);
 		}
 	};
-	console.log(ticketInfo);
 	const markTicketAsUsedFun = async () => {
 		if (!ticketInfo?.event?.id || !ticketInfo?.id) {
 			Toast.show({

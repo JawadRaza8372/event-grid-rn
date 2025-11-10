@@ -75,9 +75,9 @@ const MyEventInvite = ({
 			alignItems: "flex-start",
 			justifyContent: "center",
 			flexDirection: "column",
-			marginRight: 5,
-			height: 85,
+			height: "90%",
 			flex: 1,
+			gap: 4,
 		},
 		sideBySideView: {
 			height: "auto",
@@ -195,17 +195,15 @@ const MyEventInvite = ({
 					</Text>
 				</View>
 				{status === "pending" && onRejectFun && onAcceptFun ? (
-					<View style={styles.btnColumns}>
-						<TwoButtons
-							txtSize={10}
-							height={32}
-							firstBg={colors.redColor}
-							firstText={"Reject"}
-							secTxt={"Accept"}
-							onfirstFun={onRejectFun}
-							onSecondFun={onAcceptFun}
-						/>
-					</View>
+					<TwoButtons
+						txtSize={10}
+						height={32}
+						firstBg={colors.redColor}
+						firstText={"Reject"}
+						secTxt={"Accept"}
+						onfirstFun={onRejectFun}
+						onSecondFun={onAcceptFun}
+					/>
 				) : (
 					<Text style={styles.statusText}>
 						{status === "expired"

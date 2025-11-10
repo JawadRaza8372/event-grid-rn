@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useSelector } from "react-redux";
 import CenteredTitleTopBar from "../components/CenteredTitleTopBar";
+import EmptyComponent from "../components/EmptyComponent";
 import LoadingView from "../components/LoadingView";
 import MyEventInvite from "../components/MyEventInvite";
 import YesNoModal from "../components/YesNoModal";
@@ -117,7 +118,7 @@ const StaffInvites = () => {
 								status={item?.status}
 								bannerImage={item?.eventBanner}
 								address={item?.location?.address}
-								date={item?.date}
+								date={item?.startEndDate}
 								title={item?.eventTitle}
 								onRejectFun={() => setopenDeleteModal(item?.eventId)}
 								onAcceptFun={() => setopenPublishModal(item?.eventId)}
@@ -125,9 +126,7 @@ const StaffInvites = () => {
 						);
 					}}
 					ItemSeparatorComponent={() => <View style={styles.sepratorView} />}
-					ListEmptyComponent={
-						<EmptyComponent title={`No ${selectedEventType} events`} />
-					}
+					ListEmptyComponent={<EmptyComponent title={`No Invites`} />}
 					ListFooterComponent={<View style={styles.bottomPadding} />}
 				/>
 			</View>
@@ -141,7 +140,7 @@ const StaffInvites = () => {
 				hideModal={removeOpenDeleteModal}
 				onYesFun={rejectEventInviteFun}
 				onNoFun={removeOpenDeleteModal}
-				yesTxt={"Delete"}
+				yesTxt={"Reject"}
 				noTxt={"Cancel"}
 			/>
 			<YesNoModal
@@ -150,7 +149,7 @@ const StaffInvites = () => {
 					"Are you sure you want to accept this invite as staff member?"
 				}
 				showModal={openPublishModal ? true : false}
-				yesTxt={"Publish"}
+				yesTxt={"Accept"}
 				noTxt={"Cancel"}
 				onNoFun={removeOpenPublishModal}
 				hideModal={removeOpenPublishModal}

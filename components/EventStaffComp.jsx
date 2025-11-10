@@ -1,18 +1,15 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+	Dimensions,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
+import { Icons } from "../assets/icons";
 import { useThemeColors } from "../hooks/useThemeColors";
-import TwoButtons from "./TwoButtons";
 import UserAvatar from "./UserAvatar";
 
-const EventAttendeComp = ({
-	name,
-	email,
-	profileImage,
-	markTicketAsInvalidFun,
-	markTicketAsUsedFun,
-	quantity,
-	ticketType,
-	status,
-}) => {
+const EventStaffComp = ({ name, email, profileImage, status, onDeleteFun }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -99,6 +96,28 @@ const EventAttendeComp = ({
 			fontWeight: "700",
 			textTransform: "capitalize",
 		},
+		userInfoCont: {
+			height: "auto",
+			flex: 1,
+			display: "flex",
+			flexDirection: "column",
+			gap: 5,
+		},
+		deleteBox: {
+			justifyContent: "center",
+			alignItems: "center",
+			width: 35,
+		},
+		deleteIconBox: {
+			width: 35,
+			height: 35,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			borderWidth: 1,
+			borderColor: colors.redColor,
+			borderRadius: 8,
+		},
 	});
 
 	return (
@@ -108,35 +127,35 @@ const EventAttendeComp = ({
 					imgUrl={profileImage}
 					size={50}
 				/>
-				<Text
-					numberOfLines={1}
-					ellipsizeMode="tail"
-					style={styles.eventNmaeTxt}>
-					{name ?? email ?? ""}
-				</Text>
+				<View style={styles.userInfoCont}>
+					<Text
+						numberOfLines={1}
+						ellipsizeMode="tail"
+						style={styles.eventNmaeTxt}>
+						{name ?? email ?? ""}
+					</Text>
+					<Text
+						numberOfLines={1}
+						ellipsizeMode="tail"
+						style={styles.statusText}>
+						Status: <Text style={styles.boldText}>{status}</Text>
+					</Text>
+				</View>
+				{status === "pending" ? (
+					<TouchableOpacity
+						style={styles.deleteBox}
+						onPress={onDeleteFun}>
+						<View style={styles.deleteIconBox}>
+							<Icons.DeleteRed
+								width={20}
+								height={20}
+							/>
+						</View>
+					</TouchableOpacity>
+				) : null}
 			</View>
-
-			<Text style={styles.labelTxt}>
-				{quantity} Ticket ({ticketType})
-			</Text>
-			{status === "valid" ? (
-				<TwoButtons
-					txtSize={10}
-					height={32}
-					firstBg={colors.greenTxt}
-					secBg={colors.redColor}
-					firstText={"Mark Used"}
-					secTxt={"Mark Invalid"}
-					onfirstFun={markTicketAsUsedFun}
-					onSecondFun={markTicketAsInvalidFun}
-				/>
-			) : (
-				<Text style={styles.statusText}>
-					Status: <Text style={styles.boldText}>{status}</Text>
-				</Text>
-			)}
 		</View>
 	);
 };
 
-export default EventAttendeComp;
+export default EventStaffComp;

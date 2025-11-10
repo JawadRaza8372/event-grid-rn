@@ -163,7 +163,6 @@ const Register = () => {
 				formData.role
 			);
 			if (result) {
-				console.log("register success:", result);
 				setformData({
 					email: "",
 					name: "",

@@ -10,11 +10,14 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { Icons } from "../assets/icons";
+import AddStaffInputField from "../components/AddStaffInputField";
 import PromoSelectorItem from "../components/center-tab/PromoSelectorItem";
+import TicketAnalyticsComp from "../components/center-tab/TicketAnalyticsComp";
 import TicketSelectorItem from "../components/center-tab/TicketSelectorItem";
 import EmptyComponent from "../components/EmptyComponent";
 import EventAttendeComp from "../components/EventAttendeComp";
 import EventDetailOverView from "../components/EventDetailOverView";
+import EventStaffComp from "../components/EventStaffComp";
 import EventTopImageScoll from "../components/EventTopImageScoll";
 import LoadingView from "../components/LoadingView";
 import MapContainer from "../components/MapContainer";
@@ -23,6 +26,8 @@ import YesNoModal from "../components/YesNoModal";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
 	getEventByIdApi,
+	inviteStaffToEventApi,
+	isValidEmailFun,
 	markTicketAsInvalidApi,
 	markTicketAsUsedApi,
 } from "../services/endpoints";
@@ -32,7 +37,9 @@ const EventDetails = () => {
 	const [isLoading, setisLoading] = useState(false);
 	const [eventAnalytics, seteventAnalytics] = useState(null);
 	const [eventAttendees, seteventAttendees] = useState(null);
+	const [eventStaffMemnbers, seteventStaffMemnbers] = useState([]);
 	const [selectedInfoType, setSelectedInfoType] = useState("General");
+	const [staffEnteredEmail, setstaffEnteredEmail] = useState("");
 	const colors = useThemeColors();
 	const [openDeleteModal, setopenDeleteModal] = useState(null);
 	const [openUsedModal, setopenUsedModal] = useState(null);
@@ -46,10 +53,10 @@ const EventDetails = () => {
 		try {
 			setisLoading(true);
 			const result = await getEventByIdApi(eventId);
-			console.log("here is result", result);
 			seteventData(result?.event);
 			seteventAnalytics(result?.analytics);
 			seteventAttendees(result?.attendees);
+			seteventStaffMemnbers(result?.staffMembers);
 			setisLoading(false);
 		} catch (error) {
 			setisLoading(false);
@@ -117,7 +124,33 @@ const EventDetails = () => {
 			});
 		}
 	};
-	console.log(eventAnalytics);
+	const addStaffMembersFun = async () => {
+		try {
+			if (!isValidEmailFun(staffEnteredEmail)) {
+				Toast.show({
+					type: "error",
+					text1: "Please enter valid email",
+				});
+				return;
+			}
+			setisLoading(true);
+			await inviteStaffToEventApi(eventId, staffEnteredEmail);
+			await fetchEventWithIdFun();
+			setisLoading(false);
+			setstaffEnteredEmail("");
+			Toast.show({
+				type: "success",
+				text1: "Staff member added successfully.",
+			});
+		} catch (error) {
+			console.log("adding staff error: ", error);
+			setisLoading(false);
+			Toast.show({
+				type: "error",
+				text1: error ?? "Adding Staff failed.",
+			});
+		}
+	};
 	const styles = StyleSheet.create({
 		mainContainer: {
 			width: "100%",
@@ -248,6 +281,47 @@ const EventDetails = () => {
 			width: "100%",
 			marginVertical: 20,
 		},
+		upperMainContainer: {
+			width: Dimensions.get("screen").width - 48,
+			alignSelf: "center",
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "space-between",
+			flexDirection: "row",
+			flexWrap: "wrap",
+			gap: 12,
+			marginBottom: 20,
+		},
+		valueContainer: {
+			width: (Dimensions.get("screen").width - 48 - 12) / 2,
+			paddingVertical: 40,
+			paddingHorizontal: 21,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "flex-start",
+			flexDirection: "row",
+			borderRadius: 15,
+			backgroundColor: colors.topEventBg,
+			gap: 12,
+		},
+		labelTxt: {
+			fontSize: 16,
+			fontWeight: "600",
+			lineHeight: 20,
+			color: colors.blackColor,
+		},
+		valueTxt: {
+			fontSize: 16,
+			fontWeight: "500",
+			color: colors.dataTitleColor,
+		},
+		staffContainer: {
+			width: "100%",
+			display: "flex",
+			flexDirection: "column",
+			gap: 10,
+			marginBottom: 10,
+		},
 	});
 
 	return (
@@ -269,7 +343,7 @@ const EventDetails = () => {
 								inActiveTxtColor={colors.blackColor}
 								value={selectedInfoType}
 								onchange={(text) => setSelectedInfoType(text)}
-								options={["General", "Analytics", "Attendees"]}
+								options={["General", "Analytics", "Attendees", "Staff"]}
 							/>
 						</View>
 						{selectedInfoType === "General" ? (
@@ -341,7 +415,71 @@ const EventDetails = () => {
 								/>
 							</>
 						) : selectedInfoType === "Analytics" ? (
-							<></>
+							<>
+								<FlatList
+									ListHeaderComponent={
+										<View style={styles.upperMainContainer}>
+											<View style={styles.valueContainer}>
+												<Icons.CoinsDollar />
+												<View style={styles.childContainer}>
+													<Text style={styles.labelTxt}>Revenue</Text>
+													<Text style={styles.valueTxt}>
+														{eventAnalytics?.totalRevenue ?? 0}
+													</Text>
+												</View>
+											</View>
+											<View style={styles.valueContainer}>
+												<Icons.Ticket
+													width={25}
+													height={25}
+												/>
+												<View style={styles.childContainer}>
+													<Text style={styles.labelTxt}>Sold Tickets</Text>
+													<Text style={styles.valueTxt}>
+														{eventAnalytics?.totalTicketsSold ?? 0}
+													</Text>
+												</View>
+											</View>
+											<View style={styles.valueContainer}>
+												<Icons.CalendarDigit />
+												<View style={styles.childContainer}>
+													<Text style={styles.labelTxt}>Ticket Tiers</Text>
+													<Text style={styles.valueTxt}>
+														{eventAnalytics?.tierBreakdown?.length ?? 0}
+													</Text>
+												</View>
+											</View>
+											<View style={styles.valueContainer}>
+												<Icons.Eye />
+												<View style={styles.childContainer}>
+													<Text style={styles.labelTxt}>Views</Text>
+													<Text style={styles.valueTxt}>
+														{eventAnalytics?.totalViews ?? 0}
+													</Text>
+												</View>
+											</View>
+										</View>
+									}
+									data={eventAnalytics?.tierBreakdown}
+									ItemSeparatorComponent={() => (
+										<View style={styles.sepratorView} />
+									)}
+									ListEmptyComponent={
+										<EmptyComponent title={"No ticket tiers"} />
+									}
+									keyExtractor={(item, index) => index.toString()}
+									renderItem={({ item, index }) => (
+										<TicketAnalyticsComp
+											remainingTickets={item?.remaining}
+											revenue={item?.revenue}
+											soldTickets={item?.ticketsSold}
+											capacity={item?.capacity}
+											name={item?.name}
+											price={item?.price}
+										/>
+									)}
+								/>
+							</>
 						) : selectedInfoType === "Attendees" ? (
 							<>
 								<FlatList
@@ -350,6 +488,9 @@ const EventDetails = () => {
 										<View style={styles.sepratorView} />
 									)}
 									keyExtractor={(item, index) => item?.ticketId}
+									ListEmptyComponent={
+										<EmptyComponent title={"No  Attendees"} />
+									}
 									renderItem={({ item, index }) => (
 										<EventAttendeComp
 											markTicketAsInvalidFun={() =>
@@ -365,6 +506,40 @@ const EventDetails = () => {
 											profileImage={item?.owner?.profileImage}
 											quantity={item?.quantity}
 											ticketType={item?.ticketTier}
+										/>
+									)}
+								/>
+							</>
+						) : selectedInfoType === "Staff" ? (
+							<>
+								<FlatList
+									ListHeaderComponent={
+										<View style={styles.staffContainer}>
+											<AddStaffInputField
+												value={staffEnteredEmail}
+												onChangeValue={(text) =>
+													setstaffEnteredEmail(`${text}`.toLowerCase())
+												}
+												addMemeberFun={addStaffMembersFun}
+											/>
+											<Text style={styles.labelTxt}>Staff Memebers</Text>
+										</View>
+									}
+									data={eventStaffMemnbers}
+									ItemSeparatorComponent={() => (
+										<View style={styles.sepratorView} />
+									)}
+									ListEmptyComponent={
+										<EmptyComponent title={"No staff members added"} />
+									}
+									keyExtractor={(item, index) => index.toString()}
+									renderItem={({ item, index }) => (
+										<EventStaffComp
+											status={item?.status}
+											email={item?.email}
+											name={item?.username}
+											profileImage={item?.profileImage}
+											onDeleteFun={() => console.log("hy")}
 										/>
 									)}
 								/>
