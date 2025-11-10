@@ -13,8 +13,10 @@ import Edit from "./Edit";
 import Email from "./Email.svg";
 import Eye from "./eyeIcon.svg";
 import EyeOff from "./eyeoffIcon.svg";
+import Faq from "./faq.svg";
 import Filter from "./filter.svg";
 import Gift from "./gift.svg";
+import Contact from "./headphone.svg";
 import HeartEmptyWhite from "./heart-empty-white.svg";
 import HeartEmpty from "./heart-empty.svg";
 import HeartFillWhite from "./heart-filled-white.svg";
@@ -40,6 +42,8 @@ import ShareDark from "./u_share-alt-dark.svg";
 import Share from "./u_share-alt.svg";
 
 export const Icons = {
+	Contact,
+	Faq,
 	Invite,
 	ShareDark,
 	Calendar,

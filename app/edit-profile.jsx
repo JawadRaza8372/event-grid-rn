@@ -8,6 +8,7 @@ import { Icons } from "../assets/icons";
 import AuthLayout from "../components/AuthLayout";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
+import LoadingView from "../components/LoadingView";
 import UserAvatar from "../components/UserAvatar";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
@@ -21,6 +22,7 @@ import {
 
 const EditProfile = () => {
 	const { user } = useSelector((state) => state?.user);
+	const [isLoading, setisLoading] = useState(false);
 	const colors = useThemeColors();
 	const [localImage, setlocalImage] = useState("");
 	const [formData, setformData] = useState({
@@ -117,6 +119,7 @@ const EditProfile = () => {
 				});
 				return;
 			}
+			setisLoading(true);
 			let profileImageLink = user?.profileImage;
 			if (localImage) {
 				const imageLinkRaw = await uploadImageApi(localImage, "profile");
@@ -129,15 +132,16 @@ const EditProfile = () => {
 				formData.phoneNumber
 			);
 			if (result) {
-				console.log("edit profile success:", result);
-
 				setlocalImage("");
+				setisLoading(false);
+
 				Toast.show({
 					type: "success",
 					text1: "Profile updated successfully.",
 				});
 			}
 		} catch (error) {
+			setisLoading(false);
 			console.log("edit profile error", error);
 			Toast.show({
 				type: "error",
@@ -208,6 +212,7 @@ const EditProfile = () => {
 							: false
 					}
 				/>
+				<LoadingView loading={isLoading} />
 			</>
 		</AuthLayout>
 	);

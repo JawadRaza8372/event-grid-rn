@@ -217,7 +217,6 @@ const AppWrapper = () => {
 			if (userId === currentUserId && user?.role === "organizer") {
 				await getEventStaffInvitationsApi()
 					.then((dat) => {
-						console.log("checking invites", dat);
 						dispatch(
 							setOrganizerInvites({
 								organizerInvites: dat,

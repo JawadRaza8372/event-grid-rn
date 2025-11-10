@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { Icons } from "../assets/icons";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
+import LoadingView from "../components/LoadingView";
 import UserAvatar from "../components/UserAvatar";
 import { useThemeColors } from "../hooks/useThemeColors";
 import {
@@ -29,6 +30,7 @@ import {
 const EditProfileOrganizer = () => {
 	const { user } = useSelector((state) => state?.user);
 	const colors = useThemeColors();
+	const [isLoading, setisLoading] = useState(false);
 	const [localImage, setlocalImage] = useState("");
 	const [formData, setformData] = useState({
 		name: "",
@@ -155,7 +157,7 @@ const EditProfileOrganizer = () => {
 				});
 				return;
 			}
-
+			setisLoading(true);
 			let profileImageLink = user?.profileImage;
 			if (localImage) {
 				const imageLinkRaw = await uploadImageApi(localImage, "profile");
@@ -170,6 +172,7 @@ const EditProfileOrganizer = () => {
 			if (result) {
 				console.log("edit profile success:", result);
 				setlocalImage("");
+				setisLoading(false);
 				Toast.show({
 					type: "success",
 					text1: "Profile updated successfully.",
@@ -177,6 +180,7 @@ const EditProfileOrganizer = () => {
 			}
 		} catch (error) {
 			console.log("edit profile error", error);
+			setisLoading(false);
 			Toast.show({
 				type: "error",
 				text1: error ? parseDatabaseErrorMessage(error) : "Edit Profile Failed",
@@ -263,6 +267,7 @@ const EditProfileOrganizer = () => {
 						}
 					/>
 				</View>
+				<LoadingView loading={isLoading} />
 			</View>
 		</ScrollView>
 	);

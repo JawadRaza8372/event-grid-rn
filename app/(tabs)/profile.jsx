@@ -60,6 +60,13 @@ const Profile = () => {
 	});
 	const menuOptions = [
 		{
+			title: "Contact Us",
+			icon: <Icons.Contact size={25} />,
+			onClickFun: () => {
+				router.push({ pathname: "/contact-us" });
+			},
+		},
+		{
 			title: "My Tickets",
 			icon: (
 				<Icons.Ticket
@@ -86,7 +93,13 @@ const Profile = () => {
 				router.push({ pathname: "/edit-profile" });
 			},
 		},
-
+		{
+			title: "FAQ",
+			icon: <Icons.Faq size={25} />,
+			onClickFun: () => {
+				router.push({ pathname: "/faq" });
+			},
+		},
 		{
 			title: "Log Out",
 			icon: (
@@ -138,6 +151,7 @@ const Profile = () => {
 						<>
 							<SideTopBar
 								isTailIcon={true}
+								hideBackBtn={true}
 								title={"Profile"}
 							/>
 							<View style={styles.userContainer}>

@@ -8,7 +8,7 @@ import {
 
 const productionLink = "https://event-grid.91.108.126.5.sslip.io/";
 const developmentLink = "http://192.168.1.5:4000/";
-const isProduction = false;
+const isProduction = true;
 const mainUrl = isProduction ? productionLink : developmentLink;
 
 // ⚙️ Axios instance
