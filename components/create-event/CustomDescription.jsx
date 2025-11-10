@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { useThemeColors } from "../../hooks/useThemeColors";
 
-const CustomDescription = ({ value, onChangeValue }) => {
+const CustomDescription = ({ value, onChangeValue, placeHolder }) => {
 	const colors = useThemeColors();
 	const styles = StyleSheet.create({
 		mainContainer: {
@@ -34,7 +34,7 @@ const CustomDescription = ({ value, onChangeValue }) => {
 			<TextInput
 				multiline={true}
 				placeholderTextColor={colors.createInputLabelColor}
-				placeholder={"Tell people what your event is about..."}
+				placeholder={placeHolder ?? "Tell people what your event is about..."}
 				value={value}
 				onChangeText={onChangeValue}
 				style={styles.inputMainStyle}

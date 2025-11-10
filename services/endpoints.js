@@ -842,6 +842,27 @@ export const postPaymentSuccessApi = async (paymentIntentId) => {
 		);
 	}
 };
+export const postContactUsApi = async (subject, message) => {
+	try {
+		const result = await base.post(
+			`contact/post`,
+			{
+				subject,
+				message,
+			},
+			{
+				isPublic: false,
+			}
+		);
+		return result?.data;
+	} catch (error) {
+		throw parseDatabaseErrorMessage(
+			error?.response?.data?.message
+				? error?.response?.data?.message
+				: error?.message
+		);
+	}
+};
 const isJpgOrPng = (uri) => {
 	const fileExtension = uri.split(".").pop().toLowerCase();
 
