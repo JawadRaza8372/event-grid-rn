@@ -68,9 +68,10 @@ const SuccessModal = ({ showModal, hideModal, title, description }) => {
 	});
 	useEffect(() => {
 		if (showModal) {
-			setTimeout(() => {
+			const timer = setTimeout(() => {
 				hideModal();
 			}, 2500);
+			return () => clearTimeout(timer);
 		}
 	}, [showModal]);
 

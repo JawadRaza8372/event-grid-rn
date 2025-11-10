@@ -483,7 +483,9 @@ const UpdateEvent = () => {
 					showModal={openSuccessModal}
 					hideModal={() => {
 						switchOpenModal();
-						router.push({ pathname: "/(tabs-organizer)" });
+						setTimeout(() => {
+							router.push({ pathname: "/(tabs-organizer)" });
+						}, 800);
 					}}
 					title={"Congratulations!!"}
 					description={`Event has been updated.`}
